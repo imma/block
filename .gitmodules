@@ -1,0 +1,3 @@
+[submodule "vendor/sub"]
+	path = vendor/sub
+	url = git@github.com:defn/sub
