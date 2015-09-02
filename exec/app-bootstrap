@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function main {
+  if [[ -r "script/bootstrap" ]]; then
+    if [[ -x "script/bootstrap" ]]; then
+      script/bootstrap
+    else
+      echo "ERROR: script/bootstrap is not executable" 1>&2
+      return 1
+    fi
+  else
+    echo "ERROR: script/bootstrap not found" 2>&2
+  fi
+}
+
+source sub "$0" "$@"
