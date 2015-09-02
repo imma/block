@@ -16,4 +16,12 @@ function profile {
   fi
 }
 
+function require {
+  if [[ -r "script/"profile ]]; then
+    source "script/profile"
+  else
+    echo "ERROR: script/profile not found" 2>&2
+  fi
+}
+
 profile
