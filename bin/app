@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
 
-export MEH=1
-
 function main {
-  ps axu | head
-  echo "$@"
-  echo "$MEH"
+  case "${1:-}" in
+    bootstrap)
+      local shome="$(unset CDPATH; cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+      "$shome/script/bootstrap"
+      ;;
+    "")
+      true
+      ;;
+    *)
+      echo "ERROR: command $1 unimplemented" 1>&2
+      return 1
+      ;;
+  esac
 }
 
-source sub "$0" "$@"
+if [[ -x "$(which sub 2>&- || true)" ]]; then
+  source sub "$0" "$@"
+else
+  main "$@"
+fi
