@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+function main {
+  ruby -ryaml -rjson -e 'print YAML::load(STDIN.read).to_json'
+}
+
+source sub "$0" "$@"
