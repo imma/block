@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+function main {
+  cat <<"__EOF"
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(unset CDPATH; cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+  PATH="$shome/bin:$shome/exec:$PATH"
+}
+
+source sub "$0" "$@"
+__EOF
+}
+
+source sub "$0" "$@"
