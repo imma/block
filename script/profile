@@ -17,11 +17,17 @@ function profile {
 }
 
 function source_profile {
+  local pth_profiled
+  for pth_profiled in $(set +f; ls -d .profile.d/* 2>&- || true); do
+    if [[ -f "$pth_profiled" ]]; then
+      source "$pth_profiled"
+    fi
+  done
+
   if [[ -r "script/"profile ]]; then
     source "script/profile"
   else
     echo "WARNING: script/profile not found in $(pwd)" 1>&2
-    return 0
   fi
 }
 
