@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function main {
+  local phome="$(pwd)"
+  local nm_pack="$1"; shift
+  exec "app-detect-${nm_pack}" "$phome"
+}
+
+main "$@"
