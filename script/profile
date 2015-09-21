@@ -20,31 +20,32 @@ function source_profile {
   if [[ -r "script/"profile ]]; then
     source "script/profile"
   else
-    echo "ERROR: script/profile not found in $(pwd)" 1>&1
+    echo "WARNING: script/profile not found in $(pwd)" 1>&2
     return 0
   fi
 }
 
 function require {
   local fl_error=0
-  # requiring specific projects?
-  if [[ "$#" -gt 0 ]]; then
-    local nm_project
-    for nm_project in "$@"; do
-      if [[ -d "$nm_project" ]]; then
-        pushd "$nm_project" 1>&-
-      elif [[ -d "../$nm_project" ]]; then
-        pushd "../$nm_project" 1>&-
-      else
-        echo "ERROR: could not find project $nm_project" 1>&2
-        fl_error=1
-        continue
-      fi
+  local nm_project
+  for nm_project in "$@"; do
+    if [[ -d "./$nm_project" ]]; then
+      pushd "./$nm_project" 1>&-
+    elif [[ -n "${APP_PATH:-}" ]]; then
+      local pth_app
+      for pth_app in $(echo "${APP_PATH}" | tr ':' " "); do
+        if [[ -d "$pth_app/$nm_project" ]]; then
+          pushd "$pth_app/$nm_project" 1>&-
+          break
+        fi
+      done
+    fi
 
-      source_profile || fl_error=1
-      popd 1>&-
-    done
-  else
+    source_profile || fl_error=1
+    popd 1>&-
+  done
+
+  if [[ "$#" == 0 ]]; then
     source_profile || fl_error=1
   fi
 
