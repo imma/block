@@ -2,13 +2,13 @@
 
 function main {
   local phome="$(pwd)"
-
-  app detect bundler "$phome" || return $?
-
   local nm_pack="$1"; shift
+
+  app detect "$nm_pack" "$phome" || return $?
+
   local tmp_cache="$(mktemp -d -t XXXXXX)"
   local tmp_env="$(mktemp -d -t XXXXXX)"
-  "app-compile-${nm_pack}" "$phome" "$tmp_cache" "$tmp_env"
+  "app-compile-${nm_pack}" "$phome" "$tmp_cache" "$tmp_env" "$@"
 }
 
 main "$@"
