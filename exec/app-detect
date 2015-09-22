@@ -3,6 +3,8 @@
 function main {
   local phome="$(pwd)"
   local nm_pack="$1"; shift
+
+  cd "$phome"
   exec "app-detect-${nm_pack}" "$phome" "$@"
 }
 
