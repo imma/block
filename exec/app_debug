@@ -1,0 +1,3 @@
+function debug {
+  env DEBUG=1 "$@"
+}
