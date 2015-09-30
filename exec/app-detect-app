@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function main {
+  if [[ -f "Define.yml" ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+source sub "$0" "$@"
