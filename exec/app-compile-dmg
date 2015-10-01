@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+function main {
+  local phome="$1"; shift
+  local pth_cache="$1"; shift
+  local pth_env="$1"; shift
+
+  local url_dmg="$1"; shift
+  local nm_volume="$1"; shift
+  local nm_package="${1:-}"; shift
+
+  case "$(uname -s)" in
+    Darwin)
+     local tmp_dmg="$(mktemp -t XXXXXX)"
+     trap "$(printf "rm -f '%q'" "$tmp_dmg")" EXIT
+     curl -L -o "$tmp_dmg" "$url_dmg"
+     hdiutil attach "$tmp_dmg"
+     trap "$(printf "rm -f '%q'; hdiutil detach /Volumes/$nm_volume" "$tmp_dmg")" EXIT
+
+     if [[ -n "$nm_package" ]]; then
+       app compile pkg "/Volumes/$nm_volume/$nm_package"
+     fi
+     ;;
+  esac
+}
+
+source sub "$0" "$@"

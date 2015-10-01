@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function main {
+  case "$(uname -s)" in
+    Darwin)
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+source sub "$0" "$@"

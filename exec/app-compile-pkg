@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+function main {
+  local phome="$1"; shift
+  local pth_cache="$1"; shift
+  local pth_env="$1"; shift
+
+  local nm_package="$1"; shift
+  local pth_hd="/Volumes/Macintosh HD"
+
+  case "$(uname -s)" in
+    Darwin)
+     sudo installer -package "$nm_package" -target "$pth_hd"
+     ;;
+  esac
+}
+
+source sub "$0" "$@"
