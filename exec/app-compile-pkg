@@ -6,7 +6,15 @@ function main {
   local pth_env="$1"; shift
 
   local nm_package="$1"; shift
-  local pth_hd="/Volumes/Macintosh HD"
+  case "$nm_package" in
+    http*)
+     local tmp_package="$(mktemp -t XXXXXX)"
+     curl -L -o "$tmp_package" "$nm_package"
+      mv -f "$tmp_package" "$tmp_package.pkg"
+      nm_package="$tmp_package.pkg"
+      ;;
+  esac
+  local pth_hd="${1:-/Volumes/Macintosh HD}"
 
   case "$(uname -s)" in
     Darwin)
