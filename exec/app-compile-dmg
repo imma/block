@@ -6,8 +6,14 @@ function main {
   local pth_env="$1"; shift
 
   local url_dmg="$1"; shift
-  local nm_volume="$1"; shift
-  local nm_package="${1:-}"; shift
+  local nm_volume
+  if [[ "$#" -gt 0 ]]; then
+    nm_volume="$1"; shift
+  fi
+  local nm_package
+  if [[ "$#" -gt 0 ]]; then
+    nm_package="$1"; shift
+  fi
 
   case "$(uname -s)" in
     Darwin)
