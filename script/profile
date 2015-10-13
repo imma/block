@@ -35,6 +35,16 @@ function require {
   local fl_error=0
   local nm_project
   for nm_project in "$@"; do
+    if [[ "$nm_project" == "Blockfile" ]]; then
+      local nm_block
+      for nm_block in $(cat "$(pwd)/Blockfile" | yq -r '[.require[] | [.] | flatten] | flatten[]'); do
+        if require "$nm_block"; then
+          true
+        fi
+      done
+      break
+    fi
+
     if [[ -d "/$nm_project" ]]; then
       pushd "/$nm_project" 1>&-
     elif [[ -d "./$nm_project" ]]; then
