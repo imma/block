@@ -5,7 +5,7 @@ function main {
   local pth_cache="$1"; shift
   local pth_env="$1"; shift
 
-  cat "Define.yml" | y2j | jq .
+  cat "Blockfile" | y2j | jq .
 }
 
 source sub "$0" "$@"
