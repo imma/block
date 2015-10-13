@@ -4,8 +4,6 @@ function main {
   local phome="$(pwd)"
   local nm_pack="$1"; shift
 
-  app detect "$nm_pack" "$phome" || return $?
-
   local tmp_cache="$(mktemp -d -t XXXXXX)"
   local tmp_env="$(mktemp -d -t XXXXXX)"
 
