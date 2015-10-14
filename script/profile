@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 function debug {
-  "$@" || true
-  return 0
-
   if [[ -n "${DEBUG:-}" ]]; then
     if "$@"; then
       true
