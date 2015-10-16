@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 
 function bootstrap_block {
+  local fl_error=0
   if [[ -x "script/bootstrap" ]]; then
     debug echo INFO "$(pwd)/script/bootstrap" 1>&2
-    #"script/bootstrap"
+    source_pre || fl_error=1
+    if "script/bootstrap"; then
+      source_profile || fl_error=1
+      source_post || fl_error=1
+    else
+      fl_error=1
+    fi
   fi
+
+  return $fl_error
 }
 
 function bootstrap_in {
@@ -19,5 +28,8 @@ function bootstrap_in {
 function bootstrap {
   source "$APP_PATH/app/script/profile" || return 1
   source "$APP_PATH/jq/script/profile" || return 1
+
+  source app_require
+
   block_walker "$FUNCNAME" "$@"
 }
