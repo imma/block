@@ -80,26 +80,21 @@ function require_in {
 function require {
   local fl_error=0
 
-  local nm_project
-  for nm_project in "$@"; do
-    if [[ -d "/$nm_project" ]]; then
-      require_in "/$nm_project"
-    elif [[ -d "./$nm_project" ]]; then
-      require_in "./$nm_project"
-    elif [[ -n "${APP_PATH:-}" ]]; then
-      local pth_app
-      for pth_app in $(echo "${APP_PATH}" | tr ':' " "); do
-        if [[ -d "$pth_app/$nm_project" ]]; then
-          require_in "$pth_app/$nm_project"
-          break
-        fi
-      done
-    fi
-  done
-
   if [[ "$#" == 0 ]]; then
     require_in "."
+    return $fl_error
   fi
+
+  local nm_project
+  for nm_project in "$@"; do
+    local pth_app
+    for pth_app in / ./ $(echo "${APP_PATH:-}" | tr ':' " "); do
+      if [[ -d "$pth_app/$nm_project" ]]; then
+        require_in "$pth_app/$nm_project"
+        break
+      fi
+    done
+  done
 
   return $fl_error
 }
