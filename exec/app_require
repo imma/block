@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+function source_pre {
+  local pth_profiled
+  for pth_profiled in $(set +f; ls -d .profile.d/*.pre 2>&- || true); do
+    if [[ -f "$pth_profiled" ]]; then
+      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
+      source "$pth_profiled"
+    fi
+  done
+}
+
+function source_profile {
+  if [[ -r "script/"profile ]]; then
+    debug echo INFO "$(pwd)/script/profile" 1>&2
+    source "script/profile"
+  else
+    echo "WARNING: script/profile not found in $(pwd)" 1>&2
+  fi
+}
+
+function source_post {
+  local pth_profiled
+  for pth_profiled in $(set +f; ls -d .profile.d/*.post 2>&- || true); do
+    if [[ -f "$pth_profiled" ]]; then
+      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
+      source "$pth_profiled"
+    fi
+  done
+}
+
+function require_in {
+  local nm_project="$1"; shift
+
+  pushd "$nm_project" 1>&-
+  source_pre || fl_error=1
+  into_blockfile require
+  source_profile || fl_error=1
+  source_post || fl_error=1
+  popd 1>&-
+}
+
+function require {
+  block_walker "$FUNCNAME" "$@"
+}

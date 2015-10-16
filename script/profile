@@ -16,6 +16,9 @@ function profile {
   local shome="$(unset CDPATH; cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
 
+  source app_require
+  source app_bootstrap
+
   local cmd_sub="$(type -P sub || true 2>&-)"
   if [[ ! -x "$cmd_sub" ]]; then
     if [[ -r "$shome/vendor/sub/script/profile" ]]; then
@@ -24,40 +27,13 @@ function profile {
   fi
 }
 
-function source_pre {
-  local pth_profiled
-  for pth_profiled in $(set +f; ls -d .profile.d/*.pre 2>&- || true); do
-    if [[ -f "$pth_profiled" ]]; then
-      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
-      source "$pth_profiled"
-    fi
-  done
-}
+function into_blockfile {
+  local nm_action="$1"; shift
 
-function source_profile {
-  if [[ -r "script/"profile ]]; then
-    debug echo INFO "$(pwd)/script/profile" 1>&2
-    source "script/profile"
-  else
-    echo "WARNING: script/profile not found in $(pwd)" 1>&2
-  fi
-}
-
-function source_post {
-  local pth_profiled
-  for pth_profiled in $(set +f; ls -d .profile.d/*.post 2>&- || true); do
-    if [[ -f "$pth_profiled" ]]; then
-      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
-      source "$pth_profiled"
-    fi
-  done
-}
-
-function req_blockfile {
   if [[ -f "Blockfile" ]]; then
     local nm_block
     for nm_block in $(cat "Blockfile" | yq -r '[.require[] | [.] | flatten] | flatten[]'); do
-      if require "$nm_block"; then
+      if "$nm_action" "$nm_block"; then
         true
       fi
     done
@@ -66,22 +42,13 @@ function req_blockfile {
   return 1
 }
 
-function require_in {
-  local nm_project="$1"; shift
+function block_walker {
+  local nm_action="$1"; shift
 
-  pushd "$nm_project" 1>&-
-  source_pre || fl_error=1
-  req_blockfile
-  source_profile || fl_error=1
-  source_post || fl_error=1
-  popd 1>&-
-}
-
-function require {
   local fl_error=0
 
   if [[ "$#" == 0 ]]; then
-    require_in "."
+    "${nm_action}_in" "."
     return $fl_error
   fi
 
@@ -90,7 +57,7 @@ function require {
     local pth_app
     for pth_app in / ./ $(echo "${APP_PATH:-}" | tr ':' " "); do
       if [[ -d "$pth_app/$nm_project" ]]; then
-        require_in "$pth_app/$nm_project"
+        "${nm_action}_in" "$pth_app/$nm_project"
         break
       fi
     done
