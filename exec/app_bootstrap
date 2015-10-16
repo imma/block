@@ -5,11 +5,15 @@ function bootstrap_block {
   if [[ -x "script/bootstrap" ]]; then
     debug echo INFO "$(pwd)/script/bootstrap" 1>&2
     source_pre || fl_error=1
-    if ${NOOP:+echo 1>&2 INFO $(pwd) }script/bootstrap; then
-      source_profile || fl_error=1
-      source_post || fl_error=1
-    else
-      fl_error=1
+    if eval test -z '$'"_bootstrap_$(basename "$(pwd)")"; then
+      if ${NOOP:+echo 1>&2 INFO $(pwd) }script/bootstrap; then
+        eval unset "_bootstrap_$(basename "$(pwd)")"
+        source_profile || fl_error=1
+        source_post || fl_error=1
+      else
+        fl_error=1
+      fi
+      eval export "_bootstrap_$(basename "$(pwd)")=1"
     fi
   fi
 

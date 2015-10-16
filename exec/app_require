@@ -12,8 +12,11 @@ function source_pre {
 
 function source_profile {
   if [[ -r "script/"profile ]]; then
-    debug echo INFO "$(pwd)/script/profile" 1>&2
-    source "script/profile"
+    if eval test -z '$'"_require_$(basename "$(pwd)")"; then
+      debug echo INFO "$(pwd)/script/profile" 1>&2
+      source "script/profile"
+      eval export "_require_$(basename "$(pwd)")=1"
+    fi
   else
     echo "WARNING: script/profile not found in $(pwd)" 1>&2
   fi
