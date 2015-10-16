@@ -24,21 +24,33 @@ function profile {
   fi
 }
 
-function source_profile {
+function source_pre {
   local pth_profiled
-  for pth_profiled in $(set +f; ls -d .profile.d/*.sh 2>&- || true); do
+  for pth_profiled in $(set +f; ls -d .profile.d/*.pre 2>&- || true); do
     if [[ -f "$pth_profiled" ]]; then
       debug echo INFO "$(pwd)/$pth_profiled" 1>&2
       source "$pth_profiled"
     fi
   done
+}
 
+function source_profile {
   if [[ -r "script/"profile ]]; then
     debug echo INFO "$(pwd)/script/profile" 1>&2
     source "script/profile"
   else
     echo "WARNING: script/profile not found in $(pwd)" 1>&2
   fi
+}
+
+function source_post {
+  local pth_profiled
+  for pth_profiled in $(set +f; ls -d .profile.d/*.post 2>&- || true); do
+    if [[ -f "$pth_profiled" ]]; then
+      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
+      source "$pth_profiled"
+    fi
+  done
 }
 
 function req_blockfile {
@@ -54,29 +66,31 @@ function req_blockfile {
   return 1
 }
 
+function require_in {
+  local nm_project="$1"; shift
+
+  pushd "$nm_project" 1>&-
+  source_pre || fl_error=1
+  req_blockfile
+  source_profile || fl_error=1
+  source_post || fl_error=1
+  popd 1>&-
+}
+
 function require {
   local fl_error=0
 
   local nm_project
   for nm_project in "$@"; do
     if [[ -d "/$nm_project" ]]; then
-      pushd "/$nm_project" 1>&-
-      req_blockfile
-      source_profile || fl_error=1
-      popd 1>&-
+      require_in "/$nm_project"
     elif [[ -d "./$nm_project" ]]; then
-      pushd "./$nm_project" 1>&-
-      req_blockfile
-      source_profile || fl_error=1
-      popd 1>&-
+      require_in "./$nm_project"
     elif [[ -n "${APP_PATH:-}" ]]; then
       local pth_app
       for pth_app in $(echo "${APP_PATH}" | tr ':' " "); do
         if [[ -d "$pth_app/$nm_project" ]]; then
-          pushd "$pth_app/$nm_project" 1>&-
-          req_blockfile
-          source_profile || fl_error=1
-          popd 1>&-
+          require_in "$pth_app/$nm_project"
           break
         fi
       done
@@ -84,8 +98,7 @@ function require {
   done
 
   if [[ "$#" == 0 ]]; then
-    req_blockfile
-    source_profile || fl_error=1
+    require_in "."
   fi
 
   return $fl_error
