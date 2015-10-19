@@ -18,6 +18,7 @@ function profile {
 
   source app_require
   source app_bootstrap
+  source app_list
 
   local cmd_sub="$(type -P sub || true 2>&-)"
   if [[ ! -x "$cmd_sub" ]]; then

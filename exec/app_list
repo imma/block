@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+function list_block {
+  if eval test -z '$'"_bootstrap_$(basename "$(pwd)")"; then
+    eval export "_bootstrap_$(basename "$(pwd)")=1"
+    echo "$(basename "$(pwd)")"
+  else
+    eval unset "_bootstrap_$(basename "$(pwd)")"
+  fi
+}
+
+function list_in {
+  local nm_project="$1"; shift
+
+  pushd "$nm_project" 1>&-
+  into_blockfile list
+  list_block || fl_error=1
+  popd 1>&-
+}
+
+function list {
+  source "$APP_PATH/app/script/profile" || return 1
+  source "$APP_PATH/jq/script/profile" || return 1
+
+  block_walker "$FUNCNAME" "$@"
+}
+
