@@ -7,13 +7,12 @@ function bootstrap_block {
     source_pre || fl_error=1
     if eval test -z '$'"_bootstrap_$(basename "$(pwd)")"; then
       if ${NOOP:+echo 1>&2 INFO $(pwd) }script/bootstrap; then
-        eval unset "_bootstrap_$(basename "$(pwd)")"
+        eval export "_bootstrap_$(basename "$(pwd)")=1"
         source_profile || fl_error=1
         source_post || fl_error=1
       else
         fl_error=1
       fi
-      eval export "_bootstrap_$(basename "$(pwd)")=1"
     fi
   fi
 
@@ -27,13 +26,4 @@ function bootstrap_in {
   into_blockfile bootstrap
   bootstrap_block || fl_error=1
   popd 1>&-
-}
-
-function bootstrap {
-  source "$APP_PATH/app/script/profile" || return 1
-  source "$APP_PATH/jq/script/profile" || return 1
-
-  source app_require
-
-  (block_walker "$FUNCNAME" "$@")
 }
