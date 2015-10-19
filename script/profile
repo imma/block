@@ -34,7 +34,7 @@ function into_blockfile {
   if [[ -f "Blockfile" ]]; then
     local nm_block
     for nm_block in $(cat "Blockfile" | yq -r '[.require[] | [.] | flatten] | flatten[]'); do
-      if "$nm_action" "$nm_block"; then
+      if block_walker "$nm_action" "$nm_block"; then
         true
       fi
     done
