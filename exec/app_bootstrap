@@ -5,7 +5,7 @@ function bootstrap_block {
   if [[ -x "script/bootstrap" ]]; then
     debug echo INFO "$(pwd)/script/bootstrap" 1>&2
     source_pre || fl_error=1
-    if eval test -z '$'"_bootstrap_$(basename "$(pwd)")"; then
+    if eval test -z '${'"_bootstrap_$(basename "$(pwd)")"':-}'; then
       if ${NOOP:+echo 1>&2 INFO $(pwd) }script/bootstrap; then
         eval export "_bootstrap_$(basename "$(pwd)")=1"
         source_profile || fl_error=1
