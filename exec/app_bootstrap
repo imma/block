@@ -35,5 +35,5 @@ function bootstrap {
 
   source app_require
 
-  block_walker "$FUNCNAME" "$@"
+  (block_walker "$FUNCNAME" "$@")
 }
