@@ -5,27 +5,32 @@ function bootstrap_stale {
     return 0
   fi
   
-  ${NOOP:+echo 1>&2 INFO $(pwd) }script/stale
+  ${NOOP:+echo INFO $(pwd) }script/stale
 }
 
 function bootstrap_block {
   local nm_block="$(basename "$(pwd)")"
 
   local fl_error=0
+
+  source_pre || fl_error=1
+
   if [[ -x "script/bootstrap" ]]; then
     debug echo INFO "$(pwd)/script/bootstrap" 1>&2
-    source_pre || fl_error=1
     if eval test -z '${'"_bootstrap_${nm_block}"':-}'; then
       if bootstrap_stale; then
-        if ${NOOP:+echo 1>&2 INFO $(pwd) }script/bootstrap; then
+        if ${NOOP:+echo INFO $(pwd) }script/bootstrap; then
           eval export "_bootstrap_${nm_block}=1"
-          source_profile || fl_error=1
-          source_post || fl_error=1
         else
           fl_error=1
         fi
       fi
     fi
+  fi
+  
+  if [[ "$fl_error" == 0 ]]; then
+    source_profile || fl_error=1
+    source_post || fl_error=1
   fi
 
   return $fl_error
