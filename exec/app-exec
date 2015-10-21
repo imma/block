@@ -5,9 +5,10 @@ function main {
 
   source "$shome/script/profile" || return 1
 
-  source app_list
+  source app_require
 
-  block_walker list "$@"
+  block_walker require
+  exec "$@"
 }
 
 source sub "$0" "$@"

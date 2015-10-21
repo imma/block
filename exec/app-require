@@ -5,7 +5,6 @@ function main {
   local shome="$(unset CDPATH; cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
 
   source "$shome/script/profile" || return 1
-  source "${APP_PATH:-$ahome}/jq/script/profile" || return 1
 
   source app_require
 
