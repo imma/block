@@ -9,7 +9,7 @@ function bootstrap_stale {
 }
 
 function bootstrap_block {
-  local nm_block="$(basename "$(pwd)")"
+  local nm_block="$(cat .app-name 2>&- || basename "$(pwd)")"
 
   local fl_error=0
 

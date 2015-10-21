@@ -11,10 +11,11 @@ function source_pre {
 }
 
 function source_profile {
+  local nm_block="$(cat .app-name 2>&- || basename "$(pwd)")"
   if [[ -r "script/"profile ]]; then
-    if eval test -z '${'"_require_$(basename "$(pwd)")"':-}'; then
+    if eval test -z '${'"_require_${nm_block}"':-}'; then
       debug echo INFO "$(pwd)/script/profile" 1>&2
-      eval export "_require_$(basename "$(pwd)")=1"
+      eval export "_require_${nm_block}=1"
       source "script/profile"
     fi
   else
