@@ -53,13 +53,20 @@ function block_walker {
 
   local nm_project
   for nm_project in "$@"; do
+    local fl_found=0
+
     local pth_app
     for pth_app in / ./ $(echo "${APP_PATH:-}" | tr ':' " "); do
       if [[ -d "$pth_app/$nm_project" ]]; then
         "${nm_action}_in" "$pth_app/$nm_project"
+        fl_found=1
         break
       fi
     done
+
+    if [[ "$fl_found" == 0 ]]; then
+      echo ERROR: "$nm_project" not found 1>&2
+    fi
   done
 
   return $fl_error
