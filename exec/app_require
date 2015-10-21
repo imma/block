@@ -2,32 +2,42 @@
 
 function source_pre {
   local pth_profiled
-  for pth_profiled in $(set +f; ls -d .profile.d/*.pre 2>&- || true); do
+  set +f
+  for pth_profiled in .profile.d/*.pre; do
+    set -f
     if [[ -f "$pth_profiled" ]]; then
-      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
+      debug echo INFO "$PWD/$pth_profiled" 1>&2
       source "$pth_profiled"
     fi
   done
 }
 
 function source_profile {
-  local nm_block="$(cat .app-name 2>&- || basename "$(pwd)")"
+  local nm_block=
+  if [[ -f .app-name ]]; then
+    nm_block="$(cat .app-name)"
+  else
+    nm_block="${PWD##*/}"
+  fi
+
   if [[ -r "script/"profile ]]; then
     if eval test -z '${'"_require_${nm_block}"':-}'; then
-      debug echo INFO "$(pwd)/script/profile" 1>&2
+      debug echo INFO "$PWD/script/profile" 1>&2
       eval "_require_${nm_block}=1"
       source "script/profile"
     fi
   else
-    echo "WARNING: script/profile not found in $(pwd)" 1>&2
+    echo "WARNING: script/profile not found in $PWD" 1>&2
   fi
 }
 
 function source_post {
   local pth_profiled
-  for pth_profiled in $(set +f; ls -d .profile.d/*.post 2>&- || true); do
+  set +f
+  for pth_profiled in .profile.d/*.post; do
+    set -f
     if [[ -f "$pth_profiled" ]]; then
-      debug echo INFO "$(pwd)/$pth_profiled" 1>&2
+      debug echo INFO "$PWD/$pth_profiled" 1>&2
       source "$pth_profiled"
     fi
   done
