@@ -5,7 +5,7 @@ function main {
     return 0
   fi
    
-  local shome="$(unset CDPATH; cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+  local shome="$(cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
 
   if [[ -x "$shome/script/$1" ]]; then
     "$shome/script/$1" "$@"
