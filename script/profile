@@ -28,11 +28,23 @@ function profile {
   fi
 }
 
+function get_requires {
+  if [[ -f Blockfile.txt ]]; then
+    cat Blockfile.txt
+  else 
+    if [[ -f Blockfile ]]; then
+      cat Blockfile
+    else
+      jq -n '{require:[]}'
+    fi | yq -r '[.require[] | [.] | flatten] | flatten[]'
+  fi
+}
+
 function into_blockfile {
   local nm_action="$1"; shift
 
   local nm_block
-  for nm_block in $( (cat "Blockfile" 2>&- || jq -n '{require:[]}') | yq -r '[.require[] | [.] | flatten] | flatten[]'); do
+  for nm_block in $(get_requires); do
     if ! block_walker "$nm_action" "$nm_block"; then
       return $?
     fi
