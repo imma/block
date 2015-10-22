@@ -2,7 +2,7 @@
 
 function main {
   cat <<"__EOF"
-local shome="$(unset CDPATH; cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+local shome="$(cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
 PATH="$shome/bin:$shome/exec:$PATH"
 __EOF
 }
