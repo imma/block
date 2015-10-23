@@ -5,11 +5,11 @@ function main {
 #!/usr/bin/env bash
 
 function main {
-  local shome="$(cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
 }
 
-source sub "$0" "$@"
+source sub "$BASH_SOURCE" "$@"
 __EOF
 }
 

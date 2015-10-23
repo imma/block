@@ -2,9 +2,9 @@
 
 function main {
   cat <<"__EOF"
-local shome="$(cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
 PATH="$shome/bin:$shome/exec:$PATH"
 __EOF
 }
 
-source sub "$0" "$@"
+source sub "$BASH_SOURCE" "$@"
