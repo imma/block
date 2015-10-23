@@ -8,10 +8,6 @@ function debug {
   fi
 }
 
-function sub_profile {
-  source "$shome/vendor/sub/script/profile"
-}
-
 function profile {
   local shome="$(cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
@@ -19,13 +15,6 @@ function profile {
   source app_require
   source app_bootstrap
   source app_list
-
-  local cmd_sub="$(type -P sub || true 2>&-)"
-  if [[ ! -x "$cmd_sub" ]]; then
-    if [[ -r "$shome/vendor/sub/script/profile" ]]; then
-      sub_profile
-    fi
-  fi
 }
 
 function get_requires {
