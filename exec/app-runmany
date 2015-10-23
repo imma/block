@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "$(dirname -- "$BASH_SOURCE")/.." && pwd -P)"
+
+  source "$shome/script/profile" || return 1
+
+  app list | sed "s#^#$APP_PATH/#" | runmany "$@"
+}
+
+source sub "$0" "$@"
