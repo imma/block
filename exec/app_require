@@ -54,12 +54,12 @@ function source_post {
 function require_in {
   local nm_project="$1"; shift
 
-  pushd "$nm_project" 1>&-
+  pushd "$nm_project" >/dev/null
   source_pre || fl_error=1
   into_blockfile require
   source_profile || fl_error=1
   source_post || fl_error=1
-  popd 1>&-
+  popd >/dev/null
 }
 
 function require {

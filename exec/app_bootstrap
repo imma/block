@@ -39,8 +39,8 @@ function bootstrap_block {
 function bootstrap_in {
   local nm_project="$1"; shift
 
-  pushd "$nm_project" 1>&-
+  pushd "$nm_project" >/dev/null
   into_blockfile bootstrap
   bootstrap_block || fl_error=1
-  popd 1>&-
+  popd >/dev/null
 }
