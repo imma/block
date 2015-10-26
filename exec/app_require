@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
 
+function mark_source {
+  local pth_profile="$1"; shift
+  debug echo INFO "$PWD/script/profile" 1>&2
+  if [[ -n "${APP_RC_CACHE:-}" ]]; then
+    {
+      echo echo INFO "$PWD/script/profile" '1>&2' 
+      echo source "$PWD/script/profile"
+    } >> "$APP_RC_CACHE"
+  fi
+}
+
 function source_pre {
   local pth_profiled
   set +f
   for pth_profiled in .profile.d/*.pre; do
     set -f
     if [[ -f "$pth_profiled" ]]; then
-      debug echo INFO "$PWD/$pth_profiled" 1>&2
+      mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
     fi
   done
@@ -22,7 +33,7 @@ function source_profile {
 
   if [[ -r "script/"profile ]]; then
     if eval test -z '${'"_require_${nm_block}"':-}'; then
-      debug echo INFO "$PWD/script/profile" 1>&2
+      mark_source "$PWD/script/profile"
       eval "_require_${nm_block}=1"
       source "script/profile"
     fi
@@ -37,7 +48,7 @@ function source_post {
   for pth_profiled in .profile.d/*.post; do
     set -f
     if [[ -f "$pth_profiled" ]]; then
-      debug echo INFO "$PWD/$pth_profiled" 1>&2
+      mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
     fi
   done
