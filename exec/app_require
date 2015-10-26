@@ -2,11 +2,11 @@
 
 function mark_source {
   local pth_profile="$1"; shift
-  debug echo INFO "$PWD/script/profile" 1>&2
+  debug echo INFO "$pth_profile" 1>&2
   if [[ -n "${APP_RC_CACHE:-}" ]]; then
     {
-      echo echo INFO "$PWD/script/profile" '1>&2' 
-      echo source "$PWD/script/profile"
+      echo echo INFO "$pth_profile" '1>&2' 
+      echo source "$pth_profile"
     } >> "$APP_RC_CACHE"
   fi
 }
