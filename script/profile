@@ -25,8 +25,9 @@ function get_requires {
       if [[ -f Blockfile.json ]]; then
         cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
       else
-        echo -n > Blockfile.txt
-      fi > Blockfile.txt
+        echo -n
+      fi > Blockfile.txt.tmp
+      mv -f Blockfile.txt.tmp Blockfile.txt
     fi
     cat Blockfile.txt
   fi
