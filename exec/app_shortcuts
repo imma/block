@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-function profile_shortcuts {
-  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  PATH="$shome/bin/shortcuts:$PATH"
-}
-
-profile_shortcuts
