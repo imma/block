@@ -5,7 +5,7 @@ function mark_source {
   debug echo INFO "$pth_profile" 1>&2
   if [[ -n "${APP_RC_CACHE:-}" ]]; then
     {
-      echo echo INFO "$pth_profile" '1>&2' 
+      debug echo echo INFO "$pth_profile" '1>&2' 
       echo source "$pth_profile"
     } >> "$APP_RC_CACHE"
   fi
