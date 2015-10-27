@@ -1,11 +1,21 @@
 #!/usr/bin/env bash
 
+function runmany_in {
+  local nm_project="$1"; shift
+
+  pushd "$nm_project" >/dev/null
+  into_blockfile runmany
+  echo $PWD
+  popd >/dev/null
+}
+
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
 
   source "$shome/script/profile" || return 1
 
-  app list | sed "s#^#$APP_PATH/#" | runmany "$@"
+  block_walker runmany | runmany "$@"
 }
 
 source sub "$0" "$@"
+
