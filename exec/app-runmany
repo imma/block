@@ -4,8 +4,19 @@ function runmany_in {
   local nm_project="$1"; shift
 
   pushd "$nm_project" >/dev/null
-  into_blockfile runmany
-  echo $PWD
+
+  local nm_block=
+  if [[ -f .app-name ]]; then
+    nm_block="$(cat .app-name)"
+  else
+    nm_block="${PWD##*/}"
+  fi
+
+  if eval test -z '${'"_runmany_${nm_block}"':-}'; then
+    into_blockfile runmany
+    eval "_runmany_${nm_block}=1"
+    echo $PWD
+  fi
   popd >/dev/null
 }
 
