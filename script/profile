@@ -12,8 +12,9 @@ function profile {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
 
-  : ${APP_PATH:="$shome"}
-  export APP_PATH
+  if [[ -z "${APP_PATH:-}" ]]; then
+    export APP_PATH="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
+  fi
 
   source app_require
   source app_bootstrap
