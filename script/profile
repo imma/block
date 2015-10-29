@@ -12,6 +12,9 @@ function profile {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
 
+  : ${APP_PATH:="$shome"}
+  export APP_PATH
+
   source app_require
   source app_bootstrap
   source app_list
