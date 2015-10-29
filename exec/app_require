@@ -10,9 +10,7 @@ function mark_source {
 
 function source_pre {
   local pth_profiled
-  set +f
-  for pth_profiled in .profile.d/*.pre; do
-    set -f
+  for pth_profiled in $(set +f; echo .profile.d/*.pre); do
     if [[ -f "$pth_profiled" ]]; then
       mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
@@ -41,9 +39,7 @@ function source_profile {
 
 function source_post {
   local pth_profiled
-  set +f
-  for pth_profiled in .profile.d/*.post; do
-    set -f
+  for pth_profiled in $(set +f; echo .profile.d/*.post); do
     if [[ -f "$pth_profiled" ]]; then
       mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
