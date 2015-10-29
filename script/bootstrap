@@ -8,16 +8,16 @@ function bootstrap {
   
   local cmd_sub="$(which sub 2>&- || true)"
   if [[ ! -x "$cmd_sub" ]]; then
-    if [[ ! -d "$ahome/sub" ]]; then
-      git clone git@github.com:defn/sub "$ahome/sub"
+    if [[ ! -d "$whome/sub" ]]; then
+      git clone git@github.com:defn/sub "$whome/sub"
     fi
   fi
 
   local cmd_jq="$(which jq 2>&- || true)"
   if [[ ! -x "$cmd_jq" ]]; then
-    if [[ ! -d "$ahome/jq" ]]; then
-      git clone git@github.com:defn/app-jq "$ahome/jq"
-      (cd "$ahome/jq" && script/bootstrap)
+    if [[ ! -d "$whome/jq" ]]; then
+      git clone git@github.com:defn/app-jq "$whome/jq"
+      (cd "$whome/jq" && script/bootstrap)
     fi
   fi
 }
