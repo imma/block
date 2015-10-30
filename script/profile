@@ -23,17 +23,7 @@ function profile {
 
 function get_requires {
   if [[ -f Blockfile.json ]]; then
-    if [[ -f Blockfile.txt && Blockfile.txt -nt Blockfile.json ]]; then
-      true
-    else
-      if [[ -f Blockfile.json ]]; then
-        cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
-      else
-        echo -n
-      fi > Blockfile.txt.tmp
-      mv -f Blockfile.txt.tmp Blockfile.txt
-    fi
-    cat Blockfile.txt
+    cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
   fi
 }
 
