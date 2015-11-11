@@ -15,12 +15,13 @@ function bootstrap_block {
 
   source_pre || fl_error=1
 
+  local a="_bootstrap_${nm_block//-/_}=1"
   if [[ -x "script/bootstrap" ]]; then
     debug echo INFO "$(pwd)/script/bootstrap" 1>&2
-    if eval test -z '${'"_bootstrap_${nm_block}"':-}'; then
+    if eval test -z '${'"$a"':-}'; then
       if bootstrap_stale; then
         if ${NOOP:+echo INFO $(pwd) }script/bootstrap; then
-          eval export "_bootstrap_${nm_block}=1"
+          eval export "$a=1"
         else
           fl_error=1
         fi

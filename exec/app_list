@@ -3,7 +3,7 @@
 function list_block {
   local nm_block="$(cat .app-name 2>&- || basename "$(pwd)")"
 
-  local a="_list_${nm_block}"
+  local a="_list_${nm_block//-/_}"
   if [[ -z "${!a:-}" ]]; then
     read -r $a <<< 1
     export $a

@@ -23,10 +23,11 @@ function source_profile {
     nm_block="${PWD##*/}"
   fi
 
+  local a="_require_${nm_block//-/_}"
   if [[ -r "script/"profile ]]; then
-    if eval test -z '${'"_require_${nm_block}"':-}'; then
+    if eval test -z '${'"$a"':-}'; then
       mark_source "$PWD/script/profile"
-      eval "_require_${nm_block}=1"
+      eval "$a=1"
       source "script/profile"
     fi
   else
