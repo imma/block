@@ -7,7 +7,7 @@ function main {
 
   {
     app runmany 'exec 2>&-; ls -d $1/script/bootstrap; ls -d $1/script/profile > /dev/null && echo source $1/script/profile' 
-  } | bash -x -
+  } | bash -
 }
 
 source sub "$0" "$@"

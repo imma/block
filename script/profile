@@ -17,7 +17,6 @@ function profile {
   fi
 
   source app_require
-  source app_bootstrap
   source app_list
 }
 
