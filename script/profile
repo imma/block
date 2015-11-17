@@ -27,11 +27,17 @@ function get_requires {
 }
 
 function into_blockfile {
-  local nm_action="$1"; shift
+  local nm_action="${1%:*}"
+  local nm_not_found="${1#*:}"
+  shift
+
+  if [[ "$nm_not_found" == "$nm_action" ]]; then
+    nm_not_found=
+  fi
 
   local nm_block
   for nm_block in $(get_requires); do
-    if ! block_walker "$nm_action" "$nm_block"; then
+    if ! block_walker "$nm_action${nm_not_found:+:$nm_not_found}" "$nm_block"; then
       return $?
     fi
   done
@@ -40,7 +46,13 @@ function into_blockfile {
 }
 
 function block_walker {
-  local nm_action="$1"; shift
+  local nm_action="${1%:*}"
+  local nm_not_found="${1#*:}"
+  shift
+
+  if [[ "$nm_not_found" == "$nm_action" ]]; then
+    nm_not_found=
+  fi
 
   local fl_error=0
 
@@ -63,7 +75,11 @@ function block_walker {
     done
 
     if [[ "$fl_found" == 0 ]]; then
-      echo ERROR: "$nm_project" not found 1>&2
+      if [[ -n "$nm_not_found" ]]; then
+        "${nm_not_found}" "$nm_project"
+      else
+        echo ERROR: "$nm_project" not found 1>&2
+      fi
     fi
   done
 
