@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-function debug {
-  if [[ -n "${DEBUG:-}" ]]; then
-    if "$@"; then
-      true
-    fi
-  fi
-}
-
 function profile {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
@@ -26,72 +18,7 @@ function profile {
 
   source app_require
   source app_list
-}
-
-function get_requires {
-  if [[ -f Blockfile.json ]]; then
-    cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
-  fi
-}
-
-function into_blockfile {
-  local nm_action="${1%:*}"
-  local nm_not_found="${1#*:}"
-  shift
-
-  if [[ "$nm_not_found" == "$nm_action" ]]; then
-    nm_not_found=
-  fi
-
-  local nm_block
-  for nm_block in $(get_requires); do
-    if ! block_walker "$nm_action${nm_not_found:+:$nm_not_found}" "$nm_block"; then
-      return $?
-    fi
-  done
-
-  return 0
-}
-
-function block_walker {
-  local nm_action="${1%:*}"
-  local nm_not_found="${1#*:}"
-  shift
-
-  if [[ "$nm_not_found" == "$nm_action" ]]; then
-    nm_not_found=
-  fi
-
-  local fl_error=0
-
-  if [[ "$#" == 0 ]]; then
-    "${nm_action}_in" "."
-    return $fl_error
-  fi
-
-  local nm_project
-  for nm_project in "$@"; do
-    local fl_found=0
-
-    local pth_ap
-    for pth_app in "$nm_project" "vendor/$nm_project" "$APP_PATH/$nm_project"; do
-      if [[ -d "$pth_app" ]]; then
-        "${nm_action}_in" "$pth_app"
-        fl_found=1
-        break
-      fi
-    done
-
-    if [[ "$fl_found" == 0 ]]; then
-      if [[ -n "$nm_not_found" ]]; then
-        "${nm_not_found}" "$nm_project"
-      else
-        echo ERROR: "$nm_project" not found 1>&2
-      fi
-    fi
-  done
-
-  return $fl_error
+  source app_walker
 }
 
 profile
