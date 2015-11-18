@@ -6,9 +6,14 @@ function main {
   source "$shome/script/profile" || return 1
 
   local pth_profile
-  for pth_profile in $(app runmany 'ls -d $1/script/profile 2>&- || true'); do
+  for pth_profile in $(app runmany 'ls -d $1/script/profile $1/script/rc 2>&- || true'); do
+    echo "INFO: $pth_profile" 1>&2
     source "$pth_profile"
   done
+
+  if [[ "$#" -gt 0 ]]; then
+    exec "$@"
+  fi
 }
 
 source sub "$0" "$@"
