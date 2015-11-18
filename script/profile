@@ -3,6 +3,7 @@
 function profile {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
+  source "$shome/script/rc"
 
   if [[ -d "$shome/vendor/sub" ]]; then
     source "$shome/vendor/sub/script/profile"
@@ -16,7 +17,6 @@ function profile {
     export APP_PATH="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
   fi
 
-  source app_require
   source app_list
   source app_walker
 }
