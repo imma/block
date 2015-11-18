@@ -7,7 +7,9 @@ function mark_source {
 
 function source_pre {
   local pth_profiled
-  for pth_profiled in $(set +f; echo .profile.d/*.pre); do
+  set +f
+  for pth_profiled in .profile.d/*.pre; do
+    set -f
     if [[ -f "$pth_profiled" ]]; then
       mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
@@ -16,15 +18,13 @@ function source_pre {
 }
 
 function source_profile {
-  local nm_block=
+  local nm_block="${PWD##*/}"
   if [[ -f .app-name ]]; then
     read nm_block < .app-name
-  else
-    nm_block="${PWD##*/}"
   fi
 
   local a="_require_${nm_block//-/_}"
-  if [[ -r "script/"profile ]]; then
+  if [[ -r "script/profile" ]]; then
     if [[ -z "${!a:-}" ]]; then
       mark_source "$PWD/script/profile"
       eval "$a=1"
@@ -33,11 +33,17 @@ function source_profile {
   else
     echo "WARNING: script/profile not found in $PWD" 1>&2
   fi
+
+  if [[ -r "script/rc" ]]; then
+    source "script/rc"
+  fi
 }
 
 function source_post {
   local pth_profiled
-  for pth_profiled in $(set +f; echo .profile.d/*.post); do
+  set +f
+  for pth_profiled in .profile.d/*.post; do
+    set -f
     if [[ -f "$pth_profiled" ]]; then
       mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
