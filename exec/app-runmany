@@ -74,9 +74,10 @@ function runmany_in {
     nm_block="${PWD##*/}"
   fi
 
-  if eval test -z '${'"_runmany_${nm_block}"':-}'; then
+  local a="_runmany_${nm_block}"
+  if -z "${!a:-}"; then
     into_blockfile runmany
-    eval "_runmany_${nm_block}=1"
+    eval "$a=1"
     echo $PWD
   fi
   popd >/dev/null

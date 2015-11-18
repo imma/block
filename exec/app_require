@@ -25,7 +25,7 @@ function source_profile {
 
   local a="_require_${nm_block//-/_}"
   if [[ -r "script/"profile ]]; then
-    if eval test -z '${'"$a"':-}'; then
+    if -z "${!a:-}"; then
       mark_source "$PWD/script/profile"
       eval "$a=1"
       source "script/profile"
