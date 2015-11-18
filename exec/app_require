@@ -18,7 +18,7 @@ function source_pre {
 function source_profile {
   local nm_block=
   if [[ -f .app-name ]]; then
-    nm_block="$(cat .app-name)"
+    read nm_block < .app-name
   else
     nm_block="${PWD##*/}"
   fi
