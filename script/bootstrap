@@ -2,23 +2,13 @@
 
 function bootstrap {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  local whome="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
+  source "$shome/script/profile"
 
+  app compile gitsubmodule
   source "$shome/script/profile"
   
-  local cmd_sub="$(which sub 2>&- || true)"
-  if [[ ! -x "$cmd_sub" ]]; then
-    if [[ ! -d "$whome/sub" ]]; then
-      git clone git@github.com:defn/sub "$whome/sub"
-    fi
-  fi
-
-  local cmd_jq="$(which jq 2>&- || true)"
-  if [[ ! -x "$cmd_jq" ]]; then
-    if [[ ! -d "$whome/jq" ]]; then
-      git clone git@github.com:defn/app-jq "$whome/jq"
-      (cd "$whome/jq" && script/bootstrap)
-    fi
+  if [[ ! -x "$shome/vendor/jq/bin/jq" ]]; then
+    (cd "$shome/vendor/jq" && script/bootstrap)
   fi
 }
 
