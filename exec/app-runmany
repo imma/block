@@ -75,7 +75,7 @@ function runmany_in {
   fi
 
   local a="_runmany_${nm_block}"
-  if -z "${!a:-}"; then
+  if [[ -z "${!a:-}" ]]; then
     into_blockfile runmany
     eval "$a=1"
     echo $PWD
