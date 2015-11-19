@@ -6,6 +6,7 @@ function need_clone {
   local url_git
   for url_git in $(site-map "$nm_block"); do
     if git clone "$url_git" "$APP_PATH/$nm_block"; then
+      (cd "$APP_PATH/$nm_block" && app clone)
       break
     fi
   done
