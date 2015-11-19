@@ -14,11 +14,13 @@ function main {
       else
         script/bootstrap
       fi
-    else
+    elif [[ -x script/bootstrap ]]; then
       script/bootstrap
     fi
 
-    source script/profile
+    if [[ -e script/profile ]]; then
+      source script/profile
+    fi
 
     popd
   done
