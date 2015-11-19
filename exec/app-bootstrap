@@ -10,8 +10,6 @@ function main {
 
     if [[ -x script/stale ]]; then
       if script/stale; then
-        true
-      else
         script/bootstrap
       fi
     elif [[ -x script/bootstrap ]]; then
