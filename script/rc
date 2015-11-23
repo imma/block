@@ -63,5 +63,6 @@ function require_in {
 }
 
 function require {
+  umask 022
   block_walker "$FUNCNAME" "$@"
 }

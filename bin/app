@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+umask 022
+
 function main {
   if [[ "$#" = "0" ]]; then
     return 0
