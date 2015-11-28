@@ -7,6 +7,9 @@ function main {
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
+  source "$shome/script/profile"
+  
+  umask 022
 }
 
 source sub "$BASH_SOURCE" "$@"
