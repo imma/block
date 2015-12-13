@@ -13,7 +13,10 @@ function need_clone {
 }
 
 function clone_block {
-  local nm_block="$(cat .app-name 2>&- || basename "$(pwd)")"
+  local nm_block="${PWD##*/}"
+  if [[ -f .app-name ]]; then
+    read nm_block < .app-name
+  fi
 
   local a="_clone_${nm_block//-/_}"
   if [[ -z "${!a:-}" ]]; then

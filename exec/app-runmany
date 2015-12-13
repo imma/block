@@ -67,11 +67,9 @@ function runmany_in {
 
   pushd "$nm_project" >/dev/null
 
-  local nm_block=
+  local nm_block="${PWD##*/}"
   if [[ -f .app-name ]]; then
-    nm_block="$(cat .app-name)"
-  else
-    nm_block="${PWD##*/}"
+    read nm_block < .app-name
   fi
 
   local a="_runmany_${nm_block//-/_}"

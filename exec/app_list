@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 function list_block {
-  local nm_block="$(cat .app-name 2>&- || basename "$(pwd)")"
+  local nm_block="${PWD##*/}"
+  if [[ -f .app-name ]]; then
+    read nm_block < .app-name
+  fi
 
   local a="_list_${nm_block//-/_}"
   if [[ -z "${!a:-}" ]]; then
