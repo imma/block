@@ -4,12 +4,13 @@ function main {
   cat <<"__EOF"
 #!/usr/bin/env bash
 
+source "$APP_PATH/app/script/profile"
+
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
   source "$shome/script/profile"
-  
-  umask 022
+  require  
 }
 
 source sub "$BASH_SOURCE" "$@"
