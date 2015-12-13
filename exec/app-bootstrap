@@ -2,7 +2,6 @@
 
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-
   source "$shome/script/profile" || return 1
 
   for a in $(app runmany 'echo $1'); do
@@ -10,10 +9,10 @@ function main {
 
     if [[ -x script/stale ]]; then
       if script/stale; then
-        script/bootstrap
+        app require script/bootstrap
       fi
     elif [[ -x script/bootstrap ]]; then
-      script/bootstrap
+      app require script/bootstrap
     fi
 
     if [[ -e script/profile ]]; then
