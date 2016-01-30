@@ -9,7 +9,7 @@ function main {
   case "$nm_package" in
     http*)
      local tmp_package="$(mktemp -t XXXXXX)"
-     curl -L -o "$tmp_package" "$nm_package"
+     curl -sS -L -o "$tmp_package" "$nm_package"
       mv -f "$tmp_package" "$tmp_package.pkg"
       nm_package="$tmp_package.pkg"
       ;;
