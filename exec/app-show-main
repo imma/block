@@ -4,7 +4,7 @@ function main {
   cat <<"__EOF"
 #!/usr/bin/env bash
 
-source "$APP_PATH/app/script/profile"
+source "$APP_PATH/block/script/profile"
 
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"

@@ -54,7 +54,7 @@ function block_walker {
     local fl_found=0
 
     local pth_ap
-    for pth_app in "$nm_project" "vendor/$nm_project" "$APP_PATH/app/vendor/$nm_project" "$APP_PATH/$nm_project"; do
+    for pth_app in "$nm_project" "vendor/$nm_project" "$APP_PATH/block/vendor/$nm_project" "$APP_PATH/$nm_project"; do
       if [[ -d "$pth_app" ]]; then
         "${nm_action}_in" "$pth_app"
         fl_found=1
