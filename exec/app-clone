@@ -19,6 +19,10 @@ function main {
   while read -r nm_block pth_block id_block; do
     local a="_clone_${nm_block//-/_}"
 
+    if [[ "${!a:-}" == "$pth_block" ]]; then
+      continue
+    fi
+
     if [[ ! -d "$pth_block" ]]; then
       local url_git="$(app map "$nm_block")"
       if [[ -n "$url_git" ]]; then
@@ -32,14 +36,12 @@ function main {
     fi
 
     if [[ "$id_block" != "." ]]; then
-      if [[ "${!a:-}" != "$pth_block" ]]; then
-        read -r "$a" <<< "$pth_block"
-        export "$a"
+      read -r "$a" <<< "$pth_block"
+      export "$a"
 
-        pushd "$pth_block"
-        block clone
-        popd
-      fi
+      pushd "$pth_block"
+      block clone
+      popd
     fi
   done < "$tmp_list"
   rm -f "$tmp_list"
