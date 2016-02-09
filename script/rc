@@ -30,8 +30,6 @@ function source_profile {
       eval "$a=1"
       source "script/profile"
     fi
-  else
-    echo "WARNING: script/profile not found in $PWD" 1>&2
   fi
 
   if [[ -r "script/rc" ]]; then
