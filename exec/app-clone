@@ -7,7 +7,14 @@ function main {
   source "$shome/script/profile" || return 1
 
   local tmp_list="$(mktemp -t XXXXXX)"
-  block list > "$tmp_list"
+  if [[ "$#" == 0 ]]; then
+    block list  > "$tmp_list"
+  else
+    for nm_block in "$@"; do
+      echo "$nm_block"
+    done > "$tmp_list"
+  fi
+
   while read -r nm_block pth_block id_block; do
     local a="_clone_${nm_block//-/_}"
 
