@@ -9,22 +9,24 @@ function main {
   while read -r nm_block pth_block id_block; do
     if [[ ! -d "$pth_block" ]]; then
       block clone "$nm_block"
-    fi
-    
-    pushd "$pth_block"
-    if [[ -x script/stale ]]; then
-      if script/stale < /dev/null; then
+      pushd "$APP_PATH/$nm_block" # TODO get pth_block from list?
+      block bootstrap
+    else
+      pushd "$pth_block"
+      if [[ -x script/stale ]]; then
+        if script/stale < /dev/null; then
+          script/bootstrap < /dev/null
+        fi
+      elif [[ -x script/bootstrap ]]; then
         script/bootstrap < /dev/null
       fi
-    elif [[ -x script/bootstrap ]]; then
-      script/bootstrap < /dev/null
-    fi
 
-    if [[ -e script/profile ]]; then
-      source script/profile
-    fi
-    if [[ -e script/rc ]]; then
-      source script/rc
+      if [[ -e script/profile ]]; then
+        source script/profile
+      fi
+      if [[ -e script/rc ]]; then
+        source script/rc
+      fi
     fi
     popd
   done < "$tmp_list"
