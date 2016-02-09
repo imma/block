@@ -19,30 +19,32 @@ function main {
   while read -r nm_block pth_block id_block; do
     local a="_clone_${nm_block//-/_}"
 
-    if [[ "${!a:-}" == "$pth_block" ]]; then
+    if [[ -d "$pth_block" ]]; then
       continue
     fi
 
-    if [[ ! -d "$pth_block" ]]; then
-      local url_git="$(app map "$nm_block")"
-      if [[ -n "$url_git" ]]; then
-        read -r "$a" <<< "$pth_block"
-        export "$a"
-
-        git clone "$url_git" "$APP_PATH/$nm_block"
-        pth_block="$APP_PATH/$nm_block"
-        unset "$a"
-      else
-        echo "ERROR: could not find git repo for $nm_block" 1>&2
-        break
-      fi
+    if [[ -n "$pth_block" && "${!a:-}" == "$pth_block" ]]; then
+      continue
     fi
+
+    local url_git="$(app map "$nm_block")"
+    if [[ ! -n "$url_git" ]]; then
+      echo "ERROR: could not find git repo for $nm_block" 1>&2
+      break
+    fi
+
+    git clone "$url_git" "$APP_PATH/$nm_block"
+    pth_block="$APP_PATH/$nm_block"
+
+    read -r "$a" <<< "$pth_block"
+    export "$a"
 
     if [[ "$id_block" != "." ]]; then
       pushd "$pth_block"
       block clone
       popd
     fi
+
   done < "$tmp_list"
   rm -f "$tmp_list"
 }
