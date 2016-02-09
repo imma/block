@@ -59,16 +59,19 @@ function get_requires {
 }
 
 function list_block {
-  local nm_block="${1##*/}"; shift
-  local id_block="$nm_block"
+  local pth_block="$1"; shift
+  local id_block="${pth_block##*/}"
 
+  if [[ "$pth_block" == "." ]]; then
+    pth_block="$PWD"
+  fi
+    
+  local nm_block="${pth_block##*/}"
   if [[ -f .app-name ]]; then
     read nm_block < .app-name
-  elif [[ "$nm_block" == "." ]]; then
-    nm_block="${PWD##*/}"
   fi
 
-  echo "$nm_block $PWD $id_block"
+  echo "$nm_block $pth_block $id_block"
 }
 
 source sub "$0" "$@"
