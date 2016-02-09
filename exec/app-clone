@@ -6,6 +6,10 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" || return 1
 
+  main_clone "$@"
+}
+
+function main_clone {
   set -x
   local tmp_list="$(mktemp -t XXXXXX)"
   if [[ "$#" == 0 ]]; then
@@ -40,7 +44,7 @@ function main {
 
     if [[ "$id_block" != "." ]]; then
       pushd "$pth_block"
-      block clone
+      main_clone
       popd
     fi
 
