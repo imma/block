@@ -8,8 +8,7 @@ function main {
   block list > "$tmp_list"
   while read -r nm_block pth_block id_block; do
     if [[ ! -d "$pth_block" ]]; then
-      echo "ERROR: missing $nm_block block"
-      break
+      block clone "$nm_block"
     fi
     
     pushd "$pth_block"
