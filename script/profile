@@ -1,14 +1,6 @@
 #!/usr/bin/env bash
 
 function profile {
-  # load this once per process
-  local this_app="_app_$$"
-  if [[ -n "${!this_app:-}" ]]; then
-    return 0
-  fi
-
-  eval "${this_app}=1"
-
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   PATH="$shome/bin:$shome/exec:$PATH"
   source "$shome/script/rc"
