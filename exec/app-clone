@@ -19,7 +19,7 @@ function main {
     local a="_clone_${nm_block//-/_}"
 
     if [[ ! -d "$pth_block" ]]; then
-      local url_git="$(app map "$nm_block")"
+      local url_git="$(app map "$nm_block")" # TODO get rid of app-map
       if [[ -n "$url_git" ]]; then
         git clone "$url_git" "$APP_PATH/$nm_block"
         pth_block="$APP_PATH/$nm_block"
