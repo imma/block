@@ -1,42 +1,14 @@
 #!/usr/bin/env bash
 
-function mark_source {
-  local pth_profile="$1"; shift
-  debug echo INFO "$pth_profile" 1>&2
-}
-
 function source_pre {
   local pth_profiled
   set +f
   for pth_profiled in .profile.d/*.pre; do
     set -f
     if [[ -f "$pth_profiled" ]]; then
-      mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
     fi
   done
-}
-
-function source_profile {
-  local nm_block="${PWD##*/}"
-  if [[ -f .app-name ]]; then
-    read nm_block < .app-name
-  fi
-
-  local a="_require_${nm_block//-/_}"
-  if [[ -r "script/profile" ]]; then
-    if [[ -z "${!a:-}" ]]; then
-      mark_source "$PWD/script/profile"
-      eval "$a=1"
-      source "script/profile"
-    fi
-  else
-    echo "WARNING: script/profile not found in $PWD" 1>&2
-  fi
-
-  if [[ -r "script/rc" ]]; then
-    source "script/rc"
-  fi
 }
 
 function source_post {
@@ -45,23 +17,37 @@ function source_post {
   for pth_profiled in .profile.d/*.post; do
     set -f
     if [[ -f "$pth_profiled" ]]; then
-      mark_source "$PWD/$pth_profiled"
       source "$pth_profiled"
     fi
   done
 }
 
-function require_in {
-  local nm_project="$1"; shift
-
-  pushd "$nm_project" >/dev/null
-  source_pre || fl_error=1
-  into_blockfile require
-  source_profile || fl_error=1
-  source_post || fl_error=1
-  popd >/dev/null
-}
-
 function require {
-  block_walker "$FUNCNAME" "$@"
+  local tmp_profile="$(mktemp -t XXXXXX)"
+
+  local tmp_list="$(mktemp -t XXXXXX)"
+  block list > "$tmp_list"
+
+  while read -r nm_block pth_block id_block; do
+    if [[ ! -d "$pth_block" ]]; then
+      echo "ERROR: missing $nm_block block" 1>&2
+      set --
+      break
+    fi
+
+    source_pre
+    if [[ -e "$pth_block/script/profile" ]]; then
+      echo "source $pth_block/script/profile"
+    fi
+    if [[ -e "$pth_block/script/rc" ]]; then
+      echo "source $pth_block/script/rc"
+    fi
+    source_post
+
+  done < "$tmp_list" > "$tmp_profile"
+  rm -f "$tmp_list"
+
+  source "$tmp_profile"
+  rm -f "$tmp_profile"
 }
+

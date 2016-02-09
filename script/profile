@@ -26,7 +26,6 @@ function profile {
   fi
 
   source app_list
-  source app_walker
 }
 
 profile

@@ -1,13 +1,40 @@
 #!/usr/bin/env bash
 
+#!/usr/bin/env bash
+
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-
   source "$shome/script/profile" || return 1
 
-  source app_clone
+  local tmp_list="$(mktemp -t XXXXXX)"
+  block list > "$tmp_list"
+  while read -r nm_block pth_block id_block; do
+    local a="_clone_${nm_block//-/_}"
 
-  block_walker clone:need_clone "$@"
+    if [[ ! -d "$pth_block" ]]; then
+      local url_git="$(app map "$nm_block")"
+      if [[ -n "$url_git" ]]; then
+        git clone "$url_git" "$APP_PATH/$nm_block"
+        pth_block="$APP_PATH/$nm_block"
+        unset "$a"
+      else
+        echo "ERROR: could not find git repo for $nm_block" 1>&2
+        break
+      fi
+    fi
+
+    if [[ "$id_block" != "." ]]; then
+      if [[ "${!a:-}" != "$pth_block" ]]; then
+        read -r "$a" <<< "$pth_block"
+        export "$a"
+
+        pushd "$pth_block"
+        block clone
+        popd
+      fi
+    fi
+  done < "$tmp_list"
+  rm -f "$tmp_list"
 }
 
 source sub "$0" "$@"

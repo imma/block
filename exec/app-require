@@ -2,14 +2,10 @@
 
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-
   source "$shome/script/profile" || return 1
+  source "app_require"
 
-  local pth_profile
-  for pth_profile in $(app runmany 'ls -d $1/script/profile $1/script/rc 2>&- || true'); do
-    echo "INFO: $pth_profile" 1>&2
-    source "$pth_profile"
-  done
+  require
 
   if [[ "$#" -gt 0 ]]; then
     eval "$@"

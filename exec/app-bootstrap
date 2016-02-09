@@ -2,25 +2,35 @@
 
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+
   source "$shome/script/profile" || return 1
 
-  for a in $(app runmany 'echo $1'); do
-    pushd "$a"
-
+  local tmp_list="$(mktemp -t XXXXXX)"
+  block list > "$tmp_list"
+  while read -r nm_block pth_block id_block; do
+    if [[ ! -d "$pth_block" ]]; then
+      echo "ERROR: missing $nm_block block"
+      break
+    fi
+    
+    pushd "$pth_block"
     if [[ -x script/stale ]]; then
-      if script/stale; then
-        script/bootstrap
+      if script/stale < /dev/null; then
+        script/bootstrap < /dev/null
       fi
     elif [[ -x script/bootstrap ]]; then
-      script/bootstrap
+      script/bootstrap < /dev/null
     fi
 
     if [[ -e script/profile ]]; then
       source script/profile
     fi
-
+    if [[ -e script/rc ]]; then
+      source script/rc
+    fi
     popd
-  done
+  done < "$tmp_list"
+  rm -f "$tmp_list"
 }
 
 source sub "$0" "$@"
