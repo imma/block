@@ -10,7 +10,6 @@ function main {
 }
 
 function main_clone {
-  set -x
   local tmp_list="$(mktemp -t XXXXXX)"
   if [[ "$#" == 0 ]]; then
     block list  > "$tmp_list"
@@ -40,7 +39,6 @@ function main_clone {
     pth_block="$APP_PATH/$nm_block"
 
     read -r "$a" <<< "$pth_block"
-    export "$a"
 
     if [[ "$id_block" != "." ]]; then
       pushd "$pth_block"
