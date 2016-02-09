@@ -26,7 +26,7 @@ function main_clone {
     fi
 
     local a="_clone_${nm_block//-/_}"
-    if [[ -n "$pth_block" && "${!a:-}" == "$pth_block" ]]; then
+    if [[ -d "${!a:-}" ]]; then
       continue
     fi
 
