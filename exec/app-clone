@@ -26,6 +26,9 @@ function main {
     if [[ ! -d "$pth_block" ]]; then
       local url_git="$(app map "$nm_block")"
       if [[ -n "$url_git" ]]; then
+        read -r "$a" <<< "$pth_block"
+        export "$a"
+
         git clone "$url_git" "$APP_PATH/$nm_block"
         pth_block="$APP_PATH/$nm_block"
         unset "$a"
@@ -36,9 +39,6 @@ function main {
     fi
 
     if [[ "$id_block" != "." ]]; then
-      read -r "$a" <<< "$pth_block"
-      export "$a"
-
       pushd "$pth_block"
       block clone
       popd
