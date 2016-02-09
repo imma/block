@@ -3,9 +3,102 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" || return 1
-  source app_list
 
   block_walker list "$@"
 }
 
+function list_block {
+  local nm_block="${1##*/}"; shift
+  local id_block="$nm_block"
+
+  if [[ -f .app-name ]]; then
+    read nm_block < .app-name
+  elif [[ "$nm_block" == "." ]]; then
+    nm_block="${PWD##*/}"
+  fi
+
+  local a="_list_${nm_block//-/_}"
+  if [[ -z "${!a:-}" ]]; then
+    read -r $a <<< 1
+    export $a
+    echo "$nm_block $PWD $id_block"
+  fi
+}
+
+function list_in {
+  local nm_project="$1"; shift
+
+  pushd "$nm_project" >/dev/null
+  into_blockfile list
+  list_block "$nm_project" || fl_error=1
+  popd >/dev/null
+}
+
+function get_requires {
+  if [[ -f Blockfile.json ]]; then
+    cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
+  fi
+}
+
+function into_blockfile {
+  local nm_action="${1%:*}"
+  local nm_not_found="${1#*:}"
+  shift
+
+  if [[ "$nm_not_found" == "$nm_action" ]]; then
+    nm_not_found=
+  fi
+
+  local nm_block
+  for nm_block in $(get_requires); do
+    if ! block_walker "$nm_action${nm_not_found:+:$nm_not_found}" "$nm_block"; then
+      return $?
+    fi
+  done
+
+  return 0
+}
+
+function block_walker {
+  local nm_action="${1%:*}"
+  local nm_not_found="${1#*:}"
+  shift
+
+  if [[ "$nm_not_found" == "$nm_action" ]]; then
+    nm_not_found=
+  fi
+
+  local fl_error=0
+
+  if [[ "$#" == 0 ]]; then
+    "${nm_action}_in" "."
+    return $fl_error
+  fi
+
+  local nm_project
+  for nm_project in "$@"; do
+    local fl_found=0
+
+    local pth_ap
+    for pth_app in "vendor/$nm_project" "$APP_PATH/block/vendor/$nm_project" "$APP_PATH/$nm_project"; do
+      if [[ -d "$pth_app" ]]; then
+        "${nm_action}_in" "$pth_app"
+        fl_found=1
+        break
+      fi
+    done
+
+    if [[ "$fl_found" == 0 ]]; then
+      if [[ -n "$nm_not_found" ]]; then
+        "${nm_not_found}" "$nm_project"
+      else
+        echo "$nm_project"
+      fi
+    fi
+  done
+
+  return $fl_error
+}
+
 source sub "$0" "$@"
+

@@ -36,11 +36,11 @@ function require {
     fi
 
     source_pre
-    if [[ -e "$pth_block/script/profile" ]]; then
-      echo "source $pth_block/script/profile"
-    fi
     if [[ -e "$pth_block/script/rc" ]]; then
       echo "source $pth_block/script/rc"
+    fi
+    if [[ -e "$pth_block/script/profile" ]]; then
+      echo "source $pth_block/script/profile"
     fi
     source_post
 
