@@ -17,12 +17,11 @@ function main {
   fi
 
   while read -r nm_block pth_block id_block; do
-    local a="_clone_${nm_block//-/_}"
-
     if [[ -d "$pth_block" ]]; then
       continue
     fi
 
+    local a="_clone_${nm_block//-/_}"
     if [[ -n "$pth_block" && "${!a:-}" == "$pth_block" ]]; then
       continue
     fi
