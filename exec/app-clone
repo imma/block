@@ -6,6 +6,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" || return 1
 
+  set -x
   local tmp_list="$(mktemp -t XXXXXX)"
   if [[ "$#" == 0 ]]; then
     block list  > "$tmp_list"
