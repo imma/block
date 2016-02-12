@@ -26,6 +26,7 @@ function main_clone {
 
     local a="_clone_${nm_block//-/_}"
     a="${a//./_}"
+    echo "XXX $a"
     if [[ -d "${!a:-}" ]]; then
       continue
     fi
@@ -41,9 +42,6 @@ function main_clone {
         break
       fi
     fi
-
-    git clone "$url_git" "$APP_PATH/$nm_block"
-    pth_block="$APP_PATH/$nm_block"
 
     read -r "$a" <<< "$pth_block"
 
