@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+function stale {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+
+  if [[ -x "$shome/vendor/jq/bin/jq" ]]; then
+    return 1
+  fi
+
+  return 0
+}
+
+stale
