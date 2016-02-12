@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+function block_list {
+  local found=1
+
+  if [[ "$#" == 0 ]]; then
+    list_in "."
+    found=0
+  else
+    local nm_project
+    for nm_project in "$@"; do
+      local pth_block
+      for pth_block in "vendor/$nm_project" "$APP_PATH/block/vendor/$nm_project" "$APP_PATH/$nm_project"; do
+        if [[ -d "$pth_block" ]]; then
+          list_in "$pth_block"
+          found=0
+          break
+        fi
+      done
+    done
+  fi
+
+  return $found
+}
+
+function list_in {
+  local pth_block="$1"; shift
+
+  pushd "$pth_block" >/dev/null
+  local nm_block
+  for nm_block in $(get_requires); do
+    local a="_list_${nm_block//-/_}"
+    a="${a//./_}"
+    if [[ -z "${!a:-}" ]]; then
+      read -r $a <<< 1
+
+      if ! block_list "$nm_block"; then
+        echo "$nm_block" # not found
+      fi
+    fi
+
+  done
+
+  list_block "$pth_block"
+  popd >/dev/null
+}
+
+function get_requires {
+  if [[ -f Blockfile.json ]]; then
+    cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
+  fi
+}
+
+function list_block {
+  local pth_block="$1"; shift
+  local id_block="${pth_block##*/}"
+
+  if [[ "$pth_block" == "." ]]; then
+    pth_block="$PWD"
+  fi
+    
+  local nm_block="${pth_block##*/}"
+  if [[ -f .app-name ]]; then
+    read nm_block < .app-name
+  fi
+
+  echo "$nm_block $pth_block $id_block"
+}
+
