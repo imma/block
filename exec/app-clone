@@ -6,6 +6,10 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" || return 1
 
+  main_clone "$@"
+}
+
+function main_clone {
   local tmp_list="$(mktemp -t XXXXXX)"
   if [[ "$#" == 0 ]]; then
     block list  > "$tmp_list"
@@ -16,7 +20,14 @@ function main {
   fi
 
   while read -r nm_block pth_block id_block; do
+    if [[ -d "$pth_block" ]]; then
+      continue
+    fi
+
     local a="_clone_${nm_block//-/_}"
+    if [[ -d "${!a:-}" ]]; then
+      continue
+    fi
 
     if [[ ! -d "$pth_block" ]]; then
       local url_git="$(app map "$nm_block")" # TODO get rid of app-map
@@ -30,16 +41,17 @@ function main {
       fi
     fi
 
-    if [[ "$id_block" != "." ]]; then
-      if [[ "${!a:-}" != "$pth_block" ]]; then
-        read -r "$a" <<< "$pth_block"
-        export "$a"
+    git clone "$url_git" "$APP_PATH/$nm_block"
+    pth_block="$APP_PATH/$nm_block"
 
-        pushd "$pth_block"
-        block clone
-        popd
-      fi
+    read -r "$a" <<< "$pth_block"
+
+    if [[ "$id_block" != "." ]]; then
+      pushd "$pth_block"
+      main_clone
+      popd
     fi
+
   done < "$tmp_list"
   rm -f "$tmp_list"
 }
