@@ -8,9 +8,14 @@ blocks fit with each other depend on file-name signatures.
 
     script/profile
 
-Bash shells can source `script/profile` to make use of a block.  Most
+Bash shells can source `profile` to make use of a block.  Most
 configuration is environment variables and the side-effects it
 represents.
+
+    script/rc
+
+Shell functions aren't inherited by sub-shells, so they have to be
+loaded at every shell in `rc`; `profile` should load `rc`.
 
 # Builds
 
