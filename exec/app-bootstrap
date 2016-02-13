@@ -6,10 +6,11 @@ function main {
 
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"
+
   while read -r nm_block pth_block id_block; do
     if [[ ! -d "$pth_block" ]]; then
-      block clone "$nm_block"
-      pushd "$APP_PATH/$nm_block" # TODO get pth_block from list?
+      block clone "$nm_block" "$pth_block"
+      pushd "$APP_PATH/$nm_block"
       block bootstrap
     else
       pushd "$pth_block"

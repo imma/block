@@ -8,34 +8,24 @@ function main {
   main_clone "$@"
 }
 
-function block_map {
-  local nm_block="$1"; shift
-
-  local nm_repo=
-  case "$nm_block" in
-    jq|pkgsrc|virtualbox|python|aws|gcloud|packer|vagrant|leiningen|ansible|erlang|elixir|phoenix|node|dnsimple|ruby|rocco|digitalocean|tugboat|docker|consul|openvpn|letsencrypt|redis|memcached|mysql|postgresql|sqlite|runit|htop|homebrew|dnsmasq|ssl|dtrace|go)
-      nm_repo="app-$nm_block"
-      ;;
-    *)
-      nm_repo="$nm_block"
-      ;;
-  esac
-
-  echo "git@github.com:defn/$nm_repo"
-}
-
 function main_clone {
   local tmp_list="$(mktemp -t XXXXXX)"
 
   if [[ "$#" == 0 ]]; then
     block_list
   else
-    for nm_block in "$@"; do
-      echo "$nm_block"
-    done
+    echo "$@"
   fi > "$tmp_list"
 
+  local git_block
   while read -r nm_block pth_block id_block; do
+    if [[ -z "$id_block" ]]; then
+      git_block="$pth_block"
+      pth_block=
+    else
+      git_block=
+    fi
+
     # Block has already been cloned
     if [[ -d "$pth_block" ]]; then
       continue
@@ -43,16 +33,8 @@ function main_clone {
 
    # Block has not been cloned
     if [[ ! -d "$pth_block" ]]; then
-      # Get the git URL
-      local url_git="$(block_map "$nm_block")"
-      if [[ -z "$url_git" ]]; then
-        # Exit if repo URL is not found
-        echo "ERROR: could not find git repo for $nm_block" 1>&2
-        break
-      fi
-
       # Clone the repository
-      git clone "$url_git" "$APP_PATH/$nm_block"
+      git clone "$git_block" "$APP_PATH/$nm_block"
       pth_block="$APP_PATH/$nm_block"
     fi
 
