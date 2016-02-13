@@ -28,12 +28,12 @@ function main_clone {
   local tmp_list="$(mktemp -t XXXXXX)"
 
   if [[ "$#" == 0 ]]; then
-    block_list > "$tmp_list"
+    block_list
   else
     for nm_block in "$@"; do
       echo "$nm_block"
-    done > "$tmp_list"
-  fi
+    done
+  fi > "$tmp_list"
 
   while read -r nm_block pth_block id_block; do
     # Block has already been cloned
@@ -41,31 +41,20 @@ function main_clone {
       continue
     fi
 
-    # Block has already been processed
-    local a="_clone_${nm_block//-/_}"
-    a="${a//./_}"
-    if [[ -d "${!a:-}" ]]; then
-      continue
-    fi
-
-    # Block has not been cloned
+   # Block has not been cloned
     if [[ ! -d "$pth_block" ]]; then
       # Get the git URL
       local url_git="$(block_map "$nm_block")"
-      if [[ -n "$url_git" ]]; then
-        # Clone the repository
-        git clone "$url_git" "$APP_PATH/$nm_block"
-        pth_block="$APP_PATH/$nm_block"
-        unset "$a"
-      else
+      if [[ -z "$url_git" ]]; then
         # Exit if repo URL is not found
         echo "ERROR: could not find git repo for $nm_block" 1>&2
         break
       fi
-    fi
 
-    # Mark the block as processed
-    read -r "$a" <<< "$pth_block"
+      # Clone the repository
+      git clone "$url_git" "$APP_PATH/$nm_block"
+      pth_block="$APP_PATH/$nm_block"
+    fi
 
     # If this isn't the top level block, recursively clone
     if [[ "$id_block" != "." ]]; then
