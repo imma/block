@@ -23,19 +23,28 @@ function block_list {
   return $found
 }
 
+function get_requires {
+  if [[ -f Blockfile.json ]]; then
+    jq -r '.blocks as $b | . | [.require[] | [.] | flatten] | flatten[] | "\(.):\($b[.]//"git@github.com:defn/\(.)")"' < Blockfile.json
+  fi
+}
+
 function list_in {
   local pth_block="$1"; shift
 
   pushd "$pth_block" >/dev/null
   local nm_block
-  for nm_block in $(get_requires); do
+  local git_block
+  for the_block in $(get_requires); do
+    nm_block="${the_block%%:*}"
+    git_block="${the_block#*:}"
     local a="_list_${nm_block//-/_}"
     a="${a//./_}"
     if [[ -z "${!a:-}" ]]; then
       read -r $a <<< 1
 
       if ! block_list "$nm_block"; then
-        echo "$nm_block" # not found
+        echo "$nm_block" "$git_block" # not found
       fi
     fi
 
@@ -43,12 +52,6 @@ function list_in {
 
   list_block "$pth_block"
   popd >/dev/null
-}
-
-function get_requires {
-  if [[ -f Blockfile.json ]]; then
-    cat Blockfile.json | jq -r '[.require[] | [.] | flatten] | flatten[]'
-  fi
 }
 
 function list_block {
