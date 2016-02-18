@@ -21,7 +21,7 @@ function main {
      trap "$(printf "rm -f '%q'" "$tmp_dmg")" EXIT
      curl -sS -L -o "$tmp_dmg" "$url_dmg"
      hdiutil attach "$tmp_dmg"
-     trap "$(printf "rm -f '%q'; hdiutil detach /Volumes/$nm_volume" "$tmp_dmg")" EXIT
+     trap "$(printf "rm -f '%q'; hdiutil detach '%'" "/Volumes/$nm_volume" "$tmp_dmg")" EXIT
 
      if [[ -n "$nm_package" ]]; then
        app compile pkg "/Volumes/$nm_volume/$nm_package"
