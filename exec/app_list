@@ -40,6 +40,7 @@ function list_in {
     git_block="${the_block#*:}"
     local a="_list_${nm_block//-/_}"
     a="${a//./_}"
+    a="${a//\//_}"
     if [[ -z "${!a:-}" ]]; then
       read -r $a <<< 1
 
