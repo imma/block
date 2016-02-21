@@ -20,11 +20,10 @@ function main {
       local fnm_dmg="$(basename "$url_dmg")"
       cache curl "$fnm_dmg" "$url_dmg" -sS -L
       hdiutil attach "${BASEBOX_CACHE}/curl/$fnm_dmg"
-      trap "$(printf "hdiutil detach '%q'" "/Volumes/$nm_volume")" EXIT
-
       if [[ -n "$nm_package" ]]; then
         app compile pkg "/Volumes/$nm_volume/$nm_package"
       fi
+      hdiutil detach "/Volumes/$nm_volume"
       ;;
   esac
 }
