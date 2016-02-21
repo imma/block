@@ -5,16 +5,18 @@ function main {
   local pth_cache="$1"; shift
   local pth_env="$1"; shift
 
-  local nm_package="$1"; shift
-  case "$nm_package" in
-    http*)
-     local tmp_package="$(mktemp -t XXXXXX)"
-     curl -sS -L -o "$tmp_package" "$nm_package"
-      mv -f "$tmp_package" "$tmp_package.pkg"
-      nm_package="$tmp_package.pkg"
-      ;;
-  esac
+  local url_package="$1"; shift
   local pth_hd="${1:-/Volumes/Macintosh HD}"
+  local nm_package=
+  case "$url_package" in
+    http*)
+      local fnm_packe="$(basename "$url_package")"
+      cache curl "$fnm_package" "$url_package" -sS -L
+      nm_package="${BASEBOX_CACHE}/curl/$fnm_package"
+      ;;
+    *)
+      nm_package="$url_package"
+  esac
 
   case "$(uname -s)" in
     Darwin)
