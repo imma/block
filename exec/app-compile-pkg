@@ -10,7 +10,7 @@ function main {
   local nm_package=
   case "$url_package" in
     http*)
-      local fnm_packe="$(basename "$url_package")"
+      local fnm_package="$(basename "$url_package")"
       cache curl "$fnm_package" "$url_package" -sS -L
       nm_package="${BASEBOX_CACHE}/curl/$fnm_package"
       ;;
