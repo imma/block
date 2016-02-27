@@ -26,6 +26,8 @@ function block_list {
 function get_requires {
   if [[ -f Blockfile.json ]]; then
     jq -r '.blocks as $b | . | [.require[] | [.] | flatten] | flatten[] | "\(.):\($b[.]//"git@github.com:defn/\(.)")"' < Blockfile.json
+  elif [[ -f Blockfile.txt ]]; then
+    cat Blockfile.txt
   fi
 }
 
