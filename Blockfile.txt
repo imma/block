@@ -1,2 +1,2 @@
-jq git@github.com:defn/jq
-sub git@github.com:defn/sub
+jq:git@github.com:defn/jq
+sub:git@github.com:defn/sub
