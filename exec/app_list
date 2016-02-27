@@ -66,7 +66,9 @@ function list_block {
   fi
     
   local nm_block="${pth_block##*/}"
-  if [[ -f .app-name ]]; then
+  if [[ -f .block-name ]]; then
+    read nm_block < .block-name
+  elif [[ -f .app-name ]]; then # TODO deprecated
     read nm_block < .app-name
   fi
 
