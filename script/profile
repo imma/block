@@ -5,14 +5,6 @@ function profile {
   PATH="$shome/bin:$shome/exec:$PATH"
   source "$shome/script/rc"
 
-  if [[ -f "$shome/vendor/sub/script/profile" ]]; then
-    source "$shome/vendor/sub/script/profile"
-  fi
-
-  if [[ -f "$shome/vendor/jq/script/profile" ]]; then
-    source "$shome/vendor/jq/script/profile"
-  fi
-
   if [[ -z "${APP_PATH:-}" ]]; then
     export APP_PATH="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
   fi

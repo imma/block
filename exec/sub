@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+function try-next {
+  local pth_next="$(type -P "$1" || true)"; shift; shift
+
+  if [[ -e "$pth_next" ]]; then
+    if [[ -x "$pth_next" ]]; then
+      exec "$pth_next" "$@"
+    else
+      echo "ERR: found non-executable $pth_next" 1>&2
+      exit 1
+    fi
+  fi
+}
+
+function chain-sub {
+  # bash strict mode
+  set -efu
+
+  local pth_source="$1"; shift
+  export PATH="$(cd -P -- "$(dirname -- "$pth_source")/.." && echo "$PWD")/exec:$PATH"
+
+  # search for xxx in PATH
+  local nm_this="${pth_source##*/}"
+
+  # if the argument doesnt look like an option
+  if [[ "$#" > 0 && ! "$1" =~ ^- ]]; then
+    # try searching for the next sub-command
+    try-next "${nm_this}-$1" "$@"
+  fi
+
+  # if this is reached, no sub-command was found, and we're running in the
+  # script
+
+  # execute the script's main function
+  if declare -f -F main >/dev/null; then
+    unset _SUB
+    main "$@"
+    exit "$?"
+  else
+    # incomplete sub-command
+    if [[ "$#" > 0 ]]; then
+      echo "ERR: command $nm_this $1 not implemented" 1>&2
+    else
+      echo "ERR: command $nm_this not implemented" 1>&2
+    fi
+    exit 1
+  fi
+}
+
+chain-sub "$@"

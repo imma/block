@@ -10,7 +10,7 @@ function block_list {
     local nm_project
     for nm_project in "$@"; do
       local pth_block
-      for pth_block in "${PWD}/vendor/$nm_project" "$APP_PATH/block/vendor/$nm_project" "$APP_PATH/$nm_project"; do
+      for pth_block in "$APP_PATH/$nm_project"; do
         if [[ -d "$pth_block" ]]; then
           list_in "$pth_block"
           found=0
