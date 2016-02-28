@@ -81,12 +81,16 @@ function update_stuff {
 
 function main {
   # setup
-  if [[ "$#" == 0 ]]; then
-    echo "ERROR: specify a git repository to build" 1>&2
-    return 1
-  fi
+  local nm_repo=
 
-  local nm_repo="$1"; shift
+  if [[ "$#" == 0 ]]; then
+    if [[ ! -d ".git" ]]; then
+      echo "ERROR: specify a git repository to build" 1>&2
+      return 1
+    fi
+  else
+    nm_repo="$1"; shift
+  fi
 
   if [[ -n "${1:-}" ]]; then
     export http_proxy="$1"; shift
@@ -133,4 +137,4 @@ function main {
 set -exfu
 exec 2>&1
 cd
-main "$@" | tee -a cibuild.log
+main "$@"
