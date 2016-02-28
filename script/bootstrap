@@ -3,6 +3,8 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
+  
+  curl -sL -L -o "$shome/exec/shflags" https://raw.githubusercontent.com/nvie/shFlags/master/src/shflags
 }
 
 source sub "$BASH_SOURCE" "$@"
