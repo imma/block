@@ -16,10 +16,12 @@ function home_stuff {
   if [[ ! -d .git ]]; then
     git clone "$git_home" home
     mv home/.git . || rm -rf home/.git
+    git reset --hard
+    git clean -fd
+  else
+    git reset --hard
   fi
   
-  git reset --hard
-  git clean -fd
   git pull
 
   set +x; source script/ciprofile; set -x
