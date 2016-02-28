@@ -58,10 +58,6 @@ function cache_stuff {
       } | sudo tee /etc/apt/apt.conf.d/99boxcache
 
       if [[ -n "${http_proxy:-}" ]]; then
-        export http_proxy
-        export https_proxy="$http_proxy"
-        export ftp_proxy="$http_proxy"
-
         {
           echo "Acquire::http::Proxy \"$http_proxy\";"
         } | sudo tee -a /etc/apt/apt.conf.d/99boxcache
@@ -72,11 +68,11 @@ function cache_stuff {
 
 function update_stuff {
   case "$(uname -s)" in
-    Darwin)
-      sudo softwareupdate -i -v -a
-      ;;
     Linux)
       sudo aptitude upgrade -y
+      ;;
+    Darwin)
+      sudo softwareupdate -i -v -a
       ;;
   esac
 
@@ -85,9 +81,21 @@ function update_stuff {
 
 function main {
   # setup
+  if [[ "$#" == 0 ]]; then
+    echo "ERROR: specify a git repository to build" 1>&2
+    return 1
+  fi
+
   local nm_repo="$1"; shift
+
   if [[ -n "${1:-}" ]]; then
-    http_proxy="$1"; shift
+    export http_proxy="$1"; shift
+    export https_proxy="$http_proxy"
+    export ftp_proxy="$http_proxy"
+  fi
+
+  if [[ -n "${1:-}" ]]; then
+    export ssh_proxy="$1"; shift
   fi
 
   case "$(uname -s)" in
