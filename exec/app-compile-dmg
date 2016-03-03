@@ -6,15 +6,19 @@ function main {
   local pth_env="$1"; shift
 
   local url_dmg="$1"; shift
-  local nm_volume
+  local nm_volume=
   if [[ "$#" -gt 0 ]]; then
     nm_volume="$1"; shift
   fi
-  local nm_package
+  local nm_package=
   if [[ "$#" -gt 0 ]]; then
     nm_package="$1"; shift
   fi
 
+  if [[ -n "${DEBUG:-}" ]]; then
+    set -x
+  fi
+  
   case "$(uname -s)" in
     Darwin)
       local fnm_dmg="$(basename "$url_dmg")"
@@ -23,7 +27,9 @@ function main {
       if [[ -n "$nm_package" ]]; then
         app compile pkg "/Volumes/$nm_volume/$nm_package"
       fi
-      hdiutil detach "/Volumes/$nm_volume"
+      if [[ -n "$nm_volume" ]]; then
+        hdiutil detach "/Volumes/$nm_volume"
+      fi
       ;;
   esac
 }
