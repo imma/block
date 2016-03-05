@@ -10,7 +10,7 @@ function block_list {
     local nm_project
     for nm_project in "$@"; do
       local pth_block
-      for pth_block in "$APP_PATH/$nm_project"; do
+      for pth_block in "$BLOCK_PATH/$nm_project"; do
         if [[ -d "$pth_block" ]]; then
           list_in "$pth_block"
           found=0
@@ -68,8 +68,6 @@ function list_block {
   local nm_block="${pth_block##*/}"
   if [[ -f .block-name ]]; then
     read nm_block < .block-name
-  elif [[ -f .app-name ]]; then # TODO deprecated
-    read nm_block < .app-name
   fi
 
   echo "$nm_block $pth_block $id_block"
