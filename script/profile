@@ -5,8 +5,8 @@ function profile {
   PATH="$shome/bin:$shome/exec:$PATH"
   source "$shome/script/rc"
 
-  if [[ -z "${APP_PATH:-}" ]]; then
-    export APP_PATH="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
+  if [[ -z "${BLOCK_PATH:-}" ]]; then
+    export BLOCK_PATH="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
   fi
 }
 
