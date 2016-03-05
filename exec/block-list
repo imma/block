@@ -3,7 +3,7 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" || return 1
-  source "app_list"
+  source "block_list"
 
   block_list "$@"
 }

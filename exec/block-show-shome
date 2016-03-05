@@ -3,7 +3,6 @@
 function main {
   cat <<"__EOF"
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  PATH="$shome/bin:$shome/exec:$PATH"
   source "$shome/script/profile"
 __EOF
 }

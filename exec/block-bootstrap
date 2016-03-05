@@ -10,7 +10,7 @@ function main {
   while read -r nm_block pth_block id_block; do
     if [[ ! -d "$pth_block" ]]; then
       block clone "$nm_block" "$pth_block"
-      pushd "$APP_PATH/$nm_block"
+      pushd "$BLOCK_PATH/$nm_block"
       block bootstrap
     else
       pushd "$pth_block"

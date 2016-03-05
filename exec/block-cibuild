@@ -27,12 +27,12 @@ function home_stuff {
   set +x; source script/ciprofile; set -x
 }
 
-function app_stuff {
-  export APP_PATH="$(pwd)/work"
+function block_stuff {
+  export BLOCK_PATH="$(pwd)/work"
 
   # bootstrap app
-  git clone git@github.com:defn/block "$APP_PATH/block" || true
-  pushd "$APP_PATH/block"
+  git clone git@github.com:defn/block "$BLOCK_PATH/block" || true
+  pushd "$BLOCK_PATH/block"
   git pull
   set +x; source script/profile; require; set -x
   block clone
@@ -115,7 +115,7 @@ function main {
   cache_stuff
   git_stuff
   home_stuff "$nm_repo"
-  app_stuff
+  block_stuff
 
   # bootstrap dependencies
   block clone
