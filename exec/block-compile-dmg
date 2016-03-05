@@ -25,7 +25,7 @@ function main {
       cache curl "$fnm_dmg" "$url_dmg" -sS -L
       hdiutil attach "${BASEBOX_CACHE}/curl/$fnm_dmg"
       if [[ -n "$nm_package" ]]; then
-        app compile pkg "/Volumes/$nm_volume/$nm_package"
+        block compile pkg "/Volumes/$nm_volume/$nm_package"
       fi
       if [[ -n "$nm_volume" ]]; then
         hdiutil detach "/Volumes/$nm_volume"

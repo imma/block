@@ -35,8 +35,8 @@ function app_stuff {
   pushd "$APP_PATH/block"
   git pull
   set +x; source script/profile; require; set -x
-  app clone
-  app bootstrap
+  block clone
+  block bootstrap
   set +x; source script/profile; require; set -x
   popd
 }
@@ -118,9 +118,9 @@ function main {
   app_stuff
 
   # bootstrap dependencies
-  app clone
-  app runmany 8 'cd $1 && git pull' || true
-  app bootstrap
+  block clone
+  block runmany 8 'cd $1 && git pull' || true
+  block bootstrap
 
   # fully source home
   set +x; require; set -x

@@ -8,7 +8,7 @@ function main {
   local tmp_env="$(mktemp -d -t XXXXXX)"
 
   cd "$phome"
-  exec "app-compile-${nm_pack}" "$phome" "$tmp_cache" "$tmp_env" "$@"
+  exec "block-compile-${nm_pack}" "$phome" "$tmp_cache" "$tmp_env" "$@"
 }
 
 main "$@"
