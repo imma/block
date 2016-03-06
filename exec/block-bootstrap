@@ -18,6 +18,10 @@ function main {
         if script/stale < /dev/null; then
           script/bootstrap < /dev/null
         fi
+      elif [[ -x script/fresh ]]; then
+        if ! script/fresh< /dev/null; then
+          script/bootstrap < /dev/null
+        fi
       elif [[ -x script/bootstrap ]]; then
         script/bootstrap < /dev/null
       fi

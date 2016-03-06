@@ -35,6 +35,9 @@ To avoid running `bootstrap` needlessly, and to keep it simple, `stale`
 detects when `bootstrap` should be run.  Version information can be
 checked here to indicate out of date builds.
 
+An alternative to `stale` is `fresh`.  Might be easier to write a
+`fresh` script.
+
     script/clean
 
 Cleaning the build area is handled by `clean` which should cause `stale`
