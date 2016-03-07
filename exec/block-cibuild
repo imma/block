@@ -103,6 +103,7 @@ function main {
 
   if [[ -n "${1:-}" ]]; then
     export ssh_proxy="$1"; shift
+    ssh -oStrictHostKeyChecking=no "$ssh_proxy" true || true
   fi
 
   case "$(uname -s)" in
