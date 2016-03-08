@@ -36,22 +36,22 @@ function block_stuff {
   pushd "$BLOCK_PATH/block"
   git pull
   set +x; source script/profile; require; set -x
-  block clone
   block bootstrap
   set +x; source script/profile; require; set -x
   popd
 }
 
 function cache_stuff {
-  export BASEBOX_CACHE="/vagrant"
+  # bootstrap cache
+  git clone git@github.com:defn/cache "$BLOCK_PATH/cache" || true
+  pushd "$BLOCK_PATH/cache"
+  block runmany 8 'cd $1 && git pull' || true
+  set +x; require; set -x
+  block bootstrap
+  set +x; require; set -x
+  popd
 
-  if [[ ! -d "$BASEBOX_CACHE" ]]; then
-    sudo install -d -o ubuntu -g ubuntu -m 0755  "$BASEBOX_CACHE"
-    sudo install -d -o ubuntu -g ubuntu -m 0755  "$BASEBOX_CACHE/cache"
-    sudo install -d -o ubuntu -g ubuntu -m 0755  "$BASEBOX_CACHE/box"
-    sudo install -d -o ubuntu -g ubuntu -m 0755  "$BASEBOX_CACHE/distfiles"
-    sudo install -d -o ubuntu -g ubuntu -m 0755  "$BASEBOX_CACHE/packages"
-  fi
+  export BASEBOX_CACHE="/vagrant"
 
   case "$(uname -s)" in
     Linux)
@@ -114,17 +114,14 @@ function main {
   esac
 
   # setup
-  cache_stuff
   git_stuff
-  home_stuff "$nm_repo"
   block_stuff
+  cache_stuff
+  home_stuff "$nm_repo"
 
   # bootstrap dependencies
-  block clone
   block runmany 8 'cd $1 && git pull' || true
   block bootstrap
-
-  # fully source home
   set +x; require; set -x
 
   # update packages
