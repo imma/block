@@ -83,10 +83,10 @@ function cache_stuff {
 function update_stuff {
   case "$(uname -s)" in
     Linux)
-      sudo aptitude upgrade -y
+      sudo aptitude upgrade -y || true
       ;;
     Darwin)
-      sudo softwareupdate -i -v -a
+      sudo softwareupdate -i -v -a || true
       ;;
   esac
 
@@ -137,8 +137,11 @@ function main {
       sudo rm -f /etc/apt/apt.conf.d/99boxcache
       ;;
   esac
+
+  touch ~/.done
 }
 
+trap 'if [[ ! -f ~/.done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f ~/.done' EXIT
 set -exfu
 exec 2>&1
 cd
