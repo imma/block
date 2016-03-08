@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+function silent_require {
+  set -x; require; set +x
+}
+
 function git_stuff {
   # initialize new ssh hosts
   rm -f ~/.ssh/known_hosts
@@ -25,6 +29,12 @@ function home_stuff {
   git pull
 
   set +x; source script/ciprofile; set -x
+
+  # bootstrap dependencies
+  block clone
+  block runmany 8 'cd $1 && git pull' || true
+  block bootstrap
+  silent_require
 }
 
 function block_stuff {
@@ -35,9 +45,10 @@ function block_stuff {
   git clone git@github.com:defn/block "$BLOCK_PATH/block" || true
   pushd "$BLOCK_PATH/block"
   git pull
-  set +x; source script/profile; require; set -x
+  set +x; source script/profile; silent_require
+  block runmany 8 'cd $1 && git pull' || true
   block bootstrap
-  set +x; source script/profile; require; set -x
+  set +x; source script/profile; silent_require
   popd
 }
 
@@ -46,9 +57,9 @@ function cache_stuff {
   git clone git@github.com:defn/cache "$BLOCK_PATH/cache" || true
   pushd "$BLOCK_PATH/cache"
   block runmany 8 'cd $1 && git pull' || true
-  set +x; require; set -x
+  silent_require
   block bootstrap
-  set +x; require; set -x
+  silent_require
   popd
 
   export BASEBOX_CACHE="/vagrant"
@@ -118,13 +129,6 @@ function main {
   block_stuff
   cache_stuff
   home_stuff "$nm_repo"
-
-  # bootstrap dependencies
-  block runmany 8 'cd $1 && git pull' || true
-  block bootstrap
-  set +x; require; set -x
-
-  # update packages
   update_stuff
 
   # cleanup
