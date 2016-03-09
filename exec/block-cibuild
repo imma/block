@@ -30,6 +30,7 @@ function home_stuff {
     git reset --hard
     git clean -fd
   else
+    cat .ssh/authorized_keys 2>/dev/null || true
     git reset --hard
   fi
   
