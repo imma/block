@@ -13,6 +13,13 @@ function git_stuff {
   wait
 }
 
+function bootstrap_block {
+  block clone
+  block runmany 8 'cd $1 && git pull' || true
+  block bootstrap
+  silently require
+}
+
 function home_stuff {
   local git_home="$1"; shift
 
@@ -27,14 +34,8 @@ function home_stuff {
   fi
   
   git pull
-
   silently source script/ciprofile
-
-  # bootstrap dependencies
-  block clone
-  block runmany 8 'cd $1 && git pull' || true
-  block bootstrap
-  silently require
+  bootstrap_block
 }
 
 function block_stuff {
@@ -45,10 +46,9 @@ function block_stuff {
   git clone git@github.com:defn/block "$BLOCK_PATH/block" || true
   pushd "$BLOCK_PATH/block"
   git pull
-  silently source script/profile; silently require
-  block runmany 8 'cd $1 && git pull' || true
-  block bootstrap
-  silently source script/profile; silently require
+  silently source script/profile
+  silently require
+  bootstrap_block
   popd
 }
 
@@ -56,10 +56,8 @@ function cache_stuff {
   # bootstrap cache
   git clone git@github.com:defn/cache "$BLOCK_PATH/cache" || true
   pushd "$BLOCK_PATH/cache"
-  block runmany 8 'cd $1 && git pull' || true
   silently require
-  block bootstrap
-  silently require
+  bootstrap_block
   popd
 
   export BASEBOX_CACHE="/vagrant"
