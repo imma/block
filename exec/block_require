@@ -1,27 +1,5 @@
 #!/usr/bin/env bash
 
-function source_pre {
-  local pth_profiled
-  set +f
-  for pth_profiled in .profile.d/*.pre; do
-    set -f
-    if [[ -f "$pth_profiled" ]]; then
-      source "$pth_profiled"
-    fi
-  done
-}
-
-function source_post {
-  local pth_profiled
-  set +f
-  for pth_profiled in .profile.d/*.post; do
-    set -f
-    if [[ -f "$pth_profiled" ]]; then
-      source "$pth_profiled"
-    fi
-  done
-}
-
 function require {
   local tmp_profile="$(mktemp -t XXXXXX)"
 
@@ -35,14 +13,9 @@ function require {
       break
     fi
 
-    source_pre
-    if [[ -e "$pth_block/script/rc" ]]; then
-      echo "source $pth_block/script/rc"
-    fi
     if [[ -e "$pth_block/script/profile" ]]; then
       echo "source $pth_block/script/profile"
     fi
-    source_post
 
   done < "$tmp_list" > "$tmp_profile"
   rm -f "$tmp_list"

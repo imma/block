@@ -29,9 +29,6 @@ function main {
       if [[ -e script/profile ]]; then
         source script/profile
       fi
-      if [[ -e script/rc ]]; then
-        source script/rc
-      fi
     fi
     popd
   done < "$tmp_list"
