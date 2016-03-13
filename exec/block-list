@@ -1,12 +1,51 @@
-#!/usr/bin/env bash
+#!/usr/bin/ruby
 
-function main {
-  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  source "$shome/script/profile" || return 1
-  source "block_list"
+require 'json'
 
-  block_list "$@"
-}
+def get_requires nm_block, pth_block, reqs, ordered
+  id_block = nm_block
+  if File.exists? ".block-name"
+    nm_block = File.read(".block-name").strip 
+  elsif nm_block == "."
+    nm_block = File.basename(Dir.pwd)
+  end
 
-source sub "$0" "$@"
+  if reqs.member? nm_block
+    return reqs
+  end
 
+  reqs[nm_block] = {
+    name: nm_block,
+    path: pth_block,
+    git: "",
+    id: id_block
+  }
+
+  reqs = if File.exists? "Blockfile.json"
+    block = JSON.load(File.read("Blockfile.json"))
+    block["require"].inject([]) {|acc, ele|
+      acc += Array(ele)
+    }
+  else
+    []
+  end.inject(reqs) {|acc, ele|
+    pth_dep = "#{ENV['BLOCK_PATH']}/#{ele}"
+    Dir.chdir(pth_dep) do
+      get_requires ele, pth_dep, acc, ordered
+    end
+  }
+
+  ordered << nm_block
+
+  reqs
+end
+
+def main
+  ordered = []
+  reqs = get_requires(".", Dir.pwd, {}, ordered)
+  ordered.each {|ele|
+    puts "#{ele} #{reqs[ele][:path]} #{reqs[ele][:id]}"
+  }
+end
+
+main
