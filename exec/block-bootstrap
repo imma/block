@@ -7,7 +7,7 @@ function main {
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"
 
-  while read -r nm_block pth_block id_block; do
+  while read -r nm_block pth_block git_block end_block; do
     if [[ ! -d "$pth_block" ]]; then
       block clone "$nm_block" "$pth_block"
       pushd "$BLOCK_PATH/$nm_block"

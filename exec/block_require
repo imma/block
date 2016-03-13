@@ -6,7 +6,7 @@ function require {
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"
 
-  while read -r nm_block pth_block id_block; do
+  while read -r nm_block pth_block git_block end_block; do
     if [[ ! -d "$pth_block" ]]; then
       echo "ERROR: missing $nm_block block" 1>&2
       set --

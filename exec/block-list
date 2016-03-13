@@ -48,10 +48,11 @@ def main
   ordered = []
   reqs = get_requires(File.basename(Dir.pwd), {
       path: Dir.pwd,
-      git: %x{git ls-remote --get-url}.strip 
+      git: %x{git ls-remote --get-url}.strip,
+      end: "."
     }, {}, ordered)
   ordered.each {|ele|
-    puts "#{ele} #{reqs[ele][:path]} #{reqs[ele][:git]}"
+    puts "#{ele} #{reqs[ele][:path]} #{reqs[ele][:git]} #{reqs[ele][:end] || ""}"
   }
 end
 

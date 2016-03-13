@@ -17,14 +17,7 @@ function main_clone {
   fi > "$tmp_list"
 
   local git_block
-  while read -r nm_block pth_block id_block; do
-    if [[ -z "$id_block" ]]; then
-      git_block="$pth_block"
-      pth_block=
-    else
-      git_block=
-    fi
-
+  while read -r nm_block pth_block git_block end_block; do
     # Block has already been cloned
     if [[ -d "$pth_block" ]]; then
       continue
@@ -38,7 +31,7 @@ function main_clone {
     fi
 
     # If this isn't the top level block, recursively clone
-    if [[ "$id_block" != "." ]]; then
+    if [[ -z "$end_block" ]]; then
       pushd "$pth_block"
       main_clone
       popd
