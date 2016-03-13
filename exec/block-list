@@ -2,36 +2,40 @@
 
 require 'json'
 
-def get_requires nm_block, pth_block, reqs, ordered
-  id_block = nm_block
+def get_requires nm_block, info_block, reqs, ordered
   if File.exists? ".block-name"
     nm_block = File.read(".block-name").strip 
-  elsif nm_block == "."
-    nm_block = File.basename(Dir.pwd)
   end
 
   if reqs.member? nm_block
     return reqs
   end
 
-  reqs[nm_block] = {
-    name: nm_block,
-    path: pth_block,
-    git: "",
-    id: id_block
-  }
+  reqs[nm_block] = info_block
 
   reqs = if File.exists? "Blockfile.json"
     block = JSON.load(File.read("Blockfile.json"))
     block["require"].inject([]) {|acc, ele|
       acc += Array(ele)
+    }.inject([]) {|acc, ele|
+      git = if block["members"]
+        if block["members"].members? ele
+          block["members"][ele]
+        end
+      end || "git@github.com:defn/#{ele}"
+      acc << [ ele, git ]
     }
   else
     []
-  end.inject(reqs) {|acc, ele|
+  end.inject(reqs) {|acc, meh|
+    ele, git = meh
     pth_dep = "#{ENV['BLOCK_PATH']}/#{ele}"
     Dir.chdir(pth_dep) do
-      get_requires ele, pth_dep, acc, ordered
+      get_requires ele, {
+          name: ele,
+          path: pth_dep,
+          git: git
+        }, acc, ordered
     end
   }
 
@@ -42,9 +46,12 @@ end
 
 def main
   ordered = []
-  reqs = get_requires(".", Dir.pwd, {}, ordered)
+  reqs = get_requires(File.basename(Dir.pwd), {
+      path: Dir.pwd,
+      git: "."
+    }, {}, ordered)
   ordered.each {|ele|
-    puts "#{ele} #{reqs[ele][:path]} #{reqs[ele][:id]}"
+    puts "#{ele} #{reqs[ele][:path]} #{reqs[ele][:git]}"
   }
 end
 
