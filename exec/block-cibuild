@@ -7,9 +7,9 @@ function silently {
 function git_stuff {
   # initialize new ssh hosts
   rm -f ~/.ssh/known_hosts
-  ssh -oStrictHostKeyChecking=no github.com true &
-  ssh -oStrictHostKeyChecking=no bitbucket.org true &
-  ssh -oStrictHostKeyChecking=no localhost true &
+  ssh -oStrictHostKeyChecking=no github.com true 2>/dev/null &
+  ssh -oStrictHostKeyChecking=no bitbucket.org true 2>/dev/null &
+  ssh -oStrictHostKeyChecking=no localhost true 2>/dev/null &
   wait
 }
 
@@ -119,7 +119,7 @@ function main {
   case "$(uname -s)" in
     Linux)
       sudo aptitude update
-      sudo aptitude -y install git vim unzip curl language-pack-en lvm2 # mirror basebox-ubuntu/site.sh
+      sudo aptitude -y install git vim unzip curl language-pack-en lvm2 ruby # mirror basebox-ubuntu/site.sh
       ;;
   esac
 
