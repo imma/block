@@ -13,6 +13,13 @@ def git_defaults ele
 end
 
 def block_list nm_block, info_block, reqs, ordered
+  unless File.directory? info_block[:path]
+    reqs[nm_block] = info_block
+    return reqs
+  end
+
+  Dir.chdir(info_block[:path])
+
   # Block names can be overridden with `.block-name` for repos that don't clone
   # into a directory of the same name, for example home directories.
   if File.exists? ".block-name"
@@ -45,13 +52,11 @@ def block_list nm_block, info_block, reqs, ordered
     pth_dep = "#{ENV['BLOCK_PATH']}/#{ele}"
 
     acc.member?(ele) ? acc :
-        Dir.chdir(pth_dep) do
-          block_list ele, {
-              name: ele,
-              git: git,
-              path: pth_dep
-            }, acc, ordered
-        end
+      block_list(ele, {
+          name: ele,
+          git: git,
+          path: pth_dep
+        }, acc, ordered)
   }
 
   # The block is ordered after its dependencies
