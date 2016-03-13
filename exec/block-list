@@ -15,6 +15,7 @@ end
 def block_list nm_block, info_block, reqs, ordered
   unless File.directory? info_block[:path]
     reqs[nm_block] = info_block
+    ordered << nm_block
     return reqs
   end
 
