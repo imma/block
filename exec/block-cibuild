@@ -116,13 +116,6 @@ function main {
     ssh -oStrictHostKeyChecking=no "$ssh_gateway" true || true
   fi
 
-  case "$(uname -s)" in
-    Linux)
-      sudo aptitude update
-      sudo aptitude -y install git vim unzip curl language-pack-en lvm2 ruby # mirror basebox-ubuntu/site.sh
-      ;;
-  esac
-
   # setup
   git_stuff
   block_stuff
