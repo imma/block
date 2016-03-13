@@ -39,9 +39,9 @@ def block_list nm_block, info_block, reqs, ordered
     }.inject([]) {|acc, ele|
       # Map the block names to git repos, defaulting to github.com or
       # github.com:defn
-      git = if block["members"]
-        if block["members"].members? ele
-          block["members"][ele]
+      git = if block["blocks"]
+        if block["blocks"].member? ele
+          block["blocks"][ele]
         end
       end || git_defaults(ele)
       acc << [ ele, git ]
