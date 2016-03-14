@@ -40,6 +40,13 @@ function home_stuff {
 }
 
 function block_stuff {
+  # need ruby for block list
+  case "$(uname -s)" in 
+    Linux)
+      sudo aptitude install -y ruby
+      ;;
+  esac
+
   : ${BLOCK_PATH:="$(pwd)/work"}
   export BLOCK_PATH
 
