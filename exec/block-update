@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile" || return 1
+
+  local tmp_list="$(mktemp -t XXXXXX)"
+  block list > "$tmp_list"
+
+  while read -r nm_block pth_block git_block end_block; do
+    if [[ ! -d "$pth_block" ]]; then
+      echo "ERROR: missing block $nm_block" 1>&2
+      return 1
+    fi
+
+    if [[ ! -x "$pth_block/script/update" ]]; then
+      continue
+    fi
+
+    echo "INFO: updating $nm_block in $pth_block"
+    pushd "$pth_block" >/dev/null
+    script/update < /dev/null
+    echo
+    popd >/dev/null
+  done < "$tmp_list"
+  rm -f "$tmp_list"
+}
+
+source sub "$0" "$@"
