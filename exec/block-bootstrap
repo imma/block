@@ -9,7 +9,7 @@ function main {
 
   while read -r nm_block pth_block git_block end_block; do
     if [[ ! -d "$pth_block" ]]; then
-      block clone "$git_block" "$pth_block"
+      git clone "$git_block" "$pth_block"
       pushd "$pth_block"
       main
       popd
