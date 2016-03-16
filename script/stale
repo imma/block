@@ -4,7 +4,7 @@ function stale {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  if [[ -f "$shome/shflags" ]]; then
+  if [[ -f "$shome/exec/shflags" ]]; then
     return 1
   fi
 
