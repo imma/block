@@ -50,7 +50,8 @@ def block_list nm_block, info_block, reqs, ordered
     []
   end.inject(reqs) {|acc, ele_git|
     ele, git = ele_git
-    pth_dep = "#{ENV['BLOCK_PATH']}/#{ele}"
+    nm_work = ele.split('/')[-1]
+    pth_dep = "#{ENV['BLOCK_PATH']}/#{nm_work}"
 
     acc.member?(ele) ? acc :
       block_list(ele, {
