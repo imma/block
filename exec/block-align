@@ -4,7 +4,15 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  block lock show > "Blockfile.lock"
+	if [[ -x "$(which talign 2>/dev/null || true)" ]]; then
+		if [ -t 1 ] ; then
+			talign
+		else
+			cat
+		fi
+	else
+		cat
+	fi
 }
 
 source sub "$0" "$@"

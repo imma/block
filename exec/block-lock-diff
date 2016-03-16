@@ -4,7 +4,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  block lock show > "Blockfile.lock"
+  diff -wb Blockfile.lock <(app show lock) | block align
 }
 
 source sub "$0" "$@"
