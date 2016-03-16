@@ -44,14 +44,6 @@ function home_stuff {
 }
 
 function block_stuff {
-  # need ruby for block list
-  case "$(uname -s)" in 
-    Linux)
-      sudo aptitude update
-      sudo aptitude install -y ruby
-      ;;
-  esac
-
   : ${BLOCK_PATH:="$(pwd)/work"}
   export BLOCK_PATH
 
@@ -87,6 +79,10 @@ function cache_stuff {
           echo "Acquire::http::Proxy \"$http_proxy\";"
         } | sudo tee -a /etc/apt/apt.conf.d/99boxcache
       fi
+
+      sudo aptitude update
+      ;;
+  esac
       ;;
   esac
 }

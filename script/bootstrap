@@ -5,6 +5,13 @@ function main {
   source "$shome/script/profile"
   
   curl -sL -L -o "$shome/exec/shflags" https://raw.githubusercontent.com/nvie/shFlags/master/src/shflags
+
+  case "$(uname -s)" in
+    Linux)
+      sudo aptitude update
+      sudo aptitude install -y ruby gettext
+      ;;
+  esac
 }
 
 source sub "$BASH_SOURCE" "$@"
