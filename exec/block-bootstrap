@@ -9,9 +9,10 @@ function main {
 
   while read -r nm_block pth_block git_block end_block; do
     if [[ ! -d "$pth_block" ]]; then
-      block clone "$nm_block" "$pth_block"
-      pushd "$BLOCK_PATH/$nm_block"
-      block bootstrap
+      block clone "$git_block" "$pth_block"
+      pushd "$pth_block"
+      main
+      popd
     else
       pushd "$pth_block"
       if [[ -x script/stale ]]; then
@@ -31,8 +32,8 @@ function main {
       elif [[ -e script/rc ]]; then
         source script/rc
       fi
+      popd
     fi
-    popd
   done < "$tmp_list"
   rm -f "$tmp_list"
 }
