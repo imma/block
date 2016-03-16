@@ -26,8 +26,9 @@ function main_clone {
    # Block has not been cloned
     if [[ ! -d "$pth_block" ]]; then
       # Clone the repository
-      git clone "$git_block" "$BLOCK_PATH/$nm_block"
-      pth_block="$BLOCK_PATH/$nm_block"
+      local nm_work="${nm_block##*/}"
+      git clone "$git_block" "$BLOCK_PATH/$nm_work"
+      pth_block="$BLOCK_PATH/$nm_work"
     fi
 
     # If this isn't the top level block, recursively clone
