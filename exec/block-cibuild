@@ -83,8 +83,6 @@ function cache_stuff {
       sudo aptitude update
       ;;
   esac
-      ;;
-  esac
 }
 
 function update_stuff {
