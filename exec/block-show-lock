@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  block runmany 'echo $1 $(cd $1 && git rev-parse HEAD) $(cd $1 && git rev-parse --abbrev-ref HEAD)' | \
+    if [[ -x "$(which talign 2>/dev/null || true)" ]]; then
+      talign
+    else
+      cat
+    fi
+}
+
+source sub "$0" "$@"
