@@ -14,8 +14,12 @@ function git_stuff {
 }
 
 function bootstrap_block {
-  block clone
-  block runmany 8 'cd $1 && git pull' || true
+  if [[ -f "Blockfile.lock" ]]; then
+    block lock sync
+  else
+    block clone
+    block runmany 8 'cd $1 && git pull' || true
+  fi
   block bootstrap
   silently require
 }
