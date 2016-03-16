@@ -4,7 +4,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
 
-  cat Blockfile.lock | runmany 8 5 'set -e; if [[ ! -d "$2" ]]; then git clone -b "$5" "$3" "$2"; fi; cd "$2"; git checkout -B "$5" "$4"'
+  cat Blockfile.lock | envsubst '${BLOCK_PATH}' | runmany 8 5 'set -e; if [[ ! -d "$2" ]]; then git clone -b "$5" "$3" "$2"; fi; cd "$2"; git checkout -B "$5" "$4"'
 }
 
 source sub "$0" "$@"
