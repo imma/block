@@ -47,6 +47,7 @@ function block_stuff {
   # need ruby for block list
   case "$(uname -s)" in 
     Linux)
+      sudo aptitude update
       sudo aptitude install -y ruby
       ;;
   esac
