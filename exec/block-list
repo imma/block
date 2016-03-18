@@ -33,7 +33,7 @@ def block_list nm_block, info_block, reqs, ordered
   reqs = 
     if File.exists? "Blockfile.json"
       block = JSON.load(File.read("Blockfile.json"))
-      if File.exists? "Blockfile.json.site"
+      if ENV['BLOCK_NO_SITE'].nil? && File.exists?("Blockfile.json.site")
         site = JSON.load(File.read("Blockfile.json.site"))
         block["require"] += Array(site["require"])
       end

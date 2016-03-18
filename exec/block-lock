@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export BLOCK_NO_SITE=1
+
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
