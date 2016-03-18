@@ -30,36 +30,41 @@ def block_list nm_block, info_block, reqs, ordered
   # Record the block info
   reqs[nm_block] = info_block
 
-  reqs = if File.exists? "Blockfile.json"
-    block = JSON.load(File.read("Blockfile.json"))
+  reqs = 
+    if File.exists? "Blockfile.json"
+      block = JSON.load(File.read("Blockfile.json"))
+      if File.exists? "Blockfile.json.site"
+        site = JSON.load(File.read("Blockfile.json.site"))
+        block["require"] += Array(site["require"])
+      end
 
-    block["require"].inject([]) {|acc, ele|
-      # Flatten the .require
-      acc += Array(ele)
-    }.inject([]) {|acc, ele|
-      # Map the block names to git repos, defaulting to github.com or
-      # github.com:defn
-      git = if block["blocks"]
-        if block["blocks"].member? ele
-          block["blocks"][ele]
-        end
-      end || git_defaults(ele)
-      acc << [ ele, git ]
+      block["require"].inject([]) {|acc, ele|
+        # Flatten the .require
+        acc += Array(ele)
+      }.inject([]) {|acc, ele|
+        # Map the block names to git repos, defaulting to github.com or
+        # github.com:defn
+        git = if block["blocks"]
+          if block["blocks"].member? ele
+            block["blocks"][ele]
+          end
+        end || git_defaults(ele)
+        acc << [ ele, git ]
+      }
+    else
+      []
+    end.inject(reqs) {|acc, ele_git|
+      ele, git = ele_git
+      nm_work = ele.split('/')[-1]
+      pth_dep = "#{ENV['BLOCK_PATH']}/#{nm_work}"
+
+      acc.member?(ele) ? acc :
+        block_list(ele, {
+            name: ele,
+            git: git,
+            path: pth_dep
+          }, acc, ordered)
     }
-  else
-    []
-  end.inject(reqs) {|acc, ele_git|
-    ele, git = ele_git
-    nm_work = ele.split('/')[-1]
-    pth_dep = "#{ENV['BLOCK_PATH']}/#{nm_work}"
-
-    acc.member?(ele) ? acc :
-      block_list(ele, {
-          name: ele,
-          git: git,
-          path: pth_dep
-        }, acc, ordered)
-  }
 
   # The block is ordered after its dependencies
   ordered << nm_block
