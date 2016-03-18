@@ -123,7 +123,11 @@ function main {
 
   if [[ -n "${1:-}" ]]; then
     export ssh_gateway="$1"; shift
-    ssh -oStrictHostKeyChecking=no "$ssh_gateway" true || true
+    ssh -oStrictHostKeyChecking=no "$ssh_gateway" true 2>/dev/null || true
+  fi
+
+  if [[ -n "${1:-}" ]]; then
+    export ssh_gateway_user="$1"; shift
   fi
 
   # setup
