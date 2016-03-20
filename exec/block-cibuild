@@ -152,7 +152,7 @@ function main {
   update_stuff
 
   # cleanup
-  cleanup_stuff
+  clean_stuff
 }
 
 trap 'if [[ ! -f ~/.done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f ~/.done' EXIT
