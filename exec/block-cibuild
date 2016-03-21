@@ -46,7 +46,7 @@ function block_stuff {
   export BLOCK_PATH
 
   # bootstrap block
-  if [[ ! -d "$BLOCK_PATH/bock" ]]; then
+  if [[ ! -d "$BLOCK_PATH/block" ]]; then
     git clone git@github.com:defn/block "$BLOCK_PATH/block" || true
   else
     pushd "$BLOCK_PATH/block" >/dev/null
