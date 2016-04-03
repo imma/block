@@ -98,6 +98,7 @@ function cache_stuff {
 function update_stuff {
   case "$(uname -s)" in
     Linux)
+      sudo aptitude hold libpcre3 || true
       sudo aptitude upgrade -y || true
       ;;
     Darwin)
