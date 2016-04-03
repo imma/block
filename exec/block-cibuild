@@ -4,15 +4,6 @@ function silently {
   set +x; "$@"; set -x
 }
 
-function git_stuff {
-  # initialize new ssh hosts
-  rm -f ~/.ssh/known_hosts
-  ssh -oStrictHostKeyChecking=no github.com true 2>/dev/null &
-  ssh -oStrictHostKeyChecking=no bitbucket.org true 2>/dev/null &
-  ssh -oStrictHostKeyChecking=no localhost true 2>/dev/null &
-  wait
-}
-
 function bootstrap_block {
   if [[ -f "Blockfile.lock" ]]; then
     block lock sync
@@ -76,7 +67,9 @@ function cache_stuff {
   silently require
   bootstrap_block
   popd
+}
 
+function proxy_stuff {
   case "$(uname -s)" in
     Linux)
       {
@@ -158,7 +151,7 @@ function main {
   setup_stuff "$@"
 
   # setup
-  git_stuff
+  proxy_stuff
   block_stuff
   cache_stuff
   home_stuff
