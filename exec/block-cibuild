@@ -69,6 +69,14 @@ function cache_stuff {
   popd
 }
 
+function git_stuff {
+  (
+    ssh-keyscan -t rsa github.com &
+    ssh-keyscan -t rsa bitbucket.org &
+    ${ssh_gateway:+ssh-keyscan -t rsa "$ssh_gateway"} &
+  ) > ~/.ssh/known_hosts
+}
+
 function proxy_stuff {
   case "$(uname -s)" in
     Linux)
@@ -151,6 +159,7 @@ function main {
   setup_stuff "$@"
 
   # setup
+  git_stuff
   proxy_stuff
   block_stuff
   cache_stuff
