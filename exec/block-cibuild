@@ -15,7 +15,7 @@ function bootstrap_block {
   silently require
 }
 
-function home_stuff {
+function setup_home_block {
   # clone home
   if [[ ! -d .git ]]; then
     git clone "$url_repo" home
@@ -37,7 +37,7 @@ function require {
   silently require
 }
 
-function block_stuff {
+function setup_block {
   # bootstrap block
   if [[ ! -d "$BLOCK_PATH/block" ]]; then
     git clone git@github.com:defn/block "$BLOCK_PATH/block" || true
@@ -53,7 +53,7 @@ function block_stuff {
   popd
 }
 
-function cache_stuff {
+function setup_cache_block {
   # bootstrap cache
   if [[ ! -d "$BLOCK_PATH/cache" ]]; then
     git clone git@github.com:defn/cache "$BLOCK_PATH/cache" || true
@@ -69,7 +69,7 @@ function cache_stuff {
   popd
 }
 
-function git_stuff {
+function known_git_hosts {
   (
     ssh-keyscan -t rsa github.com &
     ssh-keyscan -t rsa bitbucket.org &
@@ -77,7 +77,7 @@ function git_stuff {
   ) > ~/.ssh/known_hosts
 }
 
-function proxy_stuff {
+function configure_apt_proxy {
   case "$(uname -s)" in
     Linux)
       {
@@ -96,7 +96,7 @@ function proxy_stuff {
   esac
 }
 
-function update_stuff {
+function update_os {
   case "$(uname -s)" in
     Linux)
       sudo aptitude upgrade -y || true
@@ -109,7 +109,7 @@ function update_stuff {
   facts cache
 }
 
-function clean_stuff {
+function cleanup {
   case "$(uname -s)" in
     Linux)
       sudo rm -f /etc/apt/apt.conf.d/99boxcache
@@ -137,7 +137,6 @@ function setup_stuff {
 
   if [[ -n "${1:-}" ]]; then
     export ssh_gateway="$1"; shift
-    ssh -oStrictHostKeyChecking=no "$ssh_gateway" true 2>/dev/null || true
   fi
 
   if [[ -n "${1:-}" ]]; then
@@ -159,15 +158,20 @@ function main {
   setup_stuff "$@"
 
   # setup
-  git_stuff
-  proxy_stuff
-  block_stuff
-  cache_stuff
-  home_stuff
-  update_stuff
+  known_git_hosts &
+  configure_apt_proxy
+  wait
+
+  # blocks
+  setup_block
+  setup_cache_block
+  setup_home_block
+
+  # update
+  update_os
 
   # cleanup
-  clean_stuff
+  cleanup
 }
 
 trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done' EXIT
