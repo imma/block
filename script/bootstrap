@@ -8,7 +8,6 @@ function main {
 
   case "$(uname -s)" in
     Linux)
-      sudo aptitude update
       sudo aptitude install -y ruby gettext
       ;;
   esac
