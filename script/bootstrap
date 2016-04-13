@@ -12,6 +12,8 @@ function main {
       sudo aptitude install -y ruby gettext
       ;;
   esac
+
+  block clone
 }
 
 main "$@"
