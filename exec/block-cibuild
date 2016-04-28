@@ -129,6 +129,19 @@ function setup_stuff {
     url_repo="$1"; shift
   fi
 
+  : ${BLOCK_PATH:="$(pwd)/work"} # TODO remove hardcoded work
+  export BLOCK_PATH
+
+  export BASEBOX_CACHE="/vagrant"
+
+  local nm_provider="${1:-}"
+
+  case "$nm_provider" in
+    aws)
+      return 0
+      ;;
+  esac
+
   if [[ -n "${1:-}" ]]; then
     export http_proxy="$1"; shift
     export https_proxy="$http_proxy"
@@ -142,15 +155,6 @@ function setup_stuff {
   if [[ -n "${1:-}" ]]; then
     export ssh_gateway_user="$1"; shift
   fi
-
-  ssh-add -l
-  echo "ssh gateway: ${ssh_gateway:-}"
-  echo "ssh gateway user: ${ssh_gateway_user:-}"
-
-  : ${BLOCK_PATH:="$(pwd)/work"} # TODO remove hardcoded work
-  export BLOCK_PATH
-
-  export BASEBOX_CACHE="/vagrant"
 }
 
 function main {
