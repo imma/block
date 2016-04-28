@@ -138,14 +138,22 @@ function setup_stuff {
     export http_proxy="$1"; shift
     export https_proxy="$http_proxy"
     export ftp_proxy="$http_proxy"
+  else
+    unset http_proxy
+    unset https_proxy
+    unset ftp_proxy
   fi
 
   if [[ -n "${1:-}" ]]; then
     export ssh_gateway="$1"; shift
+  else
+    unset ssh_gateway
   fi
 
   if [[ -n "${1:-}" ]]; then
     export ssh_gateway_user="$1"; shift
+  else
+    unset ssh_gateway_user
   fi
 }
 
