@@ -148,6 +148,7 @@ function setup_stuff {
     export ssh_gateway="$1"; shift
   else
     unset ssh_gateway
+    unset GIT_SSH
   fi
 
   if [[ -n "${1:-}" ]]; then
