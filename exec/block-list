@@ -21,7 +21,12 @@ def flattern(A):
         else: yield i
 
 def list_block(block, seen = { }):
-    os.chdir(block['path'])
+    try:
+        os.chdir(block['path'])
+    except OSError:
+        seen[block['name']] = True
+        yield block
+        return
 
     if os.path.isfile('.block-name'):
         with open('.block-name') as f:
