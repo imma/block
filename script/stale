@@ -5,10 +5,8 @@ function stale {
   source "$shome/script/profile"
 
   if [[ -f "$shome/exec/shflags" ]]; then
-    if [[ -x "$(which ruby 2>/dev/null || true)" ]]; then
-      if [[ -x "$(which envsubst 2>/dev/null || true)" ]]; then
-        return 1
-      fi
+    if [[ -x "$(which envsubst 2>/dev/null || true)" ]]; then
+      return 1
     fi
   fi
 

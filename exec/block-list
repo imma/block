@@ -1,90 +1,60 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env python
 
-require 'json'
+import json
+import re
+import subprocess
+import os
+import itertools
 
-def git_defaults ele
-  # If username/repo, default to github.com
-  if %r{^(\w+)/}.match(ele)
-    "git@github.com:#{ele}"
-  else
-    # If just name, default to github.com:defn
-    "git@github.com:defn/#{ele}"
-  end
-end
+def git_defaults(ele):
+    m = re.search('^(\w+)/', ele)
+    if m:
+        return "git@github.com:%s" % (ele)
+    else:
+        return "git@github.com:defn/%s" % (ele)
 
-def block_list nm_block, info_block, reqs, ordered
-  unless File.directory? info_block[:path]
-    reqs[nm_block] = info_block
-    ordered << nm_block
-    return reqs
-  end
+def flattern(A):
+    for i in A:
+        if isinstance(i,list): 
+            for ii in flattern(i):
+                yield ii
+        else: yield i
 
-  Dir.chdir(info_block[:path])
+def list_block(block, seen = { }):
+    os.chdir(block['path'])
 
-  # Block names can be overridden with `.block-name` for repos that don't clone
-  # into a directory of the same name, for example home directories.
-  if File.exists? ".block-name"
-    nm_block = File.read(".block-name").strip 
-  end
+    if os.path.isfile('.block-name'):
+        with open('.block-name') as f:
+            block['name'] = f.read().strip()
 
-  # Record the block info
-  reqs[nm_block] = info_block
+    if block['name'] in seen:
+        return
 
-  reqs = 
-    if File.exists? "Blockfile.json"
-      block = JSON.load(File.read("Blockfile.json"))
-      if ENV['BLOCK_NO_SITE'].nil? && File.exists?("Blockfile.json.site")
-        site = JSON.load(File.read("Blockfile.json.site"))
-        block["require"] += Array(site["require"])
-      end
+    try:
+        with open('Blockfile.json') as f:
+            block['body'] = json.load(f)
+    except IOError:
+        block['body'] = { "require": [] }
+        
+    seen[block['name']] = True
 
-      block["require"].inject([]) {|acc, ele|
-        # Flatten the .require
-        acc += Array(ele)
-      }.inject([]) {|acc, ele|
-        # Map the block names to git repos, defaulting to github.com or
-        # github.com:defn
-        git = if block["blocks"]
-          if block["blocks"].member? ele
-            block["blocks"][ele]
-          end
-        end || git_defaults(ele)
-        acc << [ ele, git ]
-      }
-    else
-      []
-    end.inject(reqs) {|acc, ele_git|
-      ele, git = ele_git
-      nm_work = ele.split('/')[-1]
-      pth_dep = "#{ENV['BLOCK_PATH']}/#{nm_work}"
+    for b in flattern(block['body'].get('require', [])):
+        for r in list_block({ 
+            'name': b,
+            'git': git_defaults(b),
+            'path': "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(b))
+            }):
+            yield r
 
-      acc.member?(ele) ? acc :
-        block_list(ele, {
-            name: ele,
-            git: git,
-            path: pth_dep
-          }, acc, ordered)
-    }
+    yield block
 
-  # The block is ordered after its dependencies
-  ordered << nm_block
+def main():
+    for b in list_block({
+        'name': os.path.dirname(os.getcwd()), 
+        'git': subprocess.check_output(['git', 'ls-remote', '--get-url']).strip(),
+        'path': os.getcwd(),
+        'end': '.'
+        }):
+        print "%s %s %s %s" % (b['name'], b['path'], b['git'], b.get('end', ''))
 
-  reqs
-end
-
-def main
-  # Block order, dependencies are first
-  ordered = []
-
-  reqs = block_list(File.basename(Dir.pwd), {
-      git: %x{git ls-remote --get-url}.strip,
-      path: Dir.pwd,
-      end: "."
-    }, {}, ordered)
-
-  ordered.each {|ele|
-    puts "#{ele} #{reqs[ele][:path]} #{reqs[ele][:git]} #{reqs[ele][:end] || ""}"
-  }
-end
-
-main
+main()
