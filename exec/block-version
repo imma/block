@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+
+  export tmp_version="$(mktemp -d -t XXXXXX)"
+  trap 'rm -rf "$tmp_version"' EXIT
+
+  block runmany 10 'if [[ -x "$1/script/version" ]]; then "$1/script/version" > "$tmp_version/$$.json"; fi'
+  (set +f; cat "$tmp_version"/*.json 2>&- || true) | jq -s 'reduce .[] as $v ({}; . + $v)'
+}
+
+source sub "$0" "$@"
