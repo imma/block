@@ -15,10 +15,6 @@ function setup_kit {
 
   if [[ ! -d "$BLOCK_PATH/$nm_block" ]]; then
     git clone "$git_block" "$BLOCK_PATH/$nm_block" || true
-  else
-    pushd "$BLOCK_PATH/$nm_block" >/dev/null
-    git pull
-    popd >/dev/null
   fi
 
   pushd "$BLOCK_PATH/$nm_block"
@@ -32,12 +28,10 @@ function setup_home {
   if [[ ! -d .git ]]; then
     git clone "$url_repo" home
     mv home/.git . || rm -rf home/.git
-    git clean -fd
-    known_git_hosts
   fi
 
-  git fetch
   git reset --hard origin/master
+  git clean -fd
   
   make
   silently require
