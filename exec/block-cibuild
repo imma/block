@@ -33,6 +33,7 @@ function setup_home {
     git clone "$url_repo" home
     mv home/.git . || rm -rf home/.git
     git clean -fd
+    known_git_hosts
   fi
 
   git fetch
@@ -51,8 +52,6 @@ function setup_cibuild {
   else
     url_repo="$1"; shift
   fi
-
-  known_git_hosts &
 
   : ${BLOCK_PATH:="$(pwd)/work"} # TODO remove hardcoded work
   export BLOCK_PATH
@@ -84,7 +83,7 @@ function setup_cibuild {
 
   configure_apt_proxy
 
-  wait
+  known_git_hosts
 }
 
 function known_git_hosts {
