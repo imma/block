@@ -91,6 +91,7 @@ function known_git_hosts {
     ssh-keyscan -t rsa github.com &
     ssh-keyscan -t rsa bitbucket.org &
     ${ssh_gateway:+ssh-keyscan -t rsa "$ssh_gateway"} &
+    wait
   ) >> ~/.ssh/known_hosts
 }
 
