@@ -42,57 +42,7 @@ function setup_home {
   silently require
 }
 
-function known_git_hosts {
-  (
-    ssh-keyscan -t rsa github.com &
-    ssh-keyscan -t rsa bitbucket.org &
-    ${ssh_gateway:+ssh-keyscan -t rsa "$ssh_gateway"} &
-  ) >> ~/.ssh/known_hosts
-}
-
-function configure_apt_proxy {
-  case "$(uname -s)" in
-    Linux)
-      {
-        echo "Acquire::Languages { \"en\"; };"
-        echo "Acquire::http { Pipeline-Depth \"200\"; }"
-      } | sudo tee /etc/apt/apt.conf.d/99boxcache
-
-      if [[ -n "${http_proxy:-}" ]]; then
-        {
-          echo "Acquire::http::Proxy \"$http_proxy\";"
-        } | sudo tee -a /etc/apt/apt.conf.d/99boxcache
-      fi
-
-      sudo aptitude update
-      ;;
-  esac
-}
-
-function update_os {
-  case "$(uname -s)" in
-    Linux)
-      sudo aptitude upgrade -y || true
-      ;;
-    Darwin)
-      sudo softwareupdate -i -v -a || true
-      ;;
-  esac
-
-  facts cache
-}
-
-function cleanup {
-  case "$(uname -s)" in
-    Linux)
-      sudo rm -f /etc/apt/apt.conf.d/99boxcache
-      ;;
-  esac
-
-  touch .done
-}
-
-function setup_stuff {
+function setup_cibuild {
   if [[ "$#" == 0 ]]; then
     if [[ ! -d ".git" ]]; then
       echo "ERROR: specify a git repository to build" 1>&2
@@ -101,6 +51,8 @@ function setup_stuff {
   else
     url_repo="$1"; shift
   fi
+
+  known_git_hosts &
 
   : ${BLOCK_PATH:="$(pwd)/work"} # TODO remove hardcoded work
   export BLOCK_PATH
@@ -129,27 +81,58 @@ function setup_stuff {
   else
     unset ssh_gateway_user
   fi
+
+  configure_apt_proxy
+
+  wait
 }
 
+function known_git_hosts {
+  (
+    ssh-keyscan -t rsa github.com &
+    ssh-keyscan -t rsa bitbucket.org &
+    ${ssh_gateway:+ssh-keyscan -t rsa "$ssh_gateway"} &
+  ) >> ~/.ssh/known_hosts
+}
+
+function configure_apt_proxy {
+  case "$(uname -s)" in
+    Linux)
+      {
+        echo "Acquire::Languages { \"en\"; };"
+        echo "Acquire::http { Pipeline-Depth \"200\"; }"
+      } | sudo tee /etc/apt/apt.conf.d/99boxcache
+
+      if [[ -n "${http_proxy:-}" ]]; then
+        {
+          echo "Acquire::http::Proxy \"$http_proxy\";"
+        } | sudo tee -a /etc/apt/apt.conf.d/99boxcache
+      fi
+
+      sudo aptitude update
+      ;;
+  esac
+}
+
+function cleanup_cibuild {
+  case "$(uname -s)" in
+    Linux)
+      sudo rm -f /etc/apt/apt.conf.d/99boxcache
+      ;;
+  esac
+
+  touch .done
+}
+
+
 function main {
-  # setup
-  setup_stuff "$@"
+  setup_cibuild "$@"
 
-  # setup
-  known_git_hosts &
-  configure_apt_proxy
-  wait
-
-  # blocks
   setup_kit git@github.com:defn/block
   setup_kit git@github.com:defn/cache
   setup_home
 
-  # update
-  update_os
-
-  # cleanup
-  cleanup
+  cleanup_cibuild
 }
 
 trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done' EXIT
