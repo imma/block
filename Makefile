@@ -1,2 +1,2 @@
 all:
-	script/cibuild
+	@script/cibuild
