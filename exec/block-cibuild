@@ -4,69 +4,42 @@ function silently {
   set +x; "$@"; set -x
 }
 
-function bootstrap_block {
-  if [[ -f "Blockfile.lock" ]]; then
-    block lock sync
-  else
-    block clone
-    block runmany 4 'cd $1 && git pull' || true
-  fi
-  block bootstrap
-  silently require
-}
-
-function setup_home_block {
-  # clone home
-  if [[ ! -d .git ]]; then
-    git clone "$url_repo" home
-    mv home/.git . || rm -rf home/.git
-    git reset --hard
-    git clean -fd
-  else
-    cat .ssh/authorized_keys 2>/dev/null || true
-    git reset --hard
-  fi
-  
-  git pull
-  silently source script/ciprofile
-  bootstrap_block
-}
-
 function require {
   silently source script/profile
   silently require
 }
 
-function setup_block {
-  # bootstrap block
-  if [[ ! -d "$BLOCK_PATH/block" ]]; then
-    git clone git@github.com:defn/block "$BLOCK_PATH/block" || true
+function setup_kit {
+  local git_block="$1"; shift
+  local nm_block="${1:-"${git_block##*/}"}"
+
+  if [[ ! -d "$BLOCK_PATH/$nm_block" ]]; then
+    git clone "$git_block" "$BLOCK_PATH/$nm_block" || true
   else
-    pushd "$BLOCK_PATH/block" >/dev/null
+    pushd "$BLOCK_PATH/$nm_block" >/dev/null
     git pull
     popd >/dev/null
   fi
 
-  pushd "$BLOCK_PATH/block"
+  pushd "$BLOCK_PATH/$nm_block"
+  make
   silently require
-  bootstrap_block
   popd
 }
 
-function setup_cache_block {
-  # bootstrap cache
-  if [[ ! -d "$BLOCK_PATH/cache" ]]; then
-    git clone git@github.com:defn/cache "$BLOCK_PATH/cache" || true
-  else
-    pushd "$BLOCK_PATH/cache" >/dev/null
-    git pull
-    popd >/dev/null
-  fi # TODO DRY
+function setup_home {
+  # clone home
+  if [[ ! -d .git ]]; then
+    git clone "$url_repo" home
+    mv home/.git . || rm -rf home/.git
+    git clean -fd
+  fi
 
-  pushd "$BLOCK_PATH/cache"
+  git fetch
+  git reset --hard origin/master
+  
+  make
   silently require
-  bootstrap_block
-  popd
 }
 
 function known_git_hosts {
@@ -168,9 +141,9 @@ function main {
   wait
 
   # blocks
-  setup_block
-  setup_cache_block
-  setup_home_block
+  setup_kit git@github.com:defn/block
+  setup_kit git@github.com:defn/cache
+  setup_home
 
   # update
   update_os
