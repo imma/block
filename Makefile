@@ -1,2 +1,2 @@
 all:
-	script/bootstrap
+	script/cibuild
