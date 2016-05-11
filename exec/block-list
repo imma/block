@@ -60,6 +60,6 @@ def main():
         'path': os.getcwd(),
         'end': '.'
         }):
-        print "%s %s %s %s" % (b['name'], b['path'], b['git'], b.get('end', ''))
+        print("%s %s %s %s" % (b['name'], b['path'], b['git'], b.get('end','')))
 
 main()
