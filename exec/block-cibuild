@@ -14,8 +14,10 @@ function setup_kit {
   local nm_block="${1:-"${git_block##*/}"}"
 
   if [[ -d "$BLOCK_PATH/$nm_block" ]]; then
+    pushd "$BLOCK_PATH/$nm_block"
     git fetch
     git reset --hard origin/master
+    popd
   else
     git clone "$git_block" "$BLOCK_PATH/$nm_block" || true
   fi
