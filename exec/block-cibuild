@@ -13,7 +13,10 @@ function setup_kit {
   local git_block="$1"; shift
   local nm_block="${1:-"${git_block##*/}"}"
 
-  if [[ ! -d "$BLOCK_PATH/$nm_block" ]]; then
+  if [[ -d "$BLOCK_PATH/$nm_block" ]]; then
+    git fetch
+    git reset --hard origin/master
+  else
     git clone "$git_block" "$BLOCK_PATH/$nm_block" || true
   fi
 
