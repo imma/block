@@ -25,7 +25,9 @@ function setup_kit {
 
 function setup_home {
   # clone home
-  if [[ ! -d .git ]]; then
+  if [[ -d .git ]]; then
+    git fetch
+  else
     git clone "$url_repo" home
     mv home/.git . || rm -rf home/.git
   fi
