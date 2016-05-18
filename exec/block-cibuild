@@ -141,4 +141,4 @@ trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]
 set -exfu
 exec 2>&1
 cd
-main "$@"
+main "$@" 2>&1 | tee cibuild-$(date +%s).log
