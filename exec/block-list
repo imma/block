@@ -38,12 +38,20 @@ def list_block(block, seen = { }):
     try:
         with open('Blockfile.json') as f:
             block['body'] = json.load(f)
+            block['body']['require'] = flattern(block['body'].get('require', []))
     except IOError:
         block['body'] = { "require": [] }
         
+    try:
+        with open('Blockfile.json.site') as f:
+            site_block = json.load(f)
+            block['body']['require'] = list(block['body']['require']) + list(flattern(site_block.get('require', [])))
+    except IOError:
+        True
+        
     seen[block['name']] = True
 
-    for b in flattern(block['body'].get('require', [])):
+    for b in block['body']['require']:
         for r in list_block({ 
             'name': b,
             'git': git_defaults(b),
