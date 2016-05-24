@@ -4,30 +4,6 @@ function silently {
   set +x; "$@"; set -x
 }
 
-function require {
-  silently source script/profile
-  silently require
-}
-
-function setup_kit {
-  local git_block="$1"; shift
-  local nm_block="${1:-"${git_block##*/}"}"
-
-  if [[ -d "$BLOCK_PATH/$nm_block" ]]; then
-    pushd "$BLOCK_PATH/$nm_block"
-    git fetch
-    git reset --hard origin/master
-    popd
-  else
-    git clone "$git_block" "$BLOCK_PATH/$nm_block" || true
-  fi
-
-  pushd "$BLOCK_PATH/$nm_block"
-  make
-  silently require
-  popd
-}
-
 function setup_home {
   # clone home
   if [[ -d .git ]]; then
@@ -38,10 +14,9 @@ function setup_home {
   fi
 
   git reset --hard origin/master
-  git clean -fd
+  git clean -fd --exclude='cibuild-*.log'
   
   make
-  silently require
 }
 
 function setup_cibuild {
@@ -130,8 +105,6 @@ function cleanup_cibuild {
 function main {
   setup_cibuild "$@"
 
-  setup_kit git@github.com:defn/block
-  setup_kit git@github.com:defn/cache
   setup_home
 
   cleanup_cibuild
