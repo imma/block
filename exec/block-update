@@ -2,7 +2,7 @@
 
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  source "$shome/script/profile" || return 1
+  source "$shome/script/profile" ''
 
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"

@@ -2,7 +2,7 @@
 
 function stale {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
-  source "$shome/script/profile"
+  source "$shome/script/profile" ''
 
   if [[ -f "$shome/exec/shflags" ]]; then
     if [[ -x "$(which envsubst 2>/dev/null || true)" ]]; then
