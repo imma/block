@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 function require {
+  set --
+
   local tmp_profile="$(mktemp -t XXXXXX)"
 
   local tmp_list="$(mktemp -t XXXXXX)"
