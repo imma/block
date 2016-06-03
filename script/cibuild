@@ -8,14 +8,21 @@ function main {
 
   local git_block
   for git_block in "$@"; do
-    pushd "$BLOCK_PATH" >/dev/null
-    git clone "$git_block" || true
-    git fetch
-    git reset --hard origin/master
+    if [[ -d "$git_block" ]]; then
+      pushd "$git_block" >/dev/null
+    else
+      pushd "$BLOCK_PATH" >/dev/null
+      git clone "$git_block" || true
+      popd >/dev/null
+
+      pushd "$BLOCK_PATH/$(basename "$git_block")" >/dev/null
+      git fetch
+      git reset --hard origin/master
+    fi
 
     block bootstrap 
     require
-    popd "$BLOCK_PATH" >/dev/null
+    popd >/dev/null
   done
 }
 
