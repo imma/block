@@ -4,7 +4,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
   
-  block bootstrap "$@"
+  block bootstrap
 
   local git_block
   for git_block in "$@"; do
@@ -13,8 +13,7 @@ function main {
     git fetch
     git reset --hard origin/master
 
-    make
-
+    block bootstrap 
     require
     popd "$BLOCK_PATH" >/dev/null
   done
