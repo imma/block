@@ -10,6 +10,7 @@ function main {
   for git_block in "$@"; do
     if [[ -d "$git_block" ]]; then
       pushd "$git_block" >/dev/null
+      block lock sync
     else
       pushd "$BLOCK_PATH" >/dev/null
       git clone "$git_block" || true
