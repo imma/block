@@ -4,13 +4,20 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
   
-  case "$(uname -s)" in
-    Linux)
-      sudo aptitude update
-      ;;
-  esac
+  block bootstrap "$@"
 
-  "$shome/script/bootstrap"
+  local git_block
+  for git_block in "$@"; do
+    pushd "$BLOCK_PATH" >/dev/null
+    git clone "$git_block" || true
+    git fetch
+    git reset --hard origin/master
+
+    make
+
+    require
+    popd "$BLOCK_PATH" >/dev/null
+  done
 }
 
 main "$@"
