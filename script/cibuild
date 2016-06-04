@@ -4,7 +4,10 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
   
+  pushd "$shome"
   block bootstrap
+  require
+  popd
 
   local git_block
   for git_block in "$@"; do
