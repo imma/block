@@ -3,13 +3,15 @@
 # The `cibuild` script can bootstrap Block and optional blocks.
 
 # ## Usage
+function suggested {
+  # This is a suggested usage of cibuild to bootstrap and build blocks.
+  mkdir ~/work
+  cd ~/work
+  git clone git@github.com:defn/block
 
-#     mkdir ~/work
-#     cd ~/work
-#     git clone git@github.com:defn/block
-#
-#     cd ~/work/block
-#     script/cibuild git@github.com:defn/home
+  cd ~/work/block
+  script/cibuild git@github.com:defn/home
+}
 
 # ## Main
 function main {
