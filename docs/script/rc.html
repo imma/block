@@ -45,7 +45,7 @@ dependencies and profile.</p>
       <h2>Require</h2>
     </div>
     <div class='code'>
-      <div class="highlight"><pre></pre></div>
+      <div class="highlight"><pre><span class="k">function</span> require <span class="o">{</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -54,10 +54,13 @@ dependencies and profile.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-3'>#</a>
       </div>
-      
+      <p>Ensure no arguments are passed to require.  Any arguments are passed on to
+profiles that are sourced without arguments.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">function</span> require <span class="o">{</span></pre></div>
+      <div class="highlight"><pre>  <span class="nb">set</span> --
+
+  <span class="nb">local</span> <span class="nv">tmp_list</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>mktemp -t XXXXXX<span class="k">)</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -66,11 +69,10 @@ dependencies and profile.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-4'>#</a>
       </div>
-      <p>Ensure no arguments are passed to require.  Any arguments are passed on to
-profiles that are sourced without arguments.</p>
+      <p>Get a list of block dependencies.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="nb">set</span> --</pre></div>
+      <div class="highlight"><pre>  block list &gt; <span class="s2">&quot;</span><span class="nv">$tmp_list</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -79,11 +81,10 @@ profiles that are sourced without arguments.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-5'>#</a>
       </div>
-      <p>Get a list of block dependencies.</p>
+      <p>Generate a profile script to source block dependencies, for efficiency.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="nb">local</span> <span class="nv">tmp_list</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>mktemp -t XXXXXX<span class="k">)</span><span class="s2">&quot;</span>
-  block list &gt; <span class="s2">&quot;</span><span class="nv">$tmp_list</span><span class="s2">&quot;</span></pre></div>
+      <div class="highlight"><pre>  <span class="nb">local</span> <span class="nv">tmp_profile</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>mktemp -t XXXXXX<span class="k">)</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -92,10 +93,10 @@ profiles that are sourced without arguments.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-6'>#</a>
       </div>
-      <p>Generate a profile script to source block dependencies, for efficiency.</p>
+      <h3>For each block dependency:</h3>
     </div>
     <div class='code'>
-      <div class="highlight"><pre></pre></div>
+      <div class="highlight"><pre>  <span class="k">while</span> <span class="nb">read</span> -r nm_block pth_block git_block end_block<span class="p">;</span> <span class="k">do</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -103,19 +104,6 @@ profiles that are sourced without arguments.</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
-      </div>
-      <h3>For each block dependency:</h3>
-    </div>
-    <div class='code'>
-      <div class="highlight"><pre>  <span class="nb">local</span> <span class="nv">tmp_profile</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span>mktemp -t XXXXXX<span class="k">)</span><span class="s2">&quot;</span>
-  <span class="k">while</span> <span class="nb">read</span> -r nm_block pth_block git_block end_block<span class="p">;</span> <span class="k">do</span></pre></div>
-    </div>
-  </div>
-  <div class='clearall'></div>
-  <div class='section' id='section-8'>
-    <div class='docs'>
-      <div class='octowrap'>
-        <a class='octothorpe' href='#section-8'>#</a>
       </div>
       <p>If a block is missing, break.  Something didn't bootstrap correctly or yet.</p>
     </div>
@@ -127,10 +115,10 @@ profiles that are sourced without arguments.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-9'>
+  <div class='section' id='section-8'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-9'>#</a>
+        <a class='octothorpe' href='#section-8'>#</a>
       </div>
       <p>If block profile is found, source it; assume profile will source rc as
 needed.  If only rc is found, source it.</p>
@@ -147,10 +135,10 @@ needed.  If only rc is found, source it.</p>
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-10'>
+  <div class='section' id='section-9'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-10'>#</a>
+        <a class='octothorpe' href='#section-9'>#</a>
       </div>
       <p>Finally, actually source the dependencies by sourcing everything.</p>
     </div>

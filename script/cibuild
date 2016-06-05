@@ -2,7 +2,7 @@
 
 # The `cibuild` script can bootstrap Block and optional blocks.
 
-# ## Suggested usage:
+# ## Usage
 
 #     mkdir ~/work
 #     cd ~/work
@@ -12,8 +12,6 @@
 #     script/cibuild git@github.com:defn/home
 
 # ## Main
-
-#
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
 
@@ -27,8 +25,6 @@ function main {
 
 
 # ## Setup Block
-
-#
 function setup_block {
   # Bootstrap & require Block to get access to dependencies
   pushd "$shome"
@@ -40,11 +36,9 @@ function setup_block {
 # ## Bootstrap optional blocks
 # Takes a list of git urls or work areas, cloning when necessary, and
 # bootstrapping/requiring each block.
-
-#
 function setup_optional {
-  # ### For each block:
   local git_block
+  # ### For each block:
   for git_block in "$@"; do
     if [[ ! -d "$git_block" ]]; then
       # Clone the block if it isn't there
