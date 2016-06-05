@@ -120,11 +120,13 @@ profiles that are sourced without arguments.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-8'>#</a>
       </div>
-      <p>To avoid recalculating the block home, set it as <code>_$block_home</code> with <code>-</code>
-replaced with <code>_</code></p>
+      <p>To avoid recalculating the block home, set it as <code>_$block_home</code>, replacing <code>.-\</code>
+with <code>_</code></p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>    <span class="nb">local</span> <span class="nv">nm_block_safe</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">nm_block</span><span class="p">//-/_</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nv">nm_block_safe</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="p">//</span><span class="se">\/</span><span class="p">/_</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="nv">nm_block_safe</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="p">//</span><span class="se">\.</span><span class="p">/_</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="nb">eval</span> <span class="s2">&quot;export _</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="si">}</span><span class="s2">_home=\&quot;</span><span class="nv">$pth_block</span><span class="s2">\&quot;&quot;</span></pre></div>
     </div>
   </div>
