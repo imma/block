@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>cibuild</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>cibuild</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>The <code>cibuild</code> script can bootstrap Block and optional blocks.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>Suggested usage:</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <pre><code>mkdir ~/work
+cd ~/work
+git clone git@github.com:defn/block
+
+cd ~/work/block
+script/cibuild git@github.com:defn/home
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">function</span> main <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <h1>Setup Block</h1>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Source Block's profile to get access to <code>block</code> commands</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="nb">source</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">/script/profile&quot;</span> <span class="s1">&#39;&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Bootstrap &amp; require Block to get access to dependencies</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="nb">pushd</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">&quot;</span>
+  block bootstrap
+  require
+  <span class="nb">popd</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <h1>Bootstrap optional blocks</h1>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="nb">local</span> git_block
+  <span class="k">for</span> git_block in <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="p">;</span> <span class="k">do</span>
+    <span class="k">if</span> <span class="o">[[</span> ! -d <span class="s2">&quot;</span><span class="nv">$git_block</span><span class="s2">&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Clone the block if it isn't there</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="nb">cd</span> <span class="s2">&quot;</span><span class="nv">$BLOCK_PATH</span><span class="s2">&quot;</span> &gt;/dev/null
+      git clone <span class="s2">&quot;</span><span class="nv">$git_block</span><span class="s2">&quot;</span> <span class="o">||</span> <span class="nb">true</span>
+      <span class="nv">git_block</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$BLOCK_PATH</span><span class="s2">/</span><span class="k">$(</span>basename <span class="s2">&quot;</span><span class="nv">$git_block</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span>
+    <span class="k">fi</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>For each block:</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="nb">cd</span> <span class="s2">&quot;</span><span class="nv">$git_block</span><span class="s2">&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <ul>
+<li>clone dependencies</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    block clone</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <ul>
+<li>build dependencies</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    block bootstrap</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <ul>
+<li>source dependencies</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    require
+  <span class="k">done</span>
+<span class="o">}</span>
+
+main <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
