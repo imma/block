@@ -64,7 +64,7 @@ def list_block(block, seen = { }):
 
 def main():
     for b in list_block({
-        'name': os.path.dirname(os.getcwd()), 
+        'name': os.path.basename(os.getcwd()), 
         'git': subprocess.check_output(['git', 'ls-remote', '--get-url']).strip(),
         'path': os.getcwd(),
         'end': '.'
