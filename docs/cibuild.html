@@ -41,7 +41,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      <p>Suggested usage:</p>
+      <h2>Suggested usage:</h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -62,8 +62,7 @@ script/cibuild git@github.com:defn/home
 </code></pre>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">function</span> main <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span></pre></div>
+      <div class="highlight"><pre></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -72,7 +71,7 @@ script/cibuild git@github.com:defn/home
       <div class='octowrap'>
         <a class='octothorpe' href='#section-4'>#</a>
       </div>
-      <h1>Setup Block</h1>
+      <h2>Main</h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -84,10 +83,11 @@ script/cibuild git@github.com:defn/home
       <div class='octowrap'>
         <a class='octothorpe' href='#section-5'>#</a>
       </div>
-      <p>Source Block's profile to get access to <code>block</code> commands</p>
+      
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="nb">source</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">/script/profile&quot;</span> <span class="s1">&#39;&#39;</span></pre></div>
+      <div class="highlight"><pre><span class="k">function</span> main <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -96,13 +96,15 @@ script/cibuild git@github.com:defn/home
       <div class='octowrap'>
         <a class='octothorpe' href='#section-6'>#</a>
       </div>
-      <p>Bootstrap &amp; require Block to get access to dependencies</p>
+      <p>Source Block's profile to get access to <code>block</code> commands</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="nb">pushd</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">&quot;</span>
-  block bootstrap
-  require
-  <span class="nb">popd</span></pre></div>
+      <div class="highlight"><pre>  <span class="nb">source</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">/script/profile&quot;</span> <span class="s1">&#39;&#39;</span>
+  
+  setup_block
+
+  setup_optional
+<span class="o">}</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -111,7 +113,7 @@ script/cibuild git@github.com:defn/home
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
       </div>
-      <h1>Bootstrap optional blocks</h1>
+      <h2>Setup Block</h2>
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -126,9 +128,7 @@ script/cibuild git@github.com:defn/home
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre>  <span class="nb">local</span> git_block
-  <span class="k">for</span> git_block in <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="p">;</span> <span class="k">do</span>
-    <span class="k">if</span> <span class="o">[[</span> ! -d <span class="s2">&quot;</span><span class="nv">$git_block</span><span class="s2">&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span></pre></div>
+      <div class="highlight"><pre><span class="k">function</span> setup_block <span class="o">{</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -136,6 +136,49 @@ script/cibuild git@github.com:defn/home
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Bootstrap &amp; require Block to get access to dependencies</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="nb">pushd</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">&quot;</span>
+  block bootstrap
+  require
+  <span class="nb">popd</span>
+<span class="o">}</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <h2>Bootstrap optional blocks</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">function</span> setup_optional <span class="o">{</span>
+  <span class="nb">local</span> git_block
+  <span class="k">for</span> git_block in <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span><span class="p">;</span> <span class="k">do</span>
+    <span class="k">if</span> <span class="o">[[</span> ! -d <span class="s2">&quot;</span><span class="nv">$git_block</span><span class="s2">&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
       </div>
       <p>Clone the block if it isn't there</p>
     </div>
@@ -147,10 +190,10 @@ script/cibuild git@github.com:defn/home
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-10'>
+  <div class='section' id='section-13'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-10'>#</a>
+        <a class='octothorpe' href='#section-13'>#</a>
       </div>
       <p>For each block:</p>
     </div>
@@ -159,10 +202,10 @@ script/cibuild git@github.com:defn/home
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-11'>
+  <div class='section' id='section-14'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-11'>#</a>
+        <a class='octothorpe' href='#section-14'>#</a>
       </div>
       <ul>
 <li>clone dependencies</li>
@@ -173,10 +216,10 @@ script/cibuild git@github.com:defn/home
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-12'>
+  <div class='section' id='section-15'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-12'>#</a>
+        <a class='octothorpe' href='#section-15'>#</a>
       </div>
       <ul>
 <li>build dependencies</li>
@@ -187,10 +230,10 @@ script/cibuild git@github.com:defn/home
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-13'>
+  <div class='section' id='section-16'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-13'>#</a>
+        <a class='octothorpe' href='#section-16'>#</a>
       </div>
       <ul>
 <li>source dependencies</li>
