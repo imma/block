@@ -30,7 +30,7 @@ function require {
     nm_block_safe="${nm_block_safe//\//_}"
     nm_block_safe="${nm_block_safe//\./_}"
     local nm_pth_block="pth_block"
-    eval "export _${nm_block_safe}_home=\"\${!${nm_pth_block}}\""
+    export "_${nm_block_safe}_home"="${!nm_pth_block}"
 
     # If block profile is found, source it; assume profile will source rc as
     # needed.  If only rc is found, source it.
