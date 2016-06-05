@@ -127,7 +127,8 @@ with <code>_</code></p>
       <div class="highlight"><pre>    <span class="nb">local</span> <span class="nv">nm_block_safe</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">nm_block</span><span class="p">//-/_</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="nv">nm_block_safe</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="p">//</span><span class="se">\/</span><span class="p">/_</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="nv">nm_block_safe</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="p">//</span><span class="se">\.</span><span class="p">/_</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="nb">eval</span> <span class="s2">&quot;export _</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="si">}</span><span class="s2">_home=\&quot;</span><span class="nv">$pth_block</span><span class="s2">\&quot;&quot;</span></pre></div>
+    <span class="nb">local</span> <span class="nv">nm_pth_block</span><span class="o">=</span><span class="s2">&quot;pth_block&quot;</span>
+    <span class="nb">export</span> <span class="s2">&quot;_</span><span class="si">${</span><span class="nv">nm_block_safe</span><span class="si">}</span><span class="s2">_home&quot;</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="p">!nm_pth_block</span><span class="si">}</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
