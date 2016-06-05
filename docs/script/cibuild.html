@@ -75,7 +75,7 @@ script/cibuild git@github.com:defn/home
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="k">function</span> main <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span></pre></div>
+  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">_block_home</span><span class="k">:-</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span><span class="si">}</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

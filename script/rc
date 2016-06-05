@@ -24,10 +24,13 @@ function require {
       break
     fi
 
+    # To avoid recalculating the block home, set it as `_$block_home` with `-`
+    # replaced with `_`
+    local nm_block_safe="${nm_block//-/_}"
+    eval "export _${nm_block_safe}_home=\"$pth_block\""
+
     # If block profile is found, source it; assume profile will source rc as
     # needed.  If only rc is found, source it.
-    local nm_block_safe="${nm_block//-/_}"
-    eval "_${nm_block_safe}_home=\"$pth_block\""
     if [[ -e "$pth_block/script/profile" ]]; then
       echo "source $pth_block/script/profile"
     elif [[ -e "$pth_block/script/rc" ]]; then
