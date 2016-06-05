@@ -1,20 +1,33 @@
 #!/usr/bin/env bash
 
+# The `rc` profile provides the `require` function to source a block's
+# dependencies and profile.
+
+# ## Require
+
+#
 function require {
+  # Ensure no arguments are passed to require.  Any arguments are passed on to
+  # profiles that are sourced without arguments.
   set --
 
-  local tmp_profile="$(mktemp -t XXXXXX)"
-
+  # Get a list of block dependencies.
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"
 
+  # Generate a profile script to source block dependencies, for efficiency.
+
+  # ### For each block dependency:
+  local tmp_profile="$(mktemp -t XXXXXX)"
   while read -r nm_block pth_block git_block end_block; do
+    # If a block is missing, break.  Something didn't bootstrap correctly or yet.
     if [[ ! -d "$pth_block" ]]; then
-      echo "ERROR: missing $nm_block block" 1>&2
-      set --
+      echo "WARNING: missing $nm_block block" 1>&2
       break
     fi
 
+    # If block profile is found, source it; assume profile will source rc as
+    # needed.  If only rc is found, source it.
     if [[ -e "$pth_block/script/profile" ]]; then
       echo "source $pth_block/script/profile"
     elif [[ -e "$pth_block/script/rc" ]]; then
@@ -24,6 +37,7 @@ function require {
   done < "$tmp_list" > "$tmp_profile"
   rm -f "$tmp_list"
 
+  # Finally, actually source the dependencies by sourcing everything.
   source "$tmp_profile"
   rm -f "$tmp_profile"
 }
