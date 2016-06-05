@@ -38,9 +38,12 @@ function setup_block {
 }
 
 # ## Bootstrap optional blocks
+# Takes a list of git urls or work areas, cloning when necessary, and
+# bootstrapping/requiring each block.
 
 #
 function setup_optional {
+  # ### For each block:
   local git_block
   for git_block in "$@"; do
     if [[ ! -d "$git_block" ]]; then
@@ -50,16 +53,15 @@ function setup_optional {
       git_block="$BLOCK_PATH/$(basename "$git_block")"
     fi
 
-    # For each block:
     cd "$git_block"
 
-    # - clone dependencies
+    # Clone dependencies
     block clone
 
-    # - build dependencies
+    # Build dependencies and block
     block bootstrap 
 
-    # - source dependencies
+    # Source dependencies and block
     require
   done
 }
