@@ -32,7 +32,7 @@ function setup_cibuild {
   : ${BLOCK_PATH:="$(pwd)/work"} # TODO remove hardcoded work
   export BLOCK_PATH
 
-  export BASEBOX_CACHE="/vagrant"
+  export BASEBOX_CACHE="/vagrant" # TODO get rid of this, and use something like defn-config
 
   if [[ -n "${1:-}" ]]; then
     export http_proxy="$1"; shift
@@ -86,7 +86,7 @@ function configure_apt_proxy {
         } | sudo tee -a /etc/apt/apt.conf.d/99boxcache
       fi
 
-      sudo aptitude update
+      sudo aptitude update >/dev/null
       ;;
   esac
 }
