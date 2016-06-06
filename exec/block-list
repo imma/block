@@ -4,7 +4,6 @@ import json
 import re
 import subprocess
 import os
-import itertools
 
 def git_defaults(ele):
     m = re.search('^(\w+)/', ele)
@@ -18,7 +17,8 @@ def flattern(A):
         if isinstance(i,list): 
             for ii in flattern(i):
                 yield ii
-        else: yield i
+        else:
+            yield i
 
 def list_block(block, seen = { }):
     try:
@@ -53,12 +53,12 @@ def list_block(block, seen = { }):
     seen[block['name']] = True
 
     for b in block['body']['require']:
-        for r in list_block({ 
+        for dep in list_block({ 
             'name': b,
             'git': git_defaults(b),
             'path': "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(b))
             }):
-            yield r
+            yield dep
 
     yield block
 
