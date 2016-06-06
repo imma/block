@@ -6,11 +6,8 @@
 function suggested {
   # This is a suggested usage of cibuild to bootstrap and build blocks.
   mkdir ~/work
-  cd ~/work
-  git clone git@github.com:defn/block
-
-  cd ~/work/block
-  script/cibuild git@github.com:defn/home
+  git clone git@github.com:defn/block ~/work/block
+  ~/work/block/script/cibuild git@github.com:defn/home
 }
 
 # ## Main
