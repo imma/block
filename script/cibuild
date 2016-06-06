@@ -19,7 +19,8 @@ function main {
   
   setup_block
 
-  setup_optional
+  # Setup dependencies on the command-line
+  setup_optional "$@"
 }
 
 
