@@ -181,10 +181,10 @@ bootstrapping/requiring each block.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-12'>#</a>
       </div>
-      <p>Clone dependencies</p>
+      <h4>Clone dependencies.</h4>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    block clone</pre></div>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="o">[[</span> -f <span class="s2">&quot;Blockfile.json.lock&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -193,10 +193,11 @@ bootstrapping/requiring each block.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-13'>#</a>
       </div>
-      <p>Build dependencies and block</p>
+      <p>If there is a <code>Blockfile.json.lock</code>, use efficient cloning in parallel</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre>    block bootstrap</pre></div>
+      <div class="highlight"><pre>      block lock sync
+    <span class="k">else</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -204,6 +205,31 @@ bootstrapping/requiring each block.</p>
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>Otherwise, clone one repo at a time, recursively</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      block clone
+    <span class="k">fi</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>Build dependencies and block</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    block bootstrap</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
       </div>
       <p>Source dependencies and block</p>
     </div>

@@ -49,8 +49,14 @@ function setup_optional {
 
     cd "$git_block"
 
-    # Clone dependencies
-    block clone
+    # #### Clone dependencies.
+    if [[ -f "Blockfile.json.lock" ]]; then
+      # If there is a `Blockfile.json.lock`, use efficient cloning in parallel
+      block lock sync
+    else
+      # Otherwise, clone one repo at a time, recursively
+      block clone
+    fi
 
     # Build dependencies and block
     block bootstrap 
