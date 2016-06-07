@@ -41,9 +41,11 @@ function require {
     fi
 
   done < "$tmp_list" > "$tmp_profile"
+
+  # ### Finished with block deps
   rm -f "$tmp_list"
 
-  # Finally, actually source the dependencies by sourcing everything.
+  # Actually source the dependencies by sourcing everything.
   source "$tmp_profile"
   rm -f "$tmp_profile"
 }

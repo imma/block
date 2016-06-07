@@ -25,7 +25,7 @@ function main {
   local not_found=
 
   local pth_block
-  # ### For each block or path:
+  # ### For each block or path location:
   for pth_block in "$@"; do
     # Find documentation and then continue the loop
     case "$pth_block" in
