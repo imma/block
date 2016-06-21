@@ -29,11 +29,6 @@ function setup_cibuild {
     url_repo="$1"; shift
   fi
 
-  : ${BLOCK_PATH:="$(pwd)/work"} # TODO remove hardcoded work
-  export BLOCK_PATH
-
-  export BASEBOX_CACHE="/vagrant" # TODO get rid of this, and use something like defn-config
-
   if [[ -n "${1:-}" ]]; then
     export http_proxy="$1"; shift
     export https_proxy="$http_proxy"
