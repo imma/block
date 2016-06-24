@@ -70,15 +70,10 @@ function known_git_hosts {
 function configure_apt_proxy {
   case "$(uname -s)" in
     Linux)
-      {
-        echo "Acquire::Languages { \"en\"; };"
-        echo "Acquire::http { Pipeline-Depth \"200\"; }"
-      } | sudo tee /etc/apt/apt.conf.d/99boxcache
-
       if [[ -n "${http_proxy:-}" ]]; then
         {
           echo "Acquire::http::Proxy \"$http_proxy\";"
-        } | sudo tee -a /etc/apt/apt.conf.d/99boxcache
+        } | sudo tee /etc/apt/apt.conf.d/99boxcache
       fi
 
       sudo aptitude update >/dev/null
@@ -86,26 +81,15 @@ function configure_apt_proxy {
   esac
 }
 
-function cleanup_cibuild {
-  case "$(uname -s)" in
-    Linux)
-      sudo rm -f /etc/apt/apt.conf.d/99boxcache
-      ;;
-  esac
-
-  touch .done
-}
-
-
 function main {
   setup_cibuild "$@"
 
   setup_home
 
-  cleanup_cibuild
+  touch .done
 }
 
-trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done' EXIT
+trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done /etc/apt/apt.conf.d/99boxcache' EXIT
 set -exfu
 exec 2>&1
 cd
