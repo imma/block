@@ -89,7 +89,7 @@ function main {
   touch .done
 }
 
-trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done /etc/apt/apt.conf.d/99boxcache' EXIT
+trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done; sudo rm -f /etc/apt/apt.conf.d/99boxcache' EXIT
 set -exfu
 exec 2>&1
 cd
