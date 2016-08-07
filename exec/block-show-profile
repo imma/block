@@ -7,8 +7,6 @@ function main {
 function profile {
   local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
   PATH="$shome/bin:$shome/exec:$PATH"
-  
-  source "$shome/script/rc"
 }
 
 profile

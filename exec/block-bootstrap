@@ -29,8 +29,6 @@ function main {
 
       if [[ -e script/profile ]]; then
         source script/profile
-      elif [[ -e script/rc ]]; then
-        source script/rc
       fi
       popd
     fi
