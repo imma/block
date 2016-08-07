@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+# ## Emit
+function emit {
+  # Ensure no arguments are passed to require.  Any arguments are passed on to
+  # profiles that are sourced without arguments.
+  set --
+
+  local tmp_list="$(mktemp -t XXXXXX)"
+  # Get a list of block dependencies.
+  block list > "$tmp_list"
+
+  # Wrap the following blocks' profile in a _profile function
+  printf 'function _profile {\n'
+
+  # ### For each block dependency:
+  while read -r nm_block pth_block git_block end_block; do
+    # If a block is missing, break.  Something didn't bootstrap correctly.
+    if [[ ! -d "$pth_block" ]]; then
+      echo "ERROR: missing $nm_block block" 1>&2
+      return 1
+    fi
+
+    # If block profile is found, source it; assume profile will source rc as
+    # needed.  If only rc is found, source it.
+    if [[ -e "$pth_block/script/profile" ]]; then
+      # To avoid recalculating the block home, set it as `_$block_home`,
+      # replacing `.-\` with `_`
+      local nm_block_safe="${nm_block//-/_}"
+      nm_block_safe="${nm_block_safe//\//_}"
+      nm_block_safe="${nm_block_safe//\./_}"
+      local nm_pth_block="pth_block"
+
+      # Emit the block's shome hint
+      printf '  export "%q"="%q"\n' "_${nm_block_safe}_home" "${!nm_pth_block}"
+
+      # Emit the block's profile
+      printf '  source "%q"\n' "$pth_block/script/profile"
+    fi
+
+  done < "$tmp_list"
+
+  # ### Finished with block deps
+  rm -f "$tmp_list"
+
+  # Finite with the wrapper _profile function
+  printf '}\n'
+}
+
+emit "$@"
