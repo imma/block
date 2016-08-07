@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function profile {
+function _block_profile {
   local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
   PATH="$shome/bin:$shome/exec:$PATH"
   source "$shome/script/rc"
@@ -17,4 +17,4 @@ function profile {
   fi
 }
 
-profile "$@"
+_block_profile "$@"
