@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# The `rc` profile provides the `require` function to source a block's
+# Block's profile provides the `require` function to source a block's
 # dependencies and profile.
 
 # ## Require

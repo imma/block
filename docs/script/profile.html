@@ -2,14 +2,14 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html;charset=utf-8">
-  <title>rc</title>
+  <title>profile</title>
   <link rel="stylesheet" href="../pycco.css">
 </head>
 <body>
 <div id='container'>
   <div id="background"></div>
   <div class='section'>
-    <div class='docs'><h1>rc</h1></div>
+    <div class='docs'><h1>profile</h1></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -29,7 +29,7 @@
       <div class='octowrap'>
         <a class='octothorpe' href='#section-1'>#</a>
       </div>
-      <p>The <code>rc</code> profile provides the <code>require</code> function to source a block's
+      <p>Block's profile provides the <code>require</code> function to source a block's
 dependencies and profile.</p>
     </div>
     <div class='code'>
@@ -143,8 +143,6 @@ needed.  If only rc is found, source it.</p>
     <div class='code'>
       <div class="highlight"><pre>    <span class="k">if</span> <span class="o">[[</span> -e <span class="s2">&quot;</span><span class="nv">$pth_block</span><span class="s2">/script/profile&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
       <span class="nb">echo</span> <span class="s2">&quot;source </span><span class="nv">$pth_block</span><span class="s2">/script/profile&quot;</span>
-    <span class="k">elif</span> <span class="o">[[</span> -e <span class="s2">&quot;</span><span class="nv">$pth_block</span><span class="s2">/script/rc&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
-      <span class="nb">echo</span> <span class="s2">&quot;source </span><span class="nv">$pth_block</span><span class="s2">/script/rc&quot;</span>
     <span class="k">fi</span>
 
   <span class="k">done</span> &lt; <span class="s2">&quot;</span><span class="nv">$tmp_list</span><span class="s2">&quot;</span> &gt; <span class="s2">&quot;</span><span class="nv">$tmp_profile</span><span class="s2">&quot;</span></pre></div>
@@ -174,6 +172,24 @@ needed.  If only rc is found, source it.</p>
       <div class="highlight"><pre>  <span class="nb">source</span> <span class="s2">&quot;</span><span class="nv">$tmp_profile</span><span class="s2">&quot;</span>
   rm -f <span class="s2">&quot;</span><span class="nv">$tmp_profile</span><span class="s2">&quot;</span>
 <span class="o">}</span>
+
+<span class="k">function</span> _block_profile <span class="o">{</span>
+  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">_block_home</span><span class="k">:-</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span><span class="si">}</span><span class="s2">&quot;</span>
+  <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">/bin:</span><span class="nv">$shome</span><span class="s2">/exec:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+
+  <span class="k">if</span> <span class="o">[[</span> -z <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BLOCK_PATH</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">export</span> <span class="nv">BLOCK_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/../..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span>
+  <span class="k">fi</span>
+
+  <span class="k">if</span> <span class="o">[[</span> -n <span class="s2">&quot;</span><span class="si">${</span><span class="nv">1</span><span class="k">:-</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">local</span> <span class="nv">pth_block</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$1</span><span class="s2">&quot;</span><span class="p">;</span> <span class="nb">shift</span>
+    <span class="nb">pushd</span> <span class="s2">&quot;</span><span class="nv">$pth_block</span><span class="s2">&quot;</span> &gt;/dev/null
+    require
+    <span class="nb">popd</span> &gt; /dev/null
+  <span class="k">fi</span>
+<span class="o">}</span>
+
+_block_profile <span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
 
 </pre></div>
     </div>
