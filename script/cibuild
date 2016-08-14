@@ -28,6 +28,7 @@ function main {
 function setup_block {
   # Bootstrap & require Block to get access to dependencies
   pushd "$shome"
+  make '../sub/exec/sub'
   block bootstrap
   require
   popd
