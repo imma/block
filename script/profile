@@ -56,12 +56,12 @@ function _block_profile {
     export BLOCK_PATH="$(cd -P -- "${BASH_SOURCE%/*}/../.." && pwd -P)"
   fi
 
-  if [[ -n "${1:-}" ]]; then
-    local pth_block="$1"; shift
+  for _a in "$@"; do
+    local pth_block="$_a"; shift
     pushd "$pth_block" >/dev/null
     require
     popd > /dev/null
-  fi
+  done
 }
 
 _block_profile "$@"
