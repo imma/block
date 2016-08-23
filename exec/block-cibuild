@@ -41,9 +41,11 @@ function setup_cibuild {
 
   if [[ -n "${1:-}" ]]; then
     export ssh_gateway="$1"; shift
+    export GIT_CACHE=1
   else
     unset ssh_gateway
     unset GIT_SSH
+    unset GIT_CACHE
   fi
 
   if [[ -n "${1:-}" ]]; then
