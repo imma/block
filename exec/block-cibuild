@@ -72,12 +72,6 @@ function known_git_hosts {
 function configure_apt_proxy {
   case "$(uname -s)" in
     Linux)
-      if [[ -n "${http_proxy:-}" ]]; then
-        {
-          echo "Acquire::http::Proxy \"$http_proxy\";"
-        } | sudo tee /etc/apt/apt.conf.d/99boxcache
-      fi
-
       sudo aptitude update >/dev/null
       ;;
   esac
@@ -91,7 +85,7 @@ function main {
   touch .done
 }
 
-trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done; sudo rm -f /etc/apt/apt.conf.d/99boxcache' EXIT
+trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done;' EXIT
 exec 2>&1
 set -exfu
 cd
