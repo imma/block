@@ -85,7 +85,8 @@ function main {
   touch .done
 }
 
-trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done;' EXIT
+trap 'if [[ ! -f .done ]]; then echo "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX[ NOT DONE ]XXXXXXXXXXXXXXXXXXXXXXXXX"; fi; rm -f .done; exit 1;'  EXIT
+
 exec 2>&1
 set -exfu
 cd
