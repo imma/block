@@ -65,7 +65,7 @@ function runmany {
 }
 
 function main {
-  local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
   block list | awk '{print $2}' | runmany "$@"

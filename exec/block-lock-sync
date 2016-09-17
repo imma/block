@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function main {
-  local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
   cat Blockfile.lock | perl -pe 's{\$\{BLOCK_PATH\}}{'"$BLOCK_PATH"'}' \

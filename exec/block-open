@@ -13,7 +13,7 @@ function suggested {
 
 # ## Main
 function main {
-  local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
   # If no locations on the command-line, default to the current directory

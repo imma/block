@@ -3,7 +3,7 @@
 export BLOCK_NO_SITE=1
 
 function main {
-  local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
   block lock show > "Blockfile.lock"
