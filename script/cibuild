@@ -54,6 +54,7 @@ function setup_optional {
     if [[ -f "Blockfile.lock" ]]; then
       # If there is a `Blockfile.lock`, use efficient cloning in parallel
       block lock sync
+      block lock update
     else
       # Otherwise, clone one repo at a time, recursively
       block clone
