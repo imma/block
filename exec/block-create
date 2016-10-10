@@ -17,7 +17,7 @@ function main {
   mkdir -p "$nm_block"
   cd "$nm_block"
   git init
-  hub create "$nm_user/"
+  hub create "$nm_user/$nm_block"
   touch README.md
   git add README.md
   git commit -m 'initial commit'
