@@ -7,8 +7,8 @@ def git_defaults ele
   if %r{^(\w+)/}.match(ele)
     "git@github.com:#{ele}"
   else
-    # If just name, default to github.com:defn
-    "git@github.com:defn/#{ele}"
+    # If just name, default to github.com:imma
+    "git@github.com:imma/#{ele}"
   end
 end
 
@@ -43,7 +43,7 @@ def block_list nm_block, info_block, reqs, ordered
         acc += Array(ele)
       }.inject([]) {|acc, ele|
         # Map the block names to git repos, defaulting to github.com or
-        # github.com:defn
+        # github.com:imma
         git = if block["blocks"]
           if block["blocks"].member? ele
             block["blocks"][ele]

@@ -10,7 +10,7 @@ def git_defaults(ele):
     if m:
         return "git@github.com:%s" % (ele)
     else:
-        return "git@github.com:defn/%s" % (ele)
+        return "git@github.com:imma/%s" % (ele)
 
 def flattern(A):
     for i in A:

@@ -57,8 +57,8 @@
     </div>
     <div class='code'>
       <div class="highlight"><pre>  mkdir ~/work
-  git clone git@github.com:defn/block ~/work/block
-  ~/work/block/script/cibuild git@github.com:defn/home
+  git clone git@github.com:imma/block ~/work/block
+  ~/work/block/script/cibuild git@github.com:imma/home
 <span class="o">}</span></pre></div>
     </div>
   </div>
@@ -72,7 +72,7 @@
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="k">function</span> main <span class="o">{</span>
-  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">_block_home</span><span class="k">:-</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span><span class="si">}</span><span class="s2">&quot;</span></pre></div>
+  <span class="nb">local</span> <span class="nv">shome</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">cd</span> -P -- <span class="s2">&quot;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">%/*</span><span class="si">}</span><span class="s2">/..&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> -P<span class="k">)</span><span class="s2">&quot;</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -124,6 +124,7 @@
     </div>
     <div class='code'>
       <div class="highlight"><pre>  <span class="nb">pushd</span> <span class="s2">&quot;</span><span class="nv">$shome</span><span class="s2">&quot;</span>
+  make <span class="s1">&#39;../sub/exec/sub&#39;</span>
   block bootstrap
   require
   <span class="nb">popd</span>
@@ -197,6 +198,8 @@ bootstrapping/requiring each block.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre>      block lock sync
+      block clone
+      block lock update
     <span class="k">else</span></pre></div>
     </div>
   </div>

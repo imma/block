@@ -10,7 +10,7 @@ function main {
 	local nm_user="$(echo "$spec_block" | cut -d/ -f1)"
 	local nm_block="$(echo "$spec_block" | cut -d/ -f2)"
   if [[ "$nm_user" == "$spec_block" ]]; then
-    nm_user="defn"
+    nm_user="imma"
   fi
 
 	cd "$BLOCK_PATH"
