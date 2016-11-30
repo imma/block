@@ -70,7 +70,7 @@ def main():
 
     for b in list_block({
         'name': cwd_basename,
-        'git': git_defaults(cwd_basename),
+        'git': subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).strip(),
         'path': os.getcwd(),
         'end': '.'
         }):
