@@ -8,4 +8,6 @@ function main {
 }
 
 umask 022
-source sub "$0" "$@"
+if type -P sub >/dev/null; then
+  source sub "$0" "$@"
+fi
