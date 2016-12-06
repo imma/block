@@ -12,7 +12,7 @@ function upsert {
 function emit {
   echo '{ "require": [ "block", "cache", "service" ] }' | upsert Blockfile.json.site
   echo 'source ~/.bashrc' | upsert ~/.bash_profile
-  echo 'source ~/work/block/script/profile ~' | upssert ~/.bashrc
+  echo 'source ~/work/block/script/profile ~' | upsert ~/.bashrc
 }
 
 emit "$@"
