@@ -20,7 +20,15 @@ def flattern(A):
         else:
             yield i
 
-def list_block(block, seen = { }):
+def list_block(block = None, seen = { }):
+    if not block:
+        block = {
+            'name': os.path.basename(os.getcwd()),
+            'git': subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).strip(),
+            'path': os.getcwd(),
+            'end': '.'
+        }
+
     try:
         os.chdir(block['path'])
     except OSError:
@@ -66,14 +74,7 @@ def main():
     if not os.path.exists(".git"):
         os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).strip())
 
-    cwd_basename = os.path.basename(os.getcwd())
-
-    for b in list_block({
-        'name': cwd_basename,
-        'git': subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).strip(),
-        'path': os.getcwd(),
-        'end': '.'
-        }):
+    for b in list_block():
         print("%s %s %s %s" % (b['name'], b['path'], b['git'], b.get('end','')))
 
 main()
