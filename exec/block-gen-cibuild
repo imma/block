@@ -2,7 +2,7 @@
 
 # ## Emit
 function emit {
-  echo '{ "require": [ "block", "cache" ] }' > Blockfile.json.site
+  echo '{ "require": [ "block", "cache", "service" ] }' > Blockfile.json.site
 }
 
 emit "$@"
