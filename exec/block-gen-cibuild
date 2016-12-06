@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# ## Emit
+function emit {
+  echo '{ "require": [ "block", "cache" ] }' > Blockfile.json.site
+}
+
+emit "$@"
