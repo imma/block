@@ -24,7 +24,7 @@ def list_block(block = None, seen = { }):
     if not block:
         block = {
             'name': os.path.basename(os.getcwd()),
-            'git': subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).strip(),
+            'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).strip(),
             'path': os.getcwd(),
             'end': '.'
         }
