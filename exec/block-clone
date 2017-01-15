@@ -24,6 +24,7 @@ function main_clone {
     fi
 
    # Block has not been cloned
+   rmdir "$pth_block" 2>/dev/null || true
     if [[ ! -d "$pth_block" ]]; then
       # Clone the repository
       local nm_work="${nm_block##*/}"
