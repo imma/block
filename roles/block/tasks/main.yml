@@ -1,0 +1,6 @@
+---
+- name: hi
+  shell: date
+
+- name: bye
+  shell: date
