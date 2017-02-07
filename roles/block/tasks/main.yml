@@ -1,6 +1,6 @@
 ---
-- name: hi
+- name: hi block
   shell: date
 
-- name: bye
+- name: bye block
   shell: date
