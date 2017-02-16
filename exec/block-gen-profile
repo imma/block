@@ -14,7 +14,7 @@ function emit {
   printf 'function _profile {\n'
 
   # ### For each block dependency:
-  while read -r nm_block pth_block git_block end_block; do
+  while read -r nm_block pth_block git_block version_block end_block; do
     # If a block is missing, break.  Something didn't bootstrap correctly.
     if [[ ! -d "$pth_block" ]]; then
       echo "ERROR: missing $nm_block block" 1>&2

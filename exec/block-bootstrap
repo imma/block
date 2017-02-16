@@ -7,10 +7,13 @@ function main {
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"
 
-  while read -r nm_block pth_block git_block end_block; do
+  while read -r nm_block pth_block git_block version_block end_block; do
     if [[ ! -d "$pth_block" ]]; then
       git clone "$git_block" "$pth_block"
       pushd "$pth_block"
+      if [[ -n "$version_block" ]]; then
+        git checkout "$version_block"
+      fi
       main
       popd
     else

@@ -17,7 +17,7 @@ function main_clone {
   fi > "$tmp_list"
 
   local git_block
-  while read -r nm_block pth_block git_block end_block; do
+  while read -r nm_block pth_block git_block version_block end_block; do
     # Block has already been cloned
     if [[ -d "$pth_block" ]]; then
       continue
@@ -29,6 +29,11 @@ function main_clone {
       # Clone the repository
       local nm_work="${nm_block##*/}"
       git clone "$git_block" "$BLOCK_PATH/$nm_work"
+      pushd "$BLOCK_PATH/$nm_work" >/dev/null
+      if [[ -n "$version_block" ]]; then
+        git checkout "$version_block"
+      fi
+      popd >/dev/null
       pth_block="$BLOCK_PATH/$nm_work"
     fi
 
