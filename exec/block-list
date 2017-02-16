@@ -22,10 +22,15 @@ def flattern(A):
 
 def list_block(block = None, seen = { }):
     if not block:
+        version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip()
+        if version == "HEAD":
+            version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).strip()
+
         block = {
             'name': os.path.basename(os.getcwd()),
-            'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).strip(),
             'path': os.getcwd(),
+            'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).strip(),
+            'version': version,
             'end': '.'
         }
 
@@ -61,11 +66,17 @@ def list_block(block = None, seen = { }):
     seen[block['name']] = True
 
     for b in block['body']['require']:
+        name = b.split("@")[0] 
+        if "@" in b:
+            version = b.split("@")[1]
+        else:
+            version = ""
+
         for dep in list_block({ 
-            'name': b,
-            'git': git_defaults(b),
-            'path': "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(b))
-            }):
+            'name': name,
+            'path': "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name)),
+            'git': git_defaults(name),
+            'version': version }):
             yield dep
 
     yield block
@@ -75,6 +86,6 @@ def main():
         os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).strip())
 
     for b in list_block():
-        print("%s %s %s %s" % (b['name'], b['path'], b['git'], b.get('end','')))
+        print("%s %s %s %s %s" % (b['name'], b['path'], b['git'], b['version'], b.get('end','')))
 
 main()
