@@ -1,6 +1,6 @@
 {
   "require": [
-    "sub@062a65e087e86659f212da82f0311815a12244f1",
+    "sub",
     "runmany"
   ]
 }
