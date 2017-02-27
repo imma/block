@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 
+function setup_submodules {
+  if ! git submodule update --init --remote --no-fetch -j 10; then
+    git submdule update --init
+    git submodule foreach git checkout master
+  fi
+}
+
 function main {
   local phome="$1"; shift
   local pth_cache="$1"; shift
   local pth_env="$1"; shift
 
-  git submodule update --init --recursive -j 4
+  setup_submodules
 }
 
 source sub "$0" "$@"
+
+
