@@ -45,21 +45,13 @@ function setup_optional {
       # Clone the block if it isn't there
       cd "$BLOCK_PATH" >/dev/null
       git clone "$git_block" || true
-      git_block="$BLOCK_PATH/$(basename "$git_block")"
+      git_block="$BLOCK_PATH/${git_block##*/}"
     fi
 
     cd "$git_block"
 
     # #### Clone dependencies.
-    if [[ -f "Blockfile.lock" ]]; then
-      # If there is a `Blockfile.lock`, use efficient cloning in parallel
-      block lock sync
-      block clone
-      block lock update
-    else
-      # Otherwise, clone one repo at a time, recursively
-      block clone
-    fi
+    block clone
 
     # Build dependencies and block
     block bootstrap 
