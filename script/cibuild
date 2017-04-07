@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+# The `cibuild` script can bootstrap Block and optional blocks.
+
+# ## Usage
+function suggested {
+  # This is a suggested usage of cibuild to bootstrap and build blocks.
+  mkdir ~/work
+  git clone git@github.com:imma/block ~/work/block
+  ~/work/block/script/cibuild git@github.com:imma/home
+}
+
+# ## Main
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+
+  # Source Block's profile to get access to `block` commands
+  source "$shome/script/profile" ''
+  
+  setup_block
+
+  # Setup dependencies on the command-line
+  setup_optional "$@"
+}
+
+
+# ## Setup Block
+function setup_block {
+  # Bootstrap & require Block to get access to dependencies
+  pushd "$shome"
+  make '../sub/exec/sub'
+  block bootstrap
+  require
+  popd
+}
+
+# ## Bootstrap optional blocks
+# Takes a list of git urls or work areas, cloning when necessary, and
+# bootstrapping/requiring each block.
+function setup_optional {
+  local git_block
+  # ### For each block:
+  for git_block in "$@"; do
+    if [[ ! -d "$git_block" ]]; then
+      # Clone the block if it isn't there
+      cd "$BLOCK_PATH" >/dev/null
+      git clone "$git_block" || true
+      git_block="$BLOCK_PATH/${git_block##*/}"
+    fi
+
+    cd "$git_block"
+
+    # #### Clone dependencies.
+    block clone
+
+    # Build dependencies and block
+    block bootstrap 
+
+    # Source dependencies and block
+    require
+  done
+}
+
+main "$@"
