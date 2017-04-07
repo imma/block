@@ -6,7 +6,7 @@ function main {
 
   block list | grep -v '\.$' | while read -r a b c d e; do
     echo $a $b $c $(cd $b && git rev-parse HEAD) $(cd $b && git rev-parse --abbrev-ref HEAD)
-  done | sed "s#${BLOCK_PATH}#\${BLOCK_PATH}#" | block align
+  done | sed "s#${BLOCK_PATH}#\${BLOCK_PATH}#" | talign
 }
 
 source sub "$0" "$@"
