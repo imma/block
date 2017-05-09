@@ -4,6 +4,11 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
+  if [[ -n "${1:-}" ]]; then
+    cd "${BLOCK_PATH}/$1"
+    shift
+  fi
+
   local tmp_list="$(mktemp -t XXXXXX)"
   block list > "$tmp_list"
 
