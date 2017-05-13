@@ -4,7 +4,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
-  runmany 'cd "$BLOCK_PATH/$nm_block" && script/refresh' "$@"
+  runmany 'cd "$BLOCK_PATH/$1" && script/refresh' "$@"
 }
 
 source sub "$0" "$@"
