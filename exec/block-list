@@ -22,20 +22,30 @@ def flattern(A):
 
 def list_block(block = None, seen = { }):
     if not block:
-        version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
-        if version == "HEAD":
-            version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
+        if os.path.exists(".git"):
+            version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
+            if version == "HEAD":
+                version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
 
-        block = {
-            'name': os.path.basename(os.getcwd()),
-            'path': os.getcwd(),
-            'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
-            'version': version,
-            'end': '.'
-        }
+            block = {
+                'name': os.path.basename(os.getcwd()),
+                'path': os.getcwd(),
+                'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
+                'version': version,
+                'end': '.'
+            }
+        else:
+            block = {
+                'name': os.path.basename(os.getcwd()),
+                'path': os.getcwd(),
+                'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
+                'version': "yyy",
+                'end': '.'
+            }
 
     try:
-        os.chdir(block['path'])
+        if block:
+            os.chdir(block['path'])
     except OSError:
         seen[block['name']] = True
         yield block
@@ -83,9 +93,13 @@ def list_block(block = None, seen = { }):
 
 def main():
     if not os.path.exists(".git"):
-        os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip())
+        if os.path.exists("Blockfile.json"):
+            True
+        else:
+            os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip())
 
     for b in list_block():
-        print("%s %s %s %s %s" % (b['name'], b['path'], b['git'], b['version'], b.get('end','')))
+        if not (b.get('end','') == '.' and b['version'] == 'yyy'):
+            print("%s %s %s %s %s" % (b['name'], b['path'], b['git'], b['version'], b.get('end','')))
 
 main()
