@@ -23,12 +23,12 @@ function main {
       popd
     else
       pushd "$pth_block"
-      if [[ -x script/stale ]]; then
-        if script/stale < /dev/null; then
+      if [[ -x script/fresh ]]; then
+        if ! script/fresh< /dev/null; then
           script/bootstrap < /dev/null
         fi
-      elif [[ -x script/fresh ]]; then
-        if ! script/fresh< /dev/null; then
+      elif [[ -x script/stale ]]; then
+        if script/stale < /dev/null; then
           script/bootstrap < /dev/null
         fi
       elif [[ -x script/bootstrap ]]; then
