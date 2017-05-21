@@ -28,16 +28,16 @@ def list_block(block = None, seen = { }):
                 version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
 
             block = {
-                'name': os.path.basename(os.getcwd()),
-                'path': os.getcwd(),
+                'name': os.path.basename(os.environ['PWD']),
+                'path': os.environ['PWD'],
                 'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
                 'version': version,
                 'end': '.'
             }
         else:
             block = {
-                'name': os.path.basename(os.getcwd()),
-                'path': os.getcwd(),
+                'name': os.path.basename(os.environ['PWD']),
+                'path': os.environ['PWD'],
                 'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
                 'version': "yyy",
                 'end': '.'
@@ -64,6 +64,14 @@ def list_block(block = None, seen = { }):
             block['body']['require'] = flattern(block['body'].get('require', []))
     except IOError:
         block['body'] = { "require": [] }
+
+    try:
+        if not os.path.exists(".git"):
+            with open("%s/Blockfile.json" % subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip()) as f:
+                site_block = json.load(f)
+                block['body']['require'] = list(flattern(site_block.get('require', []))) + list(block['body']['require'])
+    except IOError:
+        True
         
     if not os.environ.get("BLOCK_NO_SITE"):
         try:
@@ -73,15 +81,6 @@ def list_block(block = None, seen = { }):
         except IOError:
             True
 
-    try:
-        if not os.path.exists(".git"):
-            os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip())
-        with open('Blockfile.json') as f:
-            site_block = json.load(f)
-            block['body']['require'] = list(flattern(site_block.get('require', []))) + list(block['body']['require'])
-    except IOError:
-        True
-        
     seen[block['name']] = True
 
     for b in block['body']['require']:
