@@ -4,11 +4,17 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
-  require
-
-  if [[ "$#" -gt 0 ]]; then
-    eval "$@"
+  if [[ "$#" == 0 ]]; then
+    return
   fi
+
+  require
+  if [[ -f Blockfile.json && ! -e .git ]]; then
+    cd -P "$(git rev-parse --show-cdup)"
+    source script/profile
+    cd -
+  fi
+  eval "$@"
 }
 
 source sub "$0" "$@"
