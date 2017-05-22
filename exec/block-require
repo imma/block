@@ -12,7 +12,7 @@ function main {
   if [[ -f Blockfile.json && ! -e .git ]]; then
     cd -P "$(git rev-parse --show-cdup)"
     source script/profile
-    cd -
+    cd - >/dev/null
   fi
   eval "$@"
 }
