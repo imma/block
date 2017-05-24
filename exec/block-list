@@ -5,6 +5,12 @@ import re
 import subprocess
 import os
 
+def find_block(name):
+    if os.path.exists("%s/work/%s" % (os.environ['PWD'],os.path.basename(name))):
+        return "%s/work/%s" % (os.environ['PWD'], os.path.basename(name))
+    else:
+        return "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))
+
 def git_defaults(ele):
     m = re.search('^(\w+)/', ele)
     if m:
@@ -92,7 +98,7 @@ def list_block(block = None, seen = { }):
 
         for dep in list_block({ 
             'name': name,
-            'path': "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name)),
+            'path': find_block(name),
             'git': git_defaults(name),
             'version': version }):
             yield dep
