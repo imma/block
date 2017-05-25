@@ -9,7 +9,13 @@ def find_block(name):
     if os.path.exists("%s/work/%s" % (os.environ['PWD'],os.path.basename(name))):
         return "%s/work/%s" % (os.environ['PWD'], os.path.basename(name))
     else:
-        return "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))
+        if os.environ.get('BLOCK_META',False):
+            if os.path.exists("%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))):
+                return "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))
+            else:
+                return "%s/work/%s" % (os.environ['PWD'], os.path.basename(name))
+        else:
+            return "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))
 
 def git_defaults(ele):
     m = re.search('^(\w+)/', ele)

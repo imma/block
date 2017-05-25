@@ -23,18 +23,17 @@ function main_clone {
       continue
     fi
 
-   # Block has not been cloned
-   rmdir "$pth_block" 2>/dev/null || true
+    # Block has not been cloned
+    rmdir "$pth_block" 2>/dev/null || true
     if [[ ! -d "$pth_block" ]]; then
       # Clone the repository
       local nm_work="${nm_block##*/}"
-      git clone "$git_block" "$BLOCK_PATH/$nm_work"
-      pushd "$BLOCK_PATH/$nm_work" >/dev/null
+      git clone "$git_block" "$pth_block"
+      pushd "$pth_block" >/dev/null
       if [[ -n "$version_block" ]]; then
         git checkout "$version_block"
       fi
       popd >/dev/null
-      pth_block="$BLOCK_PATH/$nm_work"
     fi
 
     # If this isn't the top level block, recursively clone
