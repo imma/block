@@ -47,11 +47,14 @@ def list_block(block = None, seen = { }):
                 'end': '.'
             }
         else:
+            version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
+            if version == "HEAD":
+                version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
                 'git': ".",
-                'version': ".",
+                'version': version,
                 'end': '.',
                 'body': { "require": [] }
             }
