@@ -9,7 +9,7 @@ def find_block(name):
     if os.path.exists("%s/work/%s" % (os.environ['PWD'],os.path.basename(name))):
         return "%s/work/%s" % (os.environ['PWD'], os.path.basename(name))
     else:
-        if os.environ.get('BLOCK_META',False):
+        if os.environ.get('BLOCK_META',False) or os.path.exists(".git"):
             if os.path.exists("%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))):
                 return "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))
             else:
