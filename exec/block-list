@@ -85,14 +85,6 @@ def list_block(block = None, seen = { }):
     except IOError:
         block['body'] = { "require": [] }
 
-    if not os.path.exists(".git"):
-        try:
-            with open("%s/Blockfile.json" % subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip()) as f:
-                site_block = json.load(f)
-                block['body']['require'] = list(block['body']['require']) + list(flattern(site_block.get('require', [])))
-        except IOError:
-            True
-
     if not os.environ.get("BLOCK_NO_SITE"):
         try:
             with open('Blockfile.json.site') as f:
