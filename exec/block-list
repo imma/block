@@ -31,14 +31,21 @@ def flattern(A):
 def list_block(block = None, seen = { }):
     if not block:
         if os.path.exists(".git"):
-            version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
-            if version == "HEAD":
-                version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
+            try:
+                version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
+                if version == "HEAD":
+                    version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
+            except subprocess.CalledProcessError:
+                version =  ""
 
+            try:
+                git_remote = subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
+            except subprocess.CalledProcessError:
+                git_remote = '.'
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
-                'git': subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
+                'git': git_remote,
                 'version': version,
                 'end': '.'
             }
