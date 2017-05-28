@@ -39,7 +39,7 @@ def list_block(block = None, seen = { }):
                 version =  ""
 
             try:
-                git_remote = subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
+                git_remote = subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip()
             except subprocess.CalledProcessError:
                 git_remote = '.'
 
