@@ -4,6 +4,16 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
+  export nm_branch="$(git rev-parse --abbrev-ref HEAD)"
+  case "$nm_branch" in
+    master|develop)
+      true
+      ;;
+    *)
+      nm_branch=''
+      ;;
+  esac
+
   main_clone "$@"
 }
 
@@ -28,7 +38,7 @@ function main_clone {
     if [[ ! -d "$pth_block" ]]; then
       # Clone the repository
       local nm_work="${nm_block##*/}"
-      git clone "$git_block" "$pth_block"
+      git clone ${nm_branch:+-b "$nm_branch"} "$git_block" "$pth_block"
       pushd "$pth_block" >/dev/null
       if [[ -n "$version_block" ]]; then
         git checkout "$version_block"
