@@ -1,0 +1,19 @@
+#!/usr/bin/env bash4
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile" ''
+
+  export nm_block="$(basename $(pwd))"
+  export nm_block_caps="${nm_block^^}"
+
+  rsync -ia --exclude .git "${BLOCK_PATH}/example/." .
+
+  git add .
+  git grep xxx | cut -d: -f1 | uniq | runmany 'perl -pe "s{xxx}{"${nm_block}"}g" -i $1'
+  git grep XXX | cut -d: -f1 | uniq | runmany 'perl -pe "s{XXX}{"${nm_block_caps}"}g" -i $1'
+  git diff --word-diff
+  git add -u .
+}
+
+source sub "$0" "$@"

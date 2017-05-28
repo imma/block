@@ -57,10 +57,12 @@ function _block_profile {
   fi
 
   for _a in "$@"; do
-    local pth_block="$_a"; shift
-    pushd "$pth_block" >/dev/null
-    require
-    popd > /dev/null
+    if [[ -n "$_a" ]]; then
+      local pth_block="$_a"; shift
+      pushd "$pth_block" >/dev/null
+      require
+      popd > /dev/null
+    fi
   done
 }
 
