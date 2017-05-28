@@ -42,6 +42,7 @@ def list_block(block = None, seen = { }):
                 git_remote = subprocess.check_output([ 'git', 'config', '--local', 'remote.origin.url' ]).decode('ascii', 'ignore').strip(),
             except subprocess.CalledProcessError:
                 git_remote = '.'
+
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
@@ -61,13 +62,14 @@ def list_block(block = None, seen = { }):
                 'end': '.',
                 'body': { "require": [] }
             }
-    try:
-        if block:
+
+    if block:
+        try:
             os.chdir(block['path'])
-    except OSError:
-        seen[block['name']] = True
-        yield block
-        return
+        except OSError:
+            seen[block['name']] = True
+            yield block
+            return
 
     if os.path.isfile('.block-name') and os.path.exists(".git"):
         with open('.block-name') as f:
@@ -83,13 +85,13 @@ def list_block(block = None, seen = { }):
     except IOError:
         block['body'] = { "require": [] }
 
-    try:
-        if not os.path.exists(".git"):
+    if not os.path.exists(".git"):
+        try:
             with open("%s/Blockfile.json" % subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip()) as f:
                 site_block = json.load(f)
-                block['body']['require'] = list(flattern(site_block.get('require', []))) + list(block['body']['require'])
-    except IOError:
-        True
+                block['body']['require'] = list(block['body']['require']) + list(flattern(site_block.get('require', [])))
+        except IOError:
+            True
 
     if not os.environ.get("BLOCK_NO_SITE"):
         try:
@@ -118,11 +120,8 @@ def list_block(block = None, seen = { }):
     yield block
 
 def main():
-    if not os.path.exists(".git"):
-        if os.path.exists("Blockfile.json"):
-            True
-        else:
-            os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip())
+    if not os.path.exists(".git") and not os.path.exists("Blockfile.json"):
+        os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip())
 
     for b in list_block():
         print("%s %s %s %s %s" % (b['name'], b['path'], b['git'], b['version'], b.get('end','')))
