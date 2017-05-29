@@ -57,4 +57,5 @@ function main_clone {
   rm -f "$tmp_list"
 }
 
+export CALLING_PWD="${CALLING_PWD:-$PWD}"
 source sub "$0" "$@"
