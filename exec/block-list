@@ -6,6 +6,8 @@ import subprocess
 import os
 
 def find_block(name):
+    if os.path.exists("%s" % os.environ.get("_%s_home" % name,False)):
+        return os.environ.get("_%s_home" % name)
     if os.path.exists("%s/work/%s" % (calling_pwd,os.path.basename(name))):
         return "%s/work/%s" % (calling_pwd, os.path.basename(name))
     elif os.path.exists("%s/%s" % (os.environ['BLOCK_PATH'],os.path.basename(name))):
