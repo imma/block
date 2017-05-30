@@ -27,7 +27,7 @@ function emit {
       # To avoid recalculating the block home, set it as `_$block_home`,
       # replacing `.-\` with `_`
       local nm_block_safe="${nm_block//-/_}"
-      nm_block_safe="${nm_block_safe//\//_}"
+      nm_block_safe="${nm_block_safe##*/}"
       nm_block_safe="${nm_block_safe//\./_}"
       local nm_pth_block="pth_block"
 
