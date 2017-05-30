@@ -7,8 +7,11 @@ import os
 
 def find_block(name):
     global calling_pwd
-    if os.path.exists("%s" % os.environ.get("_%s_home" % name,False)):
-        return os.environ.get("_%s_home" % name)
+
+    env_name = name.split("/")[-1].replace("-","_")
+
+    if os.path.exists("%s" % os.environ.get("_%s_home" % env_name,False)):
+        return os.environ.get("_%s_home" % env_name)
     elif os.path.exists("%s/work/%s" % (os.getcwd(),os.path.basename(name))):
         calling_pwd = os.getcwd()
         return "%s/work/%s" % (calling_pwd, os.path.basename(name))
