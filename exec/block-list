@@ -10,13 +10,13 @@ def find_block(name):
 
     env_name = name.split("/")[-1].replace("-","_")
 
-    if os.path.exists("%s" % os.environ.get("_%s_home" % env_name,False)):
-        return os.environ.get("_%s_home" % env_name)
-    elif os.path.exists("%s/work/%s" % (os.getcwd(),os.path.basename(name))):
+    if os.path.exists("%s/work/%s" % (os.getcwd(),os.path.basename(name))):
         calling_pwd = os.getcwd()
         return "%s/work/%s" % (calling_pwd, os.path.basename(name))
     elif os.path.exists("%s/work/%s" % (calling_pwd,os.path.basename(name))):
         return "%s/work/%s" % (calling_pwd, os.path.basename(name))
+    elif os.path.exists("%s" % os.environ.get("_%s_home" % env_name,False)):
+        return os.environ.get("_%s_home" % env_name)
     elif os.path.exists("%s/%s" % (os.environ['BLOCK_PATH'],os.path.basename(name))):
         return "%s/%s" % (os.environ['BLOCK_PATH'], os.path.basename(name))
     elif os.environ.get('BLOCK_META',False):
