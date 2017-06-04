@@ -9,11 +9,6 @@ function main {
   fi
 
   require
-  if [[ -f Blockfile.json && ! -e .git ]]; then
-    cd -P "$(git rev-parse --show-cdup)"
-    source script/profile
-    cd - >/dev/null
-  fi
   eval "$@"
 }
 
