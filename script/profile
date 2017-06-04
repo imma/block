@@ -49,7 +49,7 @@ function require {
 }
 
 function _block_profile {
-  local shome="${_block_home:-"$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
+  local shome="${_block_home:="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"}"
   PATH="$shome/bin:$shome/exec:$PATH"
 
   if [[ -z "${BLOCK_PATH:-}" ]]; then
