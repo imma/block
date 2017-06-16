@@ -28,10 +28,14 @@ def find_block(name):
 
 def git_defaults(ele):
     m = re.search('^(\w+)/', ele)
-    if m:
-        return "git@github.com:%s" % (ele)
-    else:
-        return "git@github.com:imma/%s" % (ele)
+    if not m:
+        ele = "imma/%s" % (ele)
+    
+    prefix = os.environ.get('GIT_CC_PREFIX','git@github.com:')
+    if prefix.find("github.com") < 0:
+        ele = ele.replace("/","--")
+
+    return "%s%s" % (prefix,ele)
 
 def flattern(A):
     for i in A:
