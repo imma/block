@@ -4,21 +4,22 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
-  export nm_branch="$(git rev-parse --abbrev-ref HEAD)"
-  case "$nm_branch" in
-    master|develop)
-      true
-      ;;
-    *)
+  export nm_branch="$(cat Blockfile.json | jq -r '.blocks//""')"
+  if [[ -z "$nm_branch" ]]; then
+    nm_branch="$(git rev-parse --abbrev-ref HEAD)"
+    local sha_branch="$(git rev-parse HEAD)"
+    if [[ "$nm_branch" == "$sha_branch" ]]; then
       nm_branch=''
-      ;;
-  esac
+    fi
+  fi
 
   main_clone "$@"
 }
 
 function main_clone {
   local tmp_list="$(mktemp -t XXXXXX)"
+
+  set -x
 
   if [[ "$#" == 0 ]]; then
     block list
