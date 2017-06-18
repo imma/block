@@ -9,16 +9,24 @@ function main {
 
   local nm_branch=
   if [[ "$#" == 0 ]]; then
-    nm_branch="$(cat Blockfile.json | jq -r '.branch//"develop"')"
+    nm_branch="$(cat Blockfile.json | jq -r '.branch//""')"
   else
     nm_branch="$1"; shift
+  fi
+
+  if [[ -z "$nm_branch" ]]; then
+    nm_branch="$(git rev-parse --abbrev-ref HEAD)"
   fi
 
   git fetch
   git reset --hard "origin/$nm_branch"
   git checkout "$nm_branch"
 
-  local nm_block_branch="$(cat Blockfile.json | jq -r '.blocks//"develop"')"
+  local nm_block_branch="$(cat Blockfile.json | jq -r '.blocks//""')"
+  if [[ -z "$nm_block_branch" ]]; then
+    nm_block_branch="$nm_branch"
+  fi
+
   block clone
   block list | awk '{print $1,$2,$3}' | while read -r nm_block pth_block git_block; do
     pushd "$pth_block"
@@ -29,7 +37,7 @@ function main {
         git fetch
       fi
 
-      git branch --set-upstream-to "origin/$nm_branch" || { git fetch && git branch --set-upstream-to "origin/$nm_branch"; }
+      git branch --set-upstream-to "origin/$nm_block_branch" || { git fetch && git branch --set-upstream-to "origin/$nm_block_branch"; }
     popd
   done
 
