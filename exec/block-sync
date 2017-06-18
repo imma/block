@@ -27,6 +27,16 @@ function main {
     nm_block_branch="$nm_branch"
   fi
 
+  local nm_origin="$(git remote get-url origin)"
+  case "$nm_origin" in
+    http*)
+      export GIT_CC_PREFIX="${nm_origin#/*}/"
+      ;;
+    git@*)
+      export GIT_CC_PREFIX="${nm_origin#:*}:"
+      ;;
+  esac
+
   block clone
   block list | awk '{print $1,$2,$3}' | while read -r nm_block pth_block git_block; do
     pushd "$pth_block"
