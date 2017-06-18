@@ -22,7 +22,7 @@ function main {
   block clone
   block list | awk '{print $1,$2,$3}' | while read -r nm_block pth_block git_block; do
     pushd "$pth_block"
-      local nm_remote="$(git get-url origin)"
+      local nm_remote="$(git remote get-url origin)"
       if [[ "$nm_remote" != "$git_block" ]]; then
         git remote remove origin
         git remote add origin "$git_block"
