@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile"
+  source normalize
+
+  set -x
+
+  local nm_branch=
+  if [[ "$#" == 0 ]]; then
+    nm_branch="$(cat Blockfile.json | jq -r '.branch//"develop"')"
+  else
+    nm_branch="$1"; shift
+  fi
+
+  git fetch
+  git reset --hard "origin/$nm_branch"
+  git checkout "$nm_branch"
+
+  if [[ -f "Blockfile.lock" ]]; then
+	  git submodule update --init
+  	cat Blockfile.lock  | envsubst | runmany 1 5 'set -x; cd $$2 && git checkout --force $$5 && git reset --hard $$4 || (cd $$2 && git fetch && git checkout --force $$5 && git reset --hard)'
+  else
+    local nm_block_branch="$(cat Blockfile.json | jq -r '.blocks//"develop"')"
+    block list | awk '{print $1,$2,$3}'
+  fi
+}
+
+source sub "$BASH_SOURCE" "$@"
