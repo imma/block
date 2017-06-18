@@ -53,7 +53,7 @@ function main {
 
   if [[ -f "Blockfile.lock" ]]; then
 	  git submodule update --init
-  	cat Blockfile.lock  | envsubst | runmany 1 5 'set -x; cd $$2 && git checkout --force $$5 && git reset --hard $$4 || (cd $$2 && git fetch && git checkout --force $$5 && git reset --hard)'
+  	cat Blockfile.lock  | envsubst | runmany 1 5 'set -x; cd $2 && git checkout --force $5 && git reset --hard $4 || (cd $2 && git fetch && git checkout --force $5 && git reset --hard)'
   fi
 }
 
