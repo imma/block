@@ -8,6 +8,9 @@ function main {
 }
 
 umask 022
+if [[ "${PWD:0:${#BLOCK_PATH}}" != "$BLOCK_PATH" ]]; then
+  export BLOCK_META=1
+fi
 if type -P sub >/dev/null; then
   source sub "$0" "$@"
 fi
