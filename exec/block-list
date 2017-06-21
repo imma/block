@@ -49,13 +49,6 @@ def list_block(block = None, seen = { }):
     if not block:
         if os.path.exists(".git"):
             try:
-                version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
-                if version == "HEAD":
-                    version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
-            except subprocess.CalledProcessError:
-                version =  ""
-
-            try:
                 git_remote = subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).decode('ascii', 'ignore').strip()
             except subprocess.CalledProcessError:
                 git_remote = '.'
@@ -63,20 +56,13 @@ def list_block(block = None, seen = { }):
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
-                'git': git_remote,
-                'version': version,
-                'end': '.'
+                'git': git_remote
             }
         else:
-            version = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).decode('ascii', 'ignore').strip()
-            if version == "HEAD":
-                version = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode('ascii', 'ignore').strip()
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
                 'git': subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).decode('ascii', 'ignore').strip(),
-                'version': version,
-                'end': '.',
                 'body': { "require": [] }
             }
 
@@ -114,16 +100,11 @@ def list_block(block = None, seen = { }):
 
     for b in block['body']['require']:
         name = b.split("@")[0] 
-        if "@" in b:
-            version = b.split("@")[1]
-        else:
-            version = ""
 
         for dep in list_block({ 
             'name': name,
             'path': find_block(name),
-            'git': git_defaults(name),
-            'version': version }):
+            'git': git_defaults(name) }):
             yield dep
 
     yield block
@@ -133,7 +114,7 @@ def main():
         os.chdir(subprocess.check_output(['git', 'rev-parse', '--show-cdup']).decode('ascii', 'ignore').strip())
 
     for b in list_block():
-        print("%s %s %s %s %s" % (b['name'], b['path'], b['git'], b['version'], b.get('end','')))
+        print("%s %s %s" % (b['name'], b['path'], b['git']))
 
 calling_pwd = os.environ.get('CALLING_PWD',os.environ['PWD'])
 main()
