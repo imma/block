@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile" ''
+
+  export tmp_license="$(mktemp -d -t XXXXXX)"
+  trap 'rm -rf "$tmp_license"' EXIT
+
+  block runmany 10 'if [[ -x "$1/script/license" ]]; then "$1/script/license" > "$tmp_license/$$.json"; fi'
+  (set +f; cat "$tmp_license"/*.json 2>/dev/null || true) | jq -s 'reduce .[] as $v ({}; . + $v)'
+}
+
+source sub "$0" "$@"
