@@ -49,20 +49,23 @@ def list_block(block = None, seen = { }):
     if not block:
         if os.path.exists(".git"):
             try:
-                git_remote = subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).decode('ascii', 'ignore').strip()
+                git_branch = subprocess.check_output([ 'git', 'rev-parse', '--abbrev-ref', 'HEAD' ]).decode('ascii', 'ignore').strip()
+                git_remote = subprocess.check_output([ 'git', 'rev-parse', '--abbrev-ref', "%s@{upstream}" % git_branch ]).decode('ascii', 'ignore').strip()
+                git_remote = git_remote.split("/")[0]
+                git_url = subprocess.check_output([ 'git', 'remote', 'get-url', git_remote ]).decode('ascii', 'ignore').strip()
             except subprocess.CalledProcessError:
-                git_remote = '.'
+                git_url = '.'
 
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
-                'git': git_remote
+                'git': git_url
             }
         else:
             block = {
                 'name': os.path.basename(os.environ['PWD']),
                 'path': os.environ['PWD'],
-                'git': subprocess.check_output([ 'git', 'remote', 'get-url', 'origin' ]).decode('ascii', 'ignore').strip(),
+                'git': '.',
                 'body': { "require": [] }
             }
 
