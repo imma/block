@@ -19,8 +19,6 @@ function main {
 function main_clone {
   local tmp_list="$(mktemp -t XXXXXX)"
 
-  set -x
-
   if [[ "$#" == 0 ]]; then
     block list
   else
