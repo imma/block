@@ -52,7 +52,7 @@ def list_block(block = None, seen = { }):
                 git_branch = subprocess.check_output([ 'git', 'rev-parse', '--abbrev-ref', 'HEAD' ]).decode('ascii', 'ignore').strip()
                 git_remote = subprocess.check_output([ 'git', 'rev-parse', '--abbrev-ref', "%s@{upstream}" % git_branch ]).decode('ascii', 'ignore').strip()
                 git_remote = git_remote.split("/")[0]
-                git_url = subprocess.check_output([ 'git', 'remote', 'get-url', git_remote ]).decode('ascii', 'ignore').strip()
+                git_url = subprocess.check_output([ 'git', 'config', '--get', "remote.%s.url" % git_remote ]).decode('ascii', 'ignore').strip()
             except subprocess.CalledProcessError:
                 git_url = '.'
 
