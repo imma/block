@@ -28,7 +28,9 @@ function main {
 function setup_block {
   # Bootstrap & require Block to get access to dependencies
   pushd "$shome"
-  make '../sub/exec/sub'
+  if [[ ! -d "$BLOCK_PATH/sub/exec" ]]; then
+    git clone git@github.com:imma/sub "$BLOCK_PATH/sub"
+  fi
   block bootstrap
   require
   popd
