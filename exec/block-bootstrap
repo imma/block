@@ -10,36 +10,27 @@ function main {
   fi
 
   local tmp_list="$(mktemp -t XXXXXX)"
+  block clone
   block list > "$tmp_list"
 
   while read -r nm_block pth_block git_block version_block end_block; do
-    if [[ ! -d "$pth_block" ]]; then
-      git clone "$git_block" "$pth_block"
-      pushd "$pth_block"
-      if [[ -n "$version_block" ]]; then
-        git checkout "$version_block"
-      fi
-      main
-      popd
-    else
-      pushd "$pth_block"
-      if [[ -x script/fresh ]]; then
-        if ! script/fresh< /dev/null; then
-          script/bootstrap < /dev/null
-        fi
-      elif [[ -x script/stale ]]; then
-        if script/stale < /dev/null; then
-          script/bootstrap < /dev/null
-        fi
-      elif [[ -x script/bootstrap ]]; then
+    pushd "$pth_block"
+    if [[ -x script/fresh ]]; then
+      if ! script/fresh< /dev/null; then
         script/bootstrap < /dev/null
       fi
-
-      if [[ -e script/profile ]]; then
-        source script/profile
+    elif [[ -x script/stale ]]; then
+      if script/stale < /dev/null; then
+        script/bootstrap < /dev/null
       fi
-      popd
+    elif [[ -x script/bootstrap ]]; then
+      script/bootstrap < /dev/null
     fi
+
+    if [[ -e script/profile ]]; then
+      source script/profile
+    fi
+    popd
   done < "$tmp_list"
   rm -f "$tmp_list"
 }

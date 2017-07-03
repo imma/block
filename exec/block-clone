@@ -37,7 +37,7 @@ function main_clone {
     if [[ ! -d "$pth_block" ]]; then
       # Clone the repository
       local nm_work="${nm_block##*/}"
-      git clone ${nm_branch:+-b "$nm_branch"} "$git_block" "$pth_block"
+      git clone ${GIT_CC_REMOTE:+-o "${GIT_CC_REMOTE}"} ${nm_branch:+-b "$nm_branch"} "$git_block" "$pth_block"
       pushd "$pth_block" >/dev/null
       if [[ -n "$version_block" ]]; then
         git checkout "$version_block"
