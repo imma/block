@@ -21,19 +21,17 @@ function emit {
       return 1
     fi
 
-    # If block profile is found, source it; assume profile will source rc as
-    # needed.  If only rc is found, source it.
+    # To avoid recalculating the block home, set it as `_$block_home`,
+    # replacing `.-\` with `_`
+    local nm_block_safe="${nm_block//-/_}"
+    nm_block_safe="${nm_block_safe##*/}"
+    nm_block_safe="${nm_block_safe//\./_}"
+    local nm_pth_block="pth_block"
+
+    # Emit the block's shome hint
+    printf '  export "%q"="%q"\n' "_${nm_block_safe}_home" "${!nm_pth_block}"
+
     if [[ -e "$pth_block/script/profile" ]]; then
-      # To avoid recalculating the block home, set it as `_$block_home`,
-      # replacing `.-\` with `_`
-      local nm_block_safe="${nm_block//-/_}"
-      nm_block_safe="${nm_block_safe##*/}"
-      nm_block_safe="${nm_block_safe//\./_}"
-      local nm_pth_block="pth_block"
-
-      # Emit the block's shome hint
-      printf '  export "%q"="%q"\n' "_${nm_block_safe}_home" "${!nm_pth_block}"
-
       # Emit the block's profile
       printf '  source "%q"\n' "$pth_block/script/profile"
     fi
