@@ -1,8 +1,1 @@
-#!/usr/bin/env bash
-
-function main {
-  export BLOCK_META=1
-  block "$@"
-}
-
-source sub "$BASH_SOURCE" "$@"
+block-local
