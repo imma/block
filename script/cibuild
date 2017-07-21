@@ -16,6 +16,7 @@ function main {
 
   # Source Block's profile to get access to `block` commands
   source "$shome/script/profile" ''
+  require
   
   setup_block
 
