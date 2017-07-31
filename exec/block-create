@@ -1,0 +1,17 @@
+#!/usr/bin/env bash4
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile" ''
+
+  local nm_branch="$1"; shift
+  
+  git init
+  block init
+  git checkout -b "$nm_branch"
+  git add .
+  git commit -m 'initial commit'
+  git cc gh
+}
+
+source sub "$0" "$@"
