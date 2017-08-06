@@ -12,6 +12,7 @@ function main {
   git add .
   git grep xxx | cut -d: -f1 | uniq | runmany 'perl -pe "s{xxx}{"${nm_block}"}g" -i $1'
   git grep XXX | cut -d: -f1 | uniq | runmany 'perl -pe "s{XXX}{"${nm_block_caps}"}g" -i $1'
+  echo "imma/$(basename $(pwd))" > .repo-name
   git diff --word-diff
   git add -u .
 }
