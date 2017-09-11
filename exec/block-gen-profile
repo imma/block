@@ -11,7 +11,7 @@ function emit {
   block list > "$tmp_list"
 
   # Wrap the following blocks' profile in a _profile function
-  printf 'function _profile {\n'
+  printf 'function _profile { source "${BOARD_PATH}/script/rc"\n'
 
   # ### For each block dependency:
   while read -r nm_block pth_block git_block version_block end_block; do
