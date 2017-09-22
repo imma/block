@@ -1,0 +1,17 @@
+{
+  "params": {
+    "palette": {
+      "primary": "red",
+      "accent": "orange"
+    },
+    "menu": {
+      "main": [
+        {
+          "name": "block",
+          "url": "/block",
+          "weight": 10
+        }
+      ]
+    }
+  }
+}
