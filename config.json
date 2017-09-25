@@ -14,7 +14,7 @@
         {
           "name": "block",
           "url": "/block",
-          "weight": 10
+          "weight": 11
         }
       ]
     }
