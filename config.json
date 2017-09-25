@@ -14,7 +14,12 @@
         {
           "name": "block",
           "url": "/block",
-          "weight": 11
+          "weight": 100
+        },
+        {
+          "name": "bootstrap",
+          "url": "/block/bootstrap",
+          "weight": 101
         }
       ]
     }
