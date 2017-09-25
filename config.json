@@ -7,6 +7,11 @@
     "menu": {
       "main": [
         {
+          "name": "home",
+          "url": "/",
+          "weight": 10
+        },
+        {
           "name": "block",
           "url": "/block",
           "weight": 10
