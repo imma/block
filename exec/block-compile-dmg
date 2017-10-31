@@ -21,9 +21,7 @@ function main {
   
   case "$(uname -s)" in
     Darwin)
-      local fnm_dmg="$(basename "$url_dmg")"
-      cache curl "$fnm_dmg" "$url_dmg"
-      hdiutil attach "${CACHE_DIR}/curl/$fnm_dmg"
+      hdiutil attach "$url_dmg"
       if [[ -n "$nm_package" ]]; then
         block compile pkg "/Volumes/$nm_volume/$nm_package"
       fi
