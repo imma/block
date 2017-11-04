@@ -12,7 +12,6 @@ function main {
   git checkout -b "$nm_branch" || true
   git add .
   git commit -m 'initial commit' || true
-  hub create "$(cat .repo-name)"
   git cc gh
 
   mv content/example.md "content/$(basename $(cat .repo-name)).md"
