@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile" ''
+
+  local tmp_list="$(mktemp -t XXXXXX)"
+  block list > "$tmp_list"
+
+  while read -r nm_block pth_block git_block version_block end_block; do
+    pushd "$pth_block" >/dev/null
+    if [[ -x script/fresh ]]; then
+      if ! script/fresh< /dev/null; then
+        echo "$pth_block $(script/version)"
+      fi
+    elif [[ -x script/stale ]]; then
+      if script/stale < /dev/null; then
+        echo "$pth_block $(script/version)"
+      fi
+    elif [[ -x script/bootstrap ]]; then
+      echo "$pth_block always"
+    fi
+
+    if [[ -e script/profile ]]; then
+      source script/profile
+    fi
+    popd >/dev/null
+  done < "$tmp_list"
+  rm -f "$tmp_list"
+}
+
+source sub "$0" "$@"
