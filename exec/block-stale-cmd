@@ -11,11 +11,11 @@ function main {
     pushd "$pth_block" >/dev/null
     if [[ -x script/fresh ]]; then
       if ! script/fresh< /dev/null; then
-        echo "$pth_block $(script/version)"
+        echo "$pth_block $(script/version 2>/dev/null || true)"
       fi
     elif [[ -x script/stale ]]; then
       if script/stale < /dev/null; then
-        echo "$pth_block $(script/version)"
+        echo "$pth_block $(script/version 2>/dev/null || true)"
       fi
     elif [[ -x script/bootstrap ]]; then
       echo "$pth_block always"
