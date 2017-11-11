@@ -3,6 +3,10 @@
 # Block's profile provides the `require` function to source a block's
 # dependencies and profile.
 
+function bl {
+  block "$@"
+}
+
 function gen_profile {
   # ### For each block dependency:
   block list | while read -r nm_block pth_block git_block version_block end_block; do
