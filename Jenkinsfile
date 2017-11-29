@@ -15,9 +15,4 @@ node('master') {
       sh "touch /tmp/man"
     }
   } 
-  catch(error) {
-    throw error
-  } finally {
-      sh "rm /tmp/man"
-  }
 }
