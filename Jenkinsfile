@@ -8,16 +8,16 @@ node('master') {
     }
 
     stage('test') {
-      sh "df -klh
+      sh "df -klh"
     }
 
     stage('deploy') {
-      sh "touch /tmp/man
+      sh "touch /tmp/man"
     }
   } 
   catch(error) {
     throw error
   } finally {
-      sh "rm /tmp/man
+      sh "rm /tmp/man"
   }
 }
