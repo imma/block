@@ -1,16 +1,26 @@
 #!/usr/bin/env groovy
 
-node('master') {
-  stage('build') {
-    checkout scm
-    sh "uname -a"
-  }
+pipeline {
+  agent any
 
-  stage('test') {
-    sh "df -klh"
-  }
+  stages {
+    stage('build') {
+      steps {
+        checkout scm
+        sh "uname -a"
+      }
+    }
 
-  stage('deploy') {
-    sh "touch /tmp/man"
+    stage('test') {
+      steps {
+        sh "df -klh"
+      }
+    }
+
+    stage('deploy') {
+      steps {
+        sh "touch /tmp/man"
+      }
+    }
   }
 }
