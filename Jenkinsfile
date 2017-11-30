@@ -2,11 +2,8 @@
 
 stage('bootstrap') {
   node {
-    dir "tmp" {
+    dir('work') {
       checkout scm
-    }
-
-    dir "tmp" {
       sh 'script/cibuild'
     }
   }
