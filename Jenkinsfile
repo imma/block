@@ -1,11 +1,8 @@
 #!/usr/bin/env groovy
 
-stage('compile') {
+stage('bootstrap') {
   node {
     checkout scm
-    stash 'everything'
-    dir('src/cafe') {
-      sh "echo dont care"
-    }
+    sh 'script/cibuild'
   }
 }
