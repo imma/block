@@ -1,19 +1,11 @@
 #!/usr/bin/env groovy
 
-pipeline {
-	environment {
-		BLOCK_PWD= sh (script: 'pwd', returnStdout: true).trim()
-    BLOCK_PATH= "${BLOCK_PWD}/work"
+stage('bootstrap') {
+  node {
+    dir('work') {
+      BLOCK_PATH= sh (script: 'pwd', returnStdout: true).trim()
+      checkout scm
+      sh "env BLOCK_PATH='${BLOCK_PATH}' script/cibuild"
+    }
   }
-
-	stages {
-		stage('bootstrap') {
-			node {
-				dir('work') {
-					checkout scm
-					sh 'script/cibuild'
-				}
-			}
-		}
-	}
 }
