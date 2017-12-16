@@ -1,7 +1,7 @@
 package main
 
-import "github.com/imma/block/meh"
+import "github.com/imma/block/cmd"
 
 func main() {
-	meh.Block()
+	cmd.Execute()
 }
