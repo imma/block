@@ -1,11 +1,11 @@
 #!/usr/bin/env groovy
 
-stage('compile') {
+stage('bootstrap') {
   node {
-    checkout scm
-    stash 'everything'
-    dir('src/cafe') {
-      sh "echo dont care"
+    dir('work/block') {
+      BLOCK_PATH= sh (script: 'pwd', returnStdout: true).trim()
+      checkout scm
+      sh "env BLOCK_PATH='${BLOCK_PATH}' script/cibuild"
     }
   }
 }
