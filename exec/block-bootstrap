@@ -28,9 +28,26 @@ function main {
       time script/bootstrap < /dev/null
     fi
 
+    if [[ -x script/fresh ]]; then
+      if ! script/fresh< /dev/null; then
+        if [[ -x script/version ]]; then
+          script/version
+        fi
+        return 1
+      fi
+    elif [[ -x script/stale ]]; then
+      if script/stale < /dev/null; then
+        if [[ -x script/version ]]; then
+          script/version
+        fi
+        return 1
+      fi
+    fi
+
     if [[ -e script/profile ]]; then
       source script/profile
     fi
+
     popd
   done < "$tmp_list"
   rm -f "$tmp_list"
