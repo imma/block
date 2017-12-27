@@ -8,6 +8,10 @@ function main {
     return 1
   fi
 
+  if [[ "$(cat Blockfile.json | jq -r '.versions//{} | keys | length')" == 0 ]]; then
+    return 1
+  fi
+
   if diff <(script/version | jq -S .) <(block releases | jq -S .); then
     return 1
   fi
