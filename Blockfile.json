@@ -3,5 +3,6 @@
     "jq",
     "sub",
     "runmany"
-  ]
+  ],
+  "versions": {}
 }
