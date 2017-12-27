@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+function main {
+  local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
+  source "$shome/script/profile" ''
+
+  cat "Blockfile.json" | jq -r '.versions//{} | to_entries | map("\(.key) \(.value)") | .[]' \
+    | while read -r name repo; do 
+        jq -n --arg name "$name" --arg version "$(gh releases latest "$repo" | jq -r .tag)" '{"\($name)": $version}'
+      done | jq -s 'reduce .[] as $ele ({}; . + $ele)'
+}
+
+source sub "$0" "$@"
