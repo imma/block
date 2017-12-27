@@ -4,7 +4,7 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
-  if [[ ! -x "$shome/script/version" ]]; then
+  if [[ ! -x "script/version" ]]; then
     return 1
   fi
 
