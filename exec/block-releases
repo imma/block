@@ -4,10 +4,19 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
-  cat "Blockfile.json" | jq -r '.versions//{} | to_entries | map("\(.key) \(.value)") | .[]' \
-    | while read -r name repo; do 
-        jq -n --arg name "$name" --arg version "$(gh releases latest "$repo" | jq -r .tag)" '{"\($name)": $version}'
-      done | jq -s 'reduce .[] as $ele ({}; . + $ele)'
+  if [[ ! -x "script/version" ]]; then
+    return 1
+  fi
+
+  if [[ "$(cat Blockfile.json | jq -r '.versions//{} | keys | length')" == 0 ]]; then
+    return 1
+  fi
+
+  if diff <(script/version | jq -S .) <(block releases list | jq -S .); then
+    return 1
+  fi
+
+  return 1
 }
 
 source sub "$0" "$@"
