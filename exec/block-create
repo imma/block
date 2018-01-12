@@ -4,6 +4,10 @@ function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
 
+  if [[ "$#" == 0 ]]; then
+    set -- master
+  fi
+
   local nm_branch="$1"; shift
   
   set -x
@@ -12,7 +16,8 @@ function main {
   git checkout -b "$nm_branch" || true
   git add .
   git commit -m 'initial commit' || true
-  git cc gh
+  hub create "$(cat .repo-name)"
+  git push -u origin master
 
   mv content/example.md "content/$(basename $(cat .repo-name)).md"
   ln -nfs "content/$(basename $(cat .repo-name)).md" README.md
