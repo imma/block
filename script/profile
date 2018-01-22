@@ -38,7 +38,7 @@ function require {
   # profiles that are sourced without arguments.
   set --
 
-  source "${BOARD_PATH}/script/rc"
+  source "${BOARD_PATH:-$HOME}/script/rc"
   source <(gen_profile)
 }
 
