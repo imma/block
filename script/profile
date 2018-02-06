@@ -38,7 +38,10 @@ function require {
   # profiles that are sourced without arguments.
   set --
 
-  source "${BOARD_PATH:-$HOME}/script/rc"
+  local pth_rc="${BOARD_PATH:-$HOME}/script/rc"
+  if [[ -f "$pth_rc" ]]; then
+    source "$pth_rc"
+  fi
   source <(gen_profile)
 }
 
