@@ -13,6 +13,9 @@ def find_block(name):
     if os.path.exists("%s/work/%s" % (os.getcwd(),os.path.basename(name))):
         calling_pwd = os.getcwd()
         return "%s/work/%s" % (calling_pwd, os.path.basename(name))
+    if os.path.exists("%s/%s" % (os.path.dirname(os.getcwd()),os.path.basename(name))):
+        calling_pwd = os.getcwd()
+        return "%s/%s" % (os.path.dirname(calling_pwd), os.path.basename(name))
     elif os.path.exists("%s/work/%s" % (calling_pwd,os.path.basename(name))):
         return "%s/work/%s" % (calling_pwd, os.path.basename(name))
     elif os.path.exists("%s" % os.environ.get("_%s_home" % env_name,False)):
