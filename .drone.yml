@@ -3,7 +3,8 @@ pipeline:
     image: ubuntu
     commands:
       - pwd
-      - env
+      - ps axuf
+      - env | sort
   frontend:
     image: ubuntu
     commands:
