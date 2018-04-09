@@ -1,0 +1,12 @@
+pipeline:
+  backend:
+    image: ubuntu
+    commands:
+      - pwd
+			- env
+
+  frontend:
+    image: ubuntu
+    commands:
+      - uname -a
+      - id -a
