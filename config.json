@@ -1,27 +1,21 @@
 {
-  "params": {
-    "palette": {
-      "primary": "red",
-      "accent": "orange"
-    },
-    "menu": {
-      "main": [
-        {
-          "name": "home",
-          "url": "/",
-          "weight": 10
-        },
-        {
-          "name": "block",
-          "url": "/block",
-          "weight": 100
-        },
-        {
-          "name": "bootstrap",
-          "url": "/block/bootstrap",
-          "weight": 101
-        }
-      ]
-    }
+  "menu": {
+    "index": [
+      {
+        "name": "home",
+        "url": "/index.html",
+        "weight": 10
+      },
+      {
+        "name": "block",
+        "url": "/block/index.html",
+        "weight": 100
+      },
+      {
+        "name": "bootstrap",
+        "url": "/block/bootstrap/index.html",
+        "weight": 101
+      }
+    ]
   }
 }
