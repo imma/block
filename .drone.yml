@@ -6,7 +6,8 @@ pipeline:
       - ps axuf
       - env | sort
   frontend:
-    image: ubuntu
+    image: imma/ubuntu
     commands:
       - uname -a
       - id -a
+      - cat .drone.yml
