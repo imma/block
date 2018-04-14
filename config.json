@@ -1,21 +1,19 @@
 {
   "menu": {
-    "index": [
+    "block": [
       {
-        "name": "home",
-        "url": "/index.html",
-        "weight": 10
-      },
-      {
-        "name": "block",
-        "url": "/block/index.html",
-        "weight": 100
-      },
-      {
-        "name": "bootstrap",
-        "url": "/block/bootstrap/index.html",
+        "identifier": "block_overview",
         "weight": 101
+      },
+      {
+        "identifier": "block_install",
+        "weight": 102
+      },
+      {
+        "identifier": "block_usage",
+        "weight": 103
       }
-    ]
+    ],
+    "index": [ ]
   }
 }
