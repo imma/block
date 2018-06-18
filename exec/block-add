@@ -9,6 +9,8 @@ function main {
   cd "${BOARD_PATH}"
   git submodule add -f "https://github.com/imma/${nm_block}" "work/${nm_block}"
   make lock
+  git commit -m "$*"
+  git push
 }
 
 source sub "$0" "$@"
