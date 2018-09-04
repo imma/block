@@ -1,11 +1,11 @@
 pipeline:
-  backend:
+- backend:
     image: ubuntu
     commands:
       - pwd
       - ps axuf
       - env | sort
-  frontend:
+- frontend:
     image: imma/ubuntu
     commands:
       - uname -a
