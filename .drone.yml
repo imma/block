@@ -6,7 +6,7 @@ pipeline:
       - ps axuf
       - env | sort
 - frontend:
-    image: imma/ubuntu
+    image: ubuntu
     commands:
       - uname -a
       - id -a
