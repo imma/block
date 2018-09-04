@@ -11,3 +11,4 @@ pipeline:
       - uname -a
       - id -a
       - cat .drone.yml
+      - echo hello chaz
