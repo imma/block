@@ -23,7 +23,6 @@ function block_bootstrap {
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
-  source normalize
 
   if [[ -n "${1:-}" ]]; then
     cd "${BLOCK_PATH}/$1"

@@ -3,7 +3,6 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile" ''
-  source normalize
 
   local nm_block="$1"; shift
   local ptr_block="_${nm_block}_home"

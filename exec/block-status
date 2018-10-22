@@ -3,7 +3,6 @@
 function main {
   local shome="$(cd -P -- "${BASH_SOURCE%/*}/.." && pwd -P)"
   source "$shome/script/profile"
-  source normalize
 
   local many="${1:-10}"
   
