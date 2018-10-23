@@ -45,4 +45,4 @@ function emit {
   printf '}\n'
 }
 
-emit "$@"
+emit "$@" | sed "s#${BOARD_PATH}#\${BOARD_PATH}#"
